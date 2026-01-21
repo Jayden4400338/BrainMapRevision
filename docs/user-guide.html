@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Guide - BrainMapRevision</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../assets/css/documentation.css">
+    <link rel="shortcut icon" href="../assets/images/shortcut-icon.png">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/>
+                    <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/>
+                </svg>
+                <span class="logo-text">BrainMapRevision</span>
+            </div>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="developer-guide.html" class="nav-link">Developer Guide</a>
+                <a href="api-documentation.html" class="nav-link">API Docs</a>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Documentation Content -->
+    <div class="doc-container">
+        <div class="doc-header">
+            <h1 class="doc-title">User Guide</h1>
+            <p class="doc-subtitle">Everything you need to know about using BrainMapRevision</p>
+        </div>
+
+        <!-- Table of Contents -->
+        <div class="doc-nav">
+            <h3>Table of Contents</h3>
+            <ul>
+                <li><a href="#getting-started">1. Getting Started</a></li>
+                <li><a href="#creating-account">2. Creating an Account</a></li>
+                <li><a href="#browsing-subjects">3. Browsing Subjects</a></li>
+                <li><a href="#revision-boards">4. Creating Revision Boards</a></li>
+                <li><a href="#past-papers">5. Using Past Papers</a></li>
+                <li><a href="#quizzes">6. Taking Quizzes</a></li>
+                <li><a href="#flashcards">7. Using Flashcards</a></li>
+                <li><a href="#xp-system">8. XP & Leveling System</a></li>
+                <li><a href="#brain-coins">9. Brain Coins & Shop</a></li>
+                <li><a href="#progress-tracking">10. Tracking Your Progress</a></li>
+                <li><a href="#classroom">11. Classroom Features (Teachers)</a></li>
+                <li><a href="#tips">12. Study Tips & Best Practices</a></li>
+            </ul>
+        </div>
+
+        <!-- Getting Started -->
+        <section class="doc-section" id="getting-started">
+            <h2>1. Getting Started</h2>
+            <p>Welcome to BrainMapRevision! This platform is designed to help you master every subject through interactive revision tools, past paper practice, and personalized study boards.</p>
+            
+            <h3>What is BrainMapRevision?</h3>
+            <p>BrainMapRevision is a free, open-source revision platform for students from Year 1 to Year 11. Whether you're preparing for SATs or GCSEs, we provide:</p>
+            <ul>
+                <li>Authentic past paper questions from major UK exam boards</li>
+                <li>Comprehensive revision guides for key topics</li>
+                <li>Interactive quizzes and flashcards</li>
+                <li>Custom revision board creator</li>
+                <li>Progress tracking and analytics</li>
+                <li>Gamified learning with XP and rewards</li>
+            </ul>
+
+            <h3>System Requirements</h3>
+            <p>BrainMapRevision works on:</p>
+            <ul>
+                <li>Modern web browsers (Chrome, Firefox, Safari, Edge)</li>
+                <li>Desktop, tablet, and mobile devices</li>
+                <li>No downloads or installations required</li>
+            </ul>
+        </section>
+
+        <!-- Creating Account -->
+        <section class="doc-section" id="creating-account">
+            <h2>2. Creating an Account</h2>
+            
+            <h3>Sign Up Process</h3>
+            <ol>
+                <li>Click "Get Started Free" on the homepage</li>
+                <li>Choose your role: Student or Teacher</li>
+                <li>Enter your email address and create a password</li>
+                <li>Verify your email (check your inbox)</li>
+                <li>Complete your profile with year group and subjects</li>
+            </ol>
+
+            <h3>Student vs Teacher Accounts</h3>
+            <p><strong>Student Accounts:</strong></p>
+            <ul>
+                <li>Access all study materials and resources</li>
+                <li>Create personal revision boards</li>
+                <li>Track your own progress</li>
+                <li>Earn XP and Brain Coins</li>
+                <li>Join classrooms created by teachers</li>
+            </ul>
+
+            <p><strong>Teacher Accounts:</strong></p>
+            <ul>
+                <li>All student features, plus:</li>
+                <li>Create and manage classrooms</li>
+                <li>Assign homework and track student progress</li>
+                <li>View class analytics</li>
+                <li>Share resources with students</li>
+            </ul>
+        </section>
+
+        <!-- Browsing Subjects -->
+        <section class="doc-section" id="browsing-subjects">
+            <h2>3. Browsing Subjects</h2>
+            
+            <h3>Available Subjects</h3>
+            <p>BrainMapRevision covers all core GCSE subjects:</p>
+            <ul>
+                <li>English (Literature & Language)</li>
+                <li>Mathematics</li>
+                <li>Science (Biology, Chemistry, Physics)</li>
+                <li>History</li>
+                <li>Geography</li>
+                <li>Computer Science</li>
+                <li>Languages (French, Spanish, German)</li>
+                <li>Art & Design</li>
+            </ul>
+
+            <h3>Filtering by Year Group</h3>
+            <p>Content is organized by key stages:</p>
+            <ul>
+                <li><strong>Year 1-6:</strong> Primary school content</li>
+                <li><strong>Year 7-9:</strong> Key Stage 3</li>
+                <li><strong>Year 10-11:</strong> GCSE / Key Stage 4</li>
+            </ul>
+
+            <h3>Exam Board Specific Content</h3>
+            <p>Filter resources by your exam board:</p>
+            <ul>
+                <li>AQA</li>
+                <li>Edexcel</li>
+                <li>OCR</li>
+                <li>WJEC</li>
+                <li>SQA (Scotland)</li>
+            </ul>
+        </section>
+
+        <!-- Revision Boards -->
+        <section class="doc-section" id="revision-boards">
+            <h2>4. Creating Revision Boards</h2>
+            
+            <h3>What are Revision Boards?</h3>
+            <p>Revision boards are customizable study spaces where you can organize notes, flashcards, and practice questions by topic or subject.</p>
+
+            <h3>Creating a Board</h3>
+            <ol>
+                <li>Navigate to "Revision Boards" in the menu</li>
+                <li>Click "Create New Board"</li>
+                <li>Name your board (e.g., "Macbeth Revision")</li>
+                <li>Select subject and topics</li>
+                <li>Add content: notes, flashcards, or questions</li>
+                <li>Customize with colors and tags</li>
+                <li>Save your board</li>
+            </ol>
+
+            <h3>Adding Content to Boards</h3>
+            <ul>
+                <li><strong>Text Notes:</strong> Type or paste revision notes</li>
+                <li><strong>Flashcards:</strong> Create question/answer cards</li>
+                <li><strong>Past Paper Questions:</strong> Add from the question bank</li>
+                <li><strong>Images:</strong> Upload diagrams or screenshots</li>
+                <li><strong>Links:</strong> Add external resources</li>
+            </ul>
+
+            <h3>Organizing Boards</h3>
+            <ul>
+                <li>Group boards by subject or exam</li>
+                <li>Use tags for easy searching</li>
+                <li>Share boards with classmates (optional)</li>
+                <li>Export boards as PDFs</li>
+            </ul>
+        </section>
+
+        <!-- Past Papers -->
+        <section class="doc-section" id="past-papers">
+            <h2>5. Using Past Papers</h2>
+            
+            <h3>Accessing Past Paper Questions</h3>
+            <ol>
+                <li>Go to "Past Papers" in the navigation</li>
+                <li>Filter by subject, exam board, and year</li>
+                <li>Browse available questions</li>
+                <li>Click on a question to view details</li>
+            </ol>
+
+            <h3>Question Information</h3>
+            <p>Each question includes:</p>
+            <ul>
+                <li>Exam board, year, and paper number</li>
+                <li>Mark allocation</li>
+                <li>Official mark scheme</li>
+                <li>Examiner comments</li>
+                <li>Comprehensive revision guide</li>
+                <li>Related topic links</li>
+            </ul>
+
+            <h3>Practice Modes</h3>
+            <p><strong>Study Mode:</strong></p>
+            <ul>
+                <li>View questions with instant access to mark schemes</li>
+                <li>Read revision guides alongside questions</li>
+                <li>Take your time to understand concepts</li>
+            </ul>
+
+            <p><strong>Test Mode:</strong></p>
+            <ul>
+                <li>Timed practice under exam conditions</li>
+                <li>Mark schemes hidden until completion</li>
+                <li>Earn bonus XP for high scores</li>
+            </ul>
+
+            <h3>Revision Guides</h3>
+            <p>Each past paper question has an accompanying guide that explains:</p>
+            <ul>
+                <li>Key concepts being tested</li>
+                <li>Step-by-step approach to answering</li>
+                <li>Common mistakes to avoid</li>
+                <li>Exam technique tips</li>
+                <li>Related practice questions</li>
+            </ul>
+        </section>
+
+        <!-- Quizzes -->
+        <section class="doc-section" id="quizzes">
+            <h2>6. Taking Quizzes</h2>
+            
+            <h3>Starting a Quiz</h3>
+            <ol>
+                <li>Navigate to "Quizzes"</li>
+                <li>Select your subject and topic</li>
+                <li>Choose difficulty level (Foundation/Higher)</li>
+                <li>Set number of questions (5, 10, 20, or custom)</li>
+                <li>Enable timer if desired</li>
+                <li>Click "Start Quiz"</li>
+            </ol>
+
+            <h3>Question Types</h3>
+            <ul>
+                <li>Multiple choice</li>
+                <li>Short answer</li>
+                <li>Fill in the blank</li>
+                <li>True/False</li>
+                <li>Extended response</li>
+            </ul>
+
+            <h3>Using Hints</h3>
+            <p>Stuck on a question? Use hint tokens to get help:</p>
+            <ul>
+                <li><strong>Remove 2 wrong answers</strong> (1 hint) - Multiple choice only</li>
+                <li><strong>Show topic/keyword</strong> (1 hint)</li>
+                <li><strong>Reveal first letter</strong> (1 hint) - Short answer</li>
+                <li><strong>Show related formula</strong> (2 hints) - Math/Science</li>
+                <li><strong>Display worked example</strong> (3 hints)</li>
+                <li><strong>Full answer explanation</strong> (5 hints)</li>
+            </ul>
+
+            <p>Earn free hints through daily logins, perfect scores, and level-ups. Or purchase hint packs in the shop with Brain Coins.</p>
+
+            <h3>Scoring and XP</h3>
+            <ul>
+                <li>Complete quiz: +20 XP, +10 Brain Coins</li>
+                <li>Perfect score bonus: +50 XP, +25 Brain Coins</li>
+                <li>Using hints reduces XP earned slightly</li>
+                <li>Detailed feedback on incorrect answers</li>
+            </ul>
+        </section>
+
+        <!-- Flashcards -->
+        <section class="doc-section" id="flashcards">
+            <h2>7. Using Flashcards</h2>
+            
+            <h3>Accessing Flashcards</h3>
+            <ul>
+                <li>Browse pre-made flashcard decks by subject</li>
+                <li>Create your own custom decks</li>
+                <li>Add flashcards to revision boards</li>
+            </ul>
+
+            <h3>Creating Flashcards</h3>
+            <ol>
+                <li>Go to "Flashcards" → "Create Deck"</li>
+                <li>Name your deck (e.g., "Photosynthesis Key Terms")</li>
+                <li>Add cards with question on front, answer on back</li>
+                <li>Include images if helpful</li>
+                <li>Tag with relevant topics</li>
+            </ol>
+
+            <h3>Study Sessions</h3>
+            <p>BrainMapRevision uses spaced repetition to optimize learning:</p>
+            <ul>
+                <li>Cards you struggle with appear more frequently</li>
+                <li>Mastered cards appear less often</li>
+                <li>Track mastery level for each card</li>
+                <li>Earn XP for completing flashcard sessions</li>
+            </ul>
+
+            <h3>Flashcard Tips</h3>
+            <ul>
+                <li>Study in short sessions (10-15 minutes)</li>
+                <li>Review daily for best retention</li>
+                <li>Say answers out loud before flipping</li>
+                <li>Mark cards honest ("Easy", "Medium", "Hard")</li>
+            </ul>
+        </section>
+
+        <!-- XP System -->
+        <section class="doc-section" id="xp-system">
+            <h2>8. XP & Leveling System</h2>
+            
+            <h3>How XP Works</h3>
+            <p>Experience Points (XP) represent your learning progress. Earn XP by:</p>
+            
+            <h4>Study Activities:</h4>
+            <ul>
+                <li>Complete a quiz: +20 XP</li>
+                <li>Perfect score bonus: +50 XP</li>
+                <li>Answer past paper question: +15 XP</li>
+                <li>Review flashcards (10 cards): +10 XP</li>
+                <li>Create revision board: +25 XP</li>
+                <li>30-minute study session: +30 XP</li>
+                <li>Daily login: +5 XP</li>
+                <li>7-day streak: +100 XP bonus</li>
+            </ul>
+
+            <h4>Community Contributions:</h4>
+            <ul>
+                <li>Submit past paper question: +25 XP</li>
+                <li>Write revision guide: +50 XP</li>
+                <li>Helpful forum answer (per upvote): +10 XP</li>
+                <li>Report error: +5 XP</li>
+            </ul>
+
+            <h4>Achievements:</h4>
+            <ul>
+                <li>First quiz completed: +100 XP</li>
+                <li>100 questions answered: +250 XP</li>
+                <li>Subject mastery (90%+): +500 XP</li>
+                <li>Help 10 students: +200 XP</li>
+            </ul>
+
+            <h3>Leveling Up</h3>
+            <p>Level requirements:</p>
+            <ul>
+                <li>Level 1: 0 XP (Start)</li>
+                <li>Level 2: 100 XP</li>
+                <li>Level 3: 250 XP</li>
+                <li>Level 5: 1,000 XP</li>
+                <li>Level 10: 5,000 XP</li>
+                <li>Level 25: 25,000 XP</li>
+                <li>Level 50: 100,000 XP</li>
+                <li>Level 100: 500,000 XP</li>
+            </ul>
+
+            <h3>Level Perks</h3>
+            <ul>
+                <li><strong>Level 5:</strong> Unlock custom theme creator</li>
+                <li><strong>Level 10:</strong> Daily coin bonus +10</li>
+                <li><strong>Level 15:</strong> Unlock exclusive themes</li>
+                <li><strong>Level 25:</strong> Access to 2x XP events</li>
+                <li><strong>Level 50:</strong> Premium badge</li>
+                <li><strong>Level 100:</strong> Legendary badge + custom profile URL</li>
+            </ul>
+        </section>
+
+        <!-- Brain Coins -->
+        <section class="doc-section" id="brain-coins">
+            <h2>9. Brain Coins & Shop</h2>
+            
+            <h3>Earning Brain Coins</h3>
+            <p>Brain Coins are the in-platform currency used to purchase themes, hints, and cosmetics.</p>
+
+            <h4>Study Rewards:</h4>
+            <ul>
+                <li>Complete quiz: +10 coins</li>
+                <li>Perfect score: +25 coins</li>
+                <li>Daily challenge: +25-75 coins</li>
+                <li>Weekly challenge: +150 coins</li>
+                <li>Level up: +50 coins per level</li>
+            </ul>
+
+            <h4>Daily Rewards:</h4>
+            <ul>
+                <li>Daily login: +5 coins</li>
+                <li>3-day streak: +15 coins</li>
+                <li>7-day streak: +50 coins</li>
+                <li>30-day streak: +200 coins</li>
+            </ul>
+
+            <h3>The Shop</h3>
+            <p>Access the shop from your profile or navigation menu.</p>
+
+            <h4>Themes (100-500 coins):</h4>
+            <ul>
+                <li>Ocean Wave: 200 coins</li>
+                <li>Forest Sanctuary: 250 coins</li>
+                <li>Sunset Blaze: 300 coins</li>
+                <li>Neon Nights: 350 coins</li>
+                <li>Retro Arcade: 400 coins</li>
+                <li>Galaxy (Level 15+): 500 coins</li>
+                <li>Custom Theme Creator: 1,000 coins (one-time unlock)</li>
+            </ul>
+
+            <h4>Hint Packs:</h4>
+            <ul>
+                <li>5 hints: 50 coins</li>
+                <li>10 hints: 90 coins (10% discount)</li>
+                <li>25 hints: 200 coins (20% discount)</li>
+                <li>Unlimited hints (1 week): 500 coins</li>
+            </ul>
+
+            <h4>Power-Ups:</h4>
+            <ul>
+                <li>2x XP Boost (1 hour): 100 coins</li>
+                <li>Time Freeze (pause quiz timer): 75 coins</li>
+                <li>Second Chance (retry wrong answer): 60 coins</li>
+                <li>Skip Question: 50 coins</li>
+            </ul>
+
+            <h4>Cosmetics:</h4>
+            <ul>
+                <li>Animated Avatars: 150-300 coins</li>
+                <li>Profile Borders: 75-150 coins</li>
+                <li>Custom Badges: 100 coins each</li>
+                <li>Username Colors: 125 coins</li>
+            </ul>
+
+            <h3>Managing Your Inventory</h3>
+            <p>View and manage purchased items in your Inventory:</p>
+            <ul>
+                <li>Switch between owned themes</li>
+                <li>Check hint balance</li>
+                <li>Activate power-ups</li>
+                <li>Equip cosmetics</li>
+                <li>View purchase history</li>
+            </ul>
+        </section>
+
+        <!-- Progress Tracking -->
+        <section class="doc-section" id="progress-tracking">
+            <h2>10. Tracking Your Progress</h2>
+            
+            <h3>Progress Dashboard</h3>
+            <p>Access your personal analytics from the "Progress" page:</p>
+            
+            <h4>Statistics Shown:</h4>
+            <ul>
+                <li>Total XP earned</li>
+                <li>Current level and progress to next level</li>
+                <li>Brain Coins balance</li>
+                <li>Study streak (days)</li>
+                <li>Total study time</li>
+                <li>Questions answered</li>
+                <li>Quiz completion rate</li>
+                <li>Average quiz scores</li>
+            </ul>
+
+            <h3>Subject Mastery</h3>
+            <ul>
+                <li>View mastery percentage for each subject</li>
+                <li>Identify weak topics that need attention</li>
+                <li>Track improvement over time</li>
+                <li>Compare with class averages (if in a classroom)</li>
+            </ul>
+
+            <h3>Study Analytics</h3>
+            <ul>
+                <li>Daily, weekly, and monthly study charts</li>
+                <li>XP earned per subject</li>
+                <li>Most active study times</li>
+                <li>Quiz performance trends</li>
+            </ul>
+
+            <h3>Goal Setting</h3>
+            <ul>
+                <li>Set daily study time goals</li>
+                <li>Target specific topics to master</li>
+                <li>Track progress toward goals</li>
+                <li>Earn bonus XP for reaching milestones</li>
+            </ul>
+        </section>
+
+        <!-- Classroom -->
+        <section class="doc-section" id="classroom">
+            <h2>11. Classroom Features (Teachers)</h2>
+            
+            <h3>Creating a Classroom</h3>
+            <ol>
+                <li>Navigate to "Classroom" → "Create New"</li>
+                <li>Name your classroom (e.g., "Year 10 History")</li>
+                <li>Select subject and year group</li>
+                <li>Generate invite code or link</li>
+                <li>Share code with students</li>
+            </ol>
+
+            <h3>Managing Students</h3>
+            <ul>
+                <li>View student roster</li>
+                <li>Track individual progress</li>
+                <li>See completion rates</li>
+                <li>Remove or add students</li>
+            </ul>
+
+            <h3>Creating Assignments</h3>
+            <ol>
+                <li>Select "Assignments" in classroom dashboard</li>
+                <li>Click "Create New Assignment"</li>
+                <li>Choose content: quiz, past papers, or board</li>
+                <li>Set due date</li>
+                <li>Assign to entire class or individuals</li>
+            </ol>
+
+            <h3>Class Analytics</h3>
+            <ul>
+                <li>View class average scores</li>
+                <li>Identify struggling students</li>
+                <li>Track assignment completion</li>
+                <li>Generate progress reports</li>
+            </ul>
+
+            <h3>For Students: Joining a Classroom</h3>
+            <ol>
+                <li>Receive invite code from teacher</li>
+                <li>Navigate to "Classroom" → "Join"</li>
+                <li>Enter invite code</li>
+                <li>Confirm joining</li>
+                <li>Access classroom resources and assignments</li>
+            </ol>
+        </section>
+
+        <!-- Tips -->
+        <section class="doc-section" id="tips">
+            <h2>12. Study Tips & Best Practices</h2>
+            
+            <h3>Effective Revision Strategies</h3>
+            <ul>
+                <li><strong>Start Early:</strong> Begin revision weeks before exams, not days</li>
+                <li><strong>Study in Chunks:</strong> 25-30 minute sessions with 5-minute breaks</li>
+                <li><strong>Mix It Up:</strong> Alternate between subjects and topics</li>
+                <li><strong>Practice Regularly:</strong> Do a little every day rather than cramming</li>
+                <li><strong>Test Yourself:</strong> Quizzes are more effective than just reading</li>
+            </ul>
+
+            <h3>Using BrainMapRevision Effectively</h3>
+            <ul>
+                <li>Complete daily challenges to maintain your study streak</li>
+                <li>Focus on topics where you score lowest in quizzes</li>
+                <li>Review flashcards multiple times for better retention</li>
+                <li>Practice past papers under timed conditions</li>
+                <li>Read revision guides even for questions you answer correctly</li>
+            </ul>
+
+            <h3>Maximizing XP and Coins</h3>
+            <ul>
+                <li>Log in daily for streak bonuses</li>
+                <li>Aim for perfect quiz scores</li>
+                <li>Complete weekly challenges</li>
+                <li>Contribute quality content to earn community rewards</li>
+                <li>Use 2x XP boosts during intensive study sessions</li>
+            </ul>
+
+            <h3>Preparing for Exams</h3>
+            <ul>
+                <li><strong>6 weeks before:</strong> Create comprehensive revision boards</li>
+                <li><strong>4 weeks before:</strong> Focus on weak topics, use quizzes</li>
+                <li><strong>2 weeks before:</strong> Practice past papers under exam conditions</li>
+                <li><strong>1 week before:</strong> Review flashcards and revision guides</li>
+                <li><strong>Night before:</strong> Light review, get good sleep</li>
+            </ul>
+
+            <h3>Getting Help</h3>
+            <ul>
+                <li>Use the community forum to ask questions</li>
+                <li>Check revision guides for detailed explanations</li>
+                <li>Request new topics if content is missing</li>
+                <li>Report errors to help improve the platform</li>
+                <li>Collaborate with classmates in shared boards</li>
+            </ul>
+        </section>
+
+        <!-- Back to Top -->
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="#" class="btn btn-primary">Back to Top</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="footer-title">BrainMapRevision</h3>
+                    <p class="footer-text">An open-source revision platform empowering students to master all subjects effectively.</p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-heading">Documentation</h4>
+                    <a href="user-guide.html" class="footer-link">User Guide</a>
+                    <a href="developer-guide.html" class="footer-link">Developer Guide</a>
+                    <a href="api-documentation.html" class="footer-link">API Documentation</a>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-heading">Resources</h4>
+                    <a href="../pages/past-papers.html" class="footer-link">Past Papers</a>
+                    <a href="../pages/subjects.html" class="footer-link">Subjects</a>
+                    <a href="../pages/community.html" class="footer-link">Community</a>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-heading">Legal</h4>
+                    <a href="../legal/license.html" class="footer-link">MIT License</a>
+                    <a href="../legal/privacy.html" class="footer-link">Privacy Policy</a>
+                    <a href="../legal/terms.html" class="footer-link">Terms of Service</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 BrainMapRevision. Open source and free forever.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
