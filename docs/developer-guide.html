@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Guide - BrainMapRevision</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../assets/css/documentation.css">
+    <link rel="shortcut icon" href="../assets/images/shortcut-icon.png">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/>
+                    <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/>
+                </svg>
+                <span class="logo-text">BrainMapRevision</span>
+            </div>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="user-guide.html" class="nav-link">User Guide</a>
+                <a href="api-documentation.html" class="nav-link">API Docs</a>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Documentation Content -->
+    <div class="doc-container">
+        <div class="doc-header">
+            <h1 class="doc-title">Developer Guide</h1>
+            <p class="doc-subtitle">Contributing to BrainMapRevision - Architecture, setup, and best practices</p>
+        </div>
+
+        <!-- Table of Contents -->
+        <div class="doc-nav">
+            <h3>Table of Contents</h3>
+            <ul>
+                <li><a href="#introduction">1. Introduction</a></li>
+                <li><a href="#setup">2. Development Setup</a></li>
+                <li><a href="#architecture">3. Project Architecture</a></li>
+                <li><a href="#database">4. Database Schema</a></li>
+                <li><a href="#authentication">5. Authentication System</a></li>
+                <li><a href="#features">6. Implementing Features</a></li>
+                <li><a href="#styling">7. Styling Guidelines</a></li>
+                <li><a href="#testing">8. Testing</a></li>
+                <li><a href="#deployment">9. Deployment</a></li>
+                <li><a href="#contributing">10. Contributing Guidelines</a></li>
+            </ul>
+        </div>
+
+        <!-- Introduction -->
+        <section class="doc-section" id="introduction">
+            <h2>1. Introduction</h2>
+            <p>Welcome to the BrainMapRevision developer guide! This document will help you understand the project structure, set up your development environment, and contribute effectively.</p>
+
+            <h3>Tech Stack</h3>
+            <ul>
+                <li><strong>Frontend:</strong> HTML5, CSS3, Vanilla JavaScript (ES6+)</li>
+                <li><strong>Database:</strong> Supabase (PostgreSQL)</li>
+                <li><strong>Authentication:</strong> Supabase Auth</li>
+                <li><strong>Hosting:</strong> GitHub Pages (static files), Supabase (backend)</li>
+                <li><strong>Version Control:</strong> Git & GitHub</li>
+            </ul>
+
+            <h3>Project Goals</h3>
+            <ul>
+                <li>Free and open-source revision platform</li>
+                <li>Accessible to all UK students (Year 1-11)</li>
+                <li>Comprehensive past paper coverage</li>
+                <li>Engaging, gamified learning experience</li>
+                <li>Community-driven content creation</li>
+            </ul>
+
+            <h3>Development Philosophy</h3>
+            <ul>
+                <li><strong>Simplicity:</strong> Vanilla JS over complex frameworks for easier contribution</li>
+                <li><strong>Accessibility:</strong> WCAG 2.1 AA compliant</li>
+                <li><strong>Performance:</strong> Fast load times, optimized assets</li>
+                <li><strong>Modularity:</strong> Reusable components and functions</li>
+                <li><strong>Documentation:</strong> Well-commented code</li>
+            </ul>
+        </section>
+
+        <!-- Setup -->
+        <section class="doc-section" id="setup">
+            <h2>2. Development Setup</h2>
+
+            <h3>Prerequisites</h3>
+            <ul>
+                <li>Git installed</li>
+                <li>Text editor (VS Code recommended)</li>
+                <li>Modern web browser</li>
+                <li>Supabase account (for backend features)</li>
+            </ul>
+
+            <h3>Initial Setup</h3>
+            
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">bash</span>
+                </div>
+                <pre><code># 1. Fork the repository on GitHub
+
+# 2. Clone your fork
+git clone https://github.com/YOUR-USERNAME/BrainMapRevision.git
+
+# 3. Navigate to project directory
+cd BrainMapRevision
+
+# 4. Create a new branch for your feature
+git checkout -b feature/your-feature-name
+
+# 5. Open in your editor
+code .</code></pre>
+            </div>
+
+            <h3>Supabase Configuration</h3>
+            <ol>
+                <li>Create a Supabase account at <a href="https://supabase.com" target="_blank">supabase.com</a></li>
+                <li>Create a new project</li>
+                <li>Navigate to Settings → API</li>
+                <li>Copy your project URL and anon/public key</li>
+                <li>Update <code>assets/js/supabase-config.js</code>:</li>
+            </ol>
+
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">javascript</span>
+                </div>
+                <pre><code>const SUPABASE_URL = 'https://your-project.supabase.co';
+const SUPABASE_ANON_KEY = 'your-anon-key-here';
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);</code></pre>
+            </div>
+
+            <h3>Running Locally</h3>
+            <p>Since this is a static site, you can use any local server:</p>
+
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">bash</span>
+                </div>
+                <pre><code># Using Python 3
+python -m http.server 8000
+
+# Using Node.js (install live-server globally)
+npm install -g live-server
+live-server
+
+# Using VS Code Live Server extension
+# Right-click index.html → "Open with Live Server"</code></pre>
+            </div>
+
+            <p>Navigate to <code>http://localhost:8000</code> in your browser.</p>
+
+            <h3>Recommended VS Code Extensions</h3>
+            <ul>
+                <li>Live Server - Launch local server with live reload</li>
+                <li>Prettier - Code formatter</li>
+                <li>ESLint - JavaScript linter</li>
+                <li>Auto Rename Tag - Rename HTML tags automatically</li>
+                <li>CSS Peek - Peek into CSS definitions</li>
+            </ul>
+        </section>
+
+        <!-- Architecture -->
+        <section class="doc-section" id="architecture">
+            <h2>3. Project Architecture</h2>
+
+            <h3>File Structure</h3>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">plaintext</span>
+                </div>
+                <pre><code>BrainMapRevision/
+├── index.html              # Homepage
+├── style.css               # Global styles
+├── script.js               # Global scripts
+├── pages/                  # All feature pages
+│   ├── subjects.html
+│   ├── past-papers.html
+│   ├── revision-boards.html
+│   ├── quizzes.html
+│   └── ...
+├── subjects/               # Subject-specific pages
+├── key-topics/            # Topic deep-dives
+├── exam-boards/           # Exam board pages
+├── auth/                  # Authentication pages
+├── assets/
+│   ├── css/               # Component-specific CSS
+│   ├── js/                # JavaScript modules
+│   └── images/            # Images and icons
+├── supabase/
+│   ├── schema.sql         # Database schema
+│   ├── seed.sql           # Initial data
+│   └── functions/         # Database functions
+├── docs/                  # Documentation
+├── legal/                 # Legal pages
+└── markdown/              # Project documentation</code></pre>
+            </div>
+
+            <h3>CSS Architecture</h3>
+            <p>Styles are organized as follows:</p>
+            <ul>
+                <li><code>style.css</code> - Global styles, variables, components</li>
+                <li><code>assets/css/[feature].css</code> - Feature-specific styles</li>
+                <li><code>assets/css/themes/</code> - Purchasable themes</li>
+            </ul>
+
+            <div class="info-box">
+                <h4>CSS Variables</h4>
+                <p>Use CSS custom properties defined in <code>:root</code> for consistent theming:</p>
+                <ul>
+                    <li><code>--bg-primary</code>, <code>--bg-secondary</code></li>
+                    <li><code>--text-primary</code>, <code>--text-secondary</code></li>
+                    <li><code>--accent-primary</code>, <code>--accent-secondary</code></li>
+                    <li><code>--border-color</code>, <code>--card-bg</code></li>
+                </ul>
+            </div>
+
+            <h3>JavaScript Architecture</h3>
+            <p>JavaScript is modular and organized by feature:</p>
+            <ul>
+                <li><code>script.js</code> - Global functionality (theme toggle, navigation)</li>
+                <li><code>assets/js/database.js</code> - Database helper functions</li>
+                <li><code>assets/js/auth.js</code> - Authentication logic</li>
+                <li><code>assets/js/quiz-engine.js</code> - Quiz functionality</li>
+                <li><code>assets/js/xp-system.js</code> - XP calculations</li>
+                <li>And more...</li>
+            </ul>
+
+            <h3>Component Pattern</h3>
+            <p>Reusable components follow this pattern:</p>
+
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">javascript</span>
+                </div>
+                <pre><code>// Component: Quiz Card
+class QuizCard {
+    constructor(data) {
+        this.question = data.question;
+        this.options = data.options;
+        this.correctAnswer = data.correctAnswer;
+    }
+
+    render() {
+        return `
+            &lt;div class="quiz-card"&gt;
+                &lt;h3&gt;${this.question}&lt;/h3&gt;
+                &lt;div class="options"&gt;
+                    ${this.renderOptions()}
+                &lt;/div&gt;
+            &lt;/div&gt;
+        `;
+    }
+
+    renderOptions() {
+        return this.options
+            .map(opt =&gt; `&lt;button class="option"&gt;${opt}&lt;/button&gt;`)
+            .join('');
+    }
+}
+
+// Usage
+const quiz = new QuizCard({
+    question: "What is the capital of France?",
+    options: ["London", "Paris", "Berlin", "Madrid"],
+    correctAnswer: 1
+});
+
+document.getElementById('quiz-container').innerHTML = quiz.render();</code></pre>
+            </div>
+        </section>
+
+        <!-- Database -->
+        <section class="doc-section" id="database">
+            <h2>4. Database Schema</h2>
+
+            <h3>Core Tables</h3>
+
+            <h4>users</h4>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">sql</span>
+                </div>
+                <pre><code>CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    role VARCHAR(20) DEFAULT 'student', -- 'student' or 'teacher'
+    year_group VARCHAR(20),
+    xp INTEGER DEFAULT 0,
+    level INTEGER DEFAULT 1,
+    brain_coins INTEGER DEFAULT 0,
+    hint_tokens INTEGER DEFAULT 5,
+    study_streak INTEGER DEFAULT 0,
+    last_login TIMESTAMP,
+    created_at TIMESTAMP DEFAULT NOW()
+);</code></pre>
+            </div>
+
+            <h4>subjects</h4>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">sql</span>
+                </div>
+                <pre><code>CREATE TABLE subjects (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    slug VARCHAR(100) UNIQUE NOT NULL,
+    icon VARCHAR(50),
+    description TEXT,
+    year_groups TEXT[] -- ['Year 7-9', 'Year 10-11']
+);</code></pre>
+            </div>
+
+            <h4>past_paper_questions</h4>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">sql</span>
+                </div>
+                <pre><code>CREATE TABLE past_paper_questions (
+    id SERIAL PRIMARY KEY,
+    subject_id INTEGER REFERENCES subjects(id),
+    exam_board VARCHAR(50) NOT NULL, -- 'AQA', 'Edexcel', etc.
+    year INTEGER NOT NULL,
+    paper_number VARCHAR(20),
+    question_number VARCHAR(20),
+    marks INTEGER,
+    question_text TEXT NOT NULL,
+    mark_scheme TEXT,
+    examiner_comments TEXT,
+    revision_guide_id INTEGER REFERENCES revision_guides(id),
+    difficulty VARCHAR(20), -- 'Foundation' or 'Higher'
+    topics TEXT[], -- ['Algebra', 'Equations']
+    created_at TIMESTAMP DEFAULT NOW()
+);</code></pre>
+            </div>
+
+            <h4>revision_guides</h4>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">sql</span>
+                </div>
+                <pre><code>CREATE TABLE revision_guides (
+    id SERIAL PRIMARY KEY,
+    subject_id INTEGER REFERENCES subjects(id),
+    topic VARCHAR(200) NOT NULL,
+    title VARCHAR(200) NOT NULL,
+    content TEXT NOT NULL, -- Markdown format
+    key_concepts TEXT[],
+    worked_examples TEXT,
+    common_mistakes TEXT,
+    exam_tips TEXT,
+    author_id UUID REFERENCES users(id),
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);</code></pre>
+            </div>
+
+            <h4>user_progress</h4>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">sql</span>
+                </div>
+                <pre><code>CREATE TABLE user_progress (
+    id SERIAL PRIMARY KEY,
+    user_id UUID REFERENCES users(id),
+    subject_id INTEGER REFERENCES subjects(id),
+    topic VARCHAR(200),
+    questions_attempted INTEGER DEFAULT 0,
+    questions_correct INTEGER DEFAULT 0,
+    mastery_percentage DECIMAL(5,2) DEFAULT 0.00,
+    last_studied TIMESTAMP,
+    total_study_time INTEGER DEFAULT 0, -- in minutes
+    created_at TIMESTAMP DEFAULT NOW(),
+    UNIQUE(user_id, subject_id, topic)
+);</code></pre>
+            </div>
+
+            <h4>quizzes</h4>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">sql</span>
+                </div>
+                <pre><code>CREATE TABLE quizzes (
+    id SERIAL PRIMARY KEY,
+    user_id UUID REFERENCES users(id),
+    subject_id INTEGER REFERENCES subjects(id),
+    score INTEGER,
+    total_questions INTEGER,
+    xp_earned INTEGER,
+    coins_earned INTEGER,
+    hints_used INTEGER DEFAULT 0,
+    completion_time INTEGER, -- in seconds
+    completed_at TIMESTAMP DEFAULT NOW()
+);</code></pre>
+            </div>
+
+            <h4>revision_boards</h4>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">sql</span>
+                </div>
+                <pre><code>CREATE TABLE revision_boards (
+    id SERIAL PRIMARY KEY,
+    user_id UUID REFERENCES users(id),
+    title VARCHAR(200) NOT NULL,
+    description TEXT,
+    subject_id INTEGER REFERENCES subjects(id),
+    content JSONB, -- Flexible content structure
+    is_public BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);</code></pre>
+            </div>
+
+            <h4>shop_items</h4>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">sql</span>
+                </div>
+                <pre><code>CREATE TABLE shop_items (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    category VARCHAR(50), -- 'theme', 'hint_pack', 'power_up', 'cosmetic'
+    price INTEGER NOT NULL, -- in Brain Coins
+    min_level INTEGER DEFAULT 1,
+    image_url VARCHAR(255),
+    properties JSONB -- Additional item data
+);</code></pre>
+            </div>
+
+            <h4>user_inventory</h4>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">sql</span>
+                </div>
+                <pre><code>CREATE TABLE user_inventory (
+    id SERIAL PRIMARY KEY,
+    user_id UUID REFERENCES users(id),
+    item_id INTEGER REFERENCES shop_items(id),
+    purchased_at TIMESTAMP DEFAULT NOW(),
+    is_equipped BOOLEAN DEFAULT FALSE,
+    UNIQUE(user_id, item_id)
+);</code></pre>
+            </div>
+
+            <h4>classrooms</h4>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">sql</span>
+                </div>
+                <pre><code>CREATE TABLE classrooms (
+    id SERIAL PRIMARY KEY,
+    teacher_id UUID REFERENCES users(id),
+    name VARCHAR(200) NOT NULL,
+    subject_id INTEGER REFERENCES subjects(id),
+    year_group VARCHAR(20),
+    invite_code VARCHAR(10) UNIQUE,
+    created_at TIMESTAMP DEFAULT NOW()
+);</code></pre>
+            </div>
+
+            <h3>Database Functions</h3>
+            <p>Common database operations are wrapped in functions for consistency:</p>
+
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">sql</span>
+                </div>
+                <pre><code>-- Increment XP and handle level-ups
+CREATE OR REPLACE FUNCTION increment_xp(
+    user_uuid UUID,
+    xp_amount INTEGER
+) RETURNS TABLE(new_xp INTEGER, new_level INTEGER, leveled_up BOOLEAN) AS $$
+DECLARE
+    current_xp INTEGER;
+    current_level INTEGER;
+    new_total_xp INTEGER;
+    calculated_level INTEGER;
+BEGIN
+    SELECT xp, level INTO current_xp, current_level
+    FROM users WHERE id = user_uuid;
+    
+    new_total_xp := current_xp + xp_amount;
+    calculated_level := calculate_level(new_total_xp);
+    
+    UPDATE users
+    SET xp = new_total_xp, level = calculated_level
+    WHERE id = user_uuid;
+    
+    RETURN QUERY
+    SELECT new_total_xp, calculated_level, (calculated_level > current_level);
+END;
+$$ LANGUAGE plpgsql;</code></pre>
+            </div>
+        </section>
+
+        <!-- Authentication -->
+        <section class="doc-section" id="authentication">
+            <h2>5. Authentication System</h2>
+
+            <h3>Supabase Auth Setup</h3>
+            <p>BrainMapRevision uses Supabase's built-in authentication:</p>
+
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">javascript</span>
+                </div>
+                <pre><code>// assets/js/auth.js
+
+// Sign up
+async function signUp(email, password, username, role) {
+    try {
+        const { data, error } = await supabase.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                data: {
+                    username: username,
+                    role: role
+                }
+            }
+        });
+        
+        if (error) throw error;
+        
+        // Create user profile
+        await createUserProfile(data.user.id, username, role);
+        
+        return { success: true, user: data.user };
+    } catch (error) {
+        return { success: false, error: error.message };
+    }
+}
+
+// Sign in
+async function signIn(email, password) {
+    try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+        
+        if (error) throw error;
+        
+        // Update last login
+        await updateLastLogin(data.user.id);
+        
+        return { success: true, user: data.user };
+    } catch (error) {
+        return { success: false, error: error.message };
+    }
+}
+
+// Sign out
+async function signOut() {
+    const { error } = await supabase.auth.signOut();
+    if (!error) {
+        window.location.href = '/index.html';
+    }
+}
+
+// Get current user
+async function getCurrentUser() {
+    const { data: { user } } = await supabase.auth.getUser();
+    return user;
+}
+
+// Check if user is authenticated
+async function isAuthenticated() {
+    const user = await getCurrentUser();
+    return user !== null;
+}</code></pre>
+            </div>
+
+            <h3>Protected Routes</h3>
+            <p>Pages that require authentication should check on load:</p>
+
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">javascript</span>
+                </div>
+                <pre><code>// At the top of protected pages
+document.addEventListener('DOMContentLoaded', async () => {
+    const authenticated = await isAuthenticated();
+    
+    if (!authenticated) {
+        window.location.href = '/auth/login.html';
+        return;
+    }
+    
+    // Load page content
+    loadPageContent();
+});</code></pre>
+            </div>
+
+            <h3>Row Level Security (RLS)</h3>
+            <p>Enable RLS on all tables and create policies:</p>
+
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">sql</span>
+                </div>
+                <pre><code>-- Enable RLS
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE revision_boards ENABLE ROW LEVEL SECURITY;
+
+-- Users can only see/edit their own data
+CREATE POLICY "Users can view own profile"
+    ON users FOR SELECT
+    USING (auth.uid() = id);
+
+CREATE POLICY "Users can update own profile"
+    ON users FOR UPDATE
+    USING (auth.uid() = id);
+
+-- Revision boards: users can CRUD their own, view public ones
+CREATE POLICY "Users can create own boards"
+    ON revision_boards FOR INSERT
+    WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can view own and public boards"
+    ON revision_boards FOR SELECT
+    USING (auth.uid() = user_id OR is_public = true);</code></pre>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section class="doc-section" id="features">
+            <h2>6. Implementing Features</h2>
+
+            <h3>Feature Development Workflow</h3>
+            <ol>
+                <li>Create a new branch: <code>git checkout -b feature/feature-name</code></li>
+                <li>Create necessary HTML files in appropriate directories</li>
+                <li>Add component-specific CSS in <code>assets/css/</code></li>
+                <li>Implement JavaScript functionality in <code>assets/js/</code></li>
+                <li>Update database schema if needed</li>
+                <li>Test thoroughly</li>
+                <li>Commit and push</li>
+                <li>Create pull request</li>
+            </ol>
+
+            <h3>Example: Creating a Quiz Feature</h3>
+
+            <h4>Step 1: HTML Structure (pages/quizzes.html)</h4>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">html</span>
+                </div>
+                <pre><code>&lt;div class="quiz-container"&gt;
+    &lt;div class="quiz-header"&gt;
+        &lt;h1&gt;Mathematics Quiz&lt;/h1&gt;
+        &lt;div class="quiz-progress"&gt;
+            &lt;span&gt;Question &lt;span id="current-question"&gt;1&lt;/span&gt; of &lt;span id="total-questions"&gt;10&lt;/span&gt;&lt;/span&gt;
+            &lt;div class="progress-bar"&gt;
+                &lt;div class="progress-fill" id="progress-fill"&gt;&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div id="quiz-content"&gt;
+        &lt;!-- Questions loaded dynamically --&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="quiz-actions"&gt;
+        &lt;button id="hint-btn" class="btn btn-secondary"&gt;Use Hint (-1 token)&lt;/button&gt;
+        &lt;button id="submit-btn" class="btn btn-primary"&gt;Submit Answer&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <h4>Step 2: CSS Styling (assets/css/quiz.css)</h4>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">css</span>
+                </div>
+                <pre><code>.quiz-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 40px;
+    background: var(--card-bg);
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.quiz-progress {
+    margin-top: 20px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--border-color);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--accent-gradient);
+    width: 10%; /* Updated via JS */
+    transition: width 0.3s ease;
+}
+
+.quiz-question {
+    font-size: 1.3rem;
+    margin: 30px 0;
+}
+
+.quiz-options {
+    display: grid;
+    gap: 15px;
+}
+
+.option-btn {
+    padding: 15px 20px;
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.option-btn:hover {
+    border-color: var(--accent-primary);
+    background: rgba(167, 139, 250, 0.1);
+}
+
+.option-btn.selected {
+    border-color: var(--accent-primary);
+    background: rgba(167, 139, 250, 0.2);
+}
+
+.option-btn.correct {
+    border-color: #48BB78;
+    background: rgba(72, 187, 120, 0.2);
+}
+
+.option-btn.incorrect {
+    border-color: #F56565;
+    background: rgba(245, 101, 101, 0.2);
+}</code></pre>
+            </div>
+
+            <h4>Step 3: JavaScript Logic (assets/js/quiz-engine.js)</h4>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">javascript</span>
+                </div>
+                <pre><code>// Quiz Engine
+class QuizEngine {
+    constructor(questions) {
+        this.questions = questions;
+        this.currentIndex = 0;
+        this.score = 0;
+        this.hintsUsed = 0;
+        this.userAnswers = [];
+    }
+
+    getCurrentQuestion() {
+        return this.questions[this.currentIndex];
+    }
+
+    submitAnswer(answerIndex) {
+        const question = this.getCurrentQuestion();
+        const isCorrect = answerIndex === question.correctAnswer;
+        
+        this.userAnswers.push({
+            questionId: question.id,
+            answer: answerIndex,
+            correct: isCorrect
+        });
+        
+        if (isCorrect) {
+            this.score++;
+        }
+        
+        return isCorrect;
+    }
+
+    nextQuestion() {
+        this.currentIndex++;
+        return this.currentIndex < this.questions.length;
+    }
+
+    getProgress() {
+        return ((this.currentIndex + 1) / this.questions.length) * 100;
+    }
+
+    useHint(hintType) {
+        this.hintsUsed++;
+        const question = this.getCurrentQuestion();
+        
+        switch(hintType) {
+            case 'remove_two':
+                return this.removeIncorrectOptions(2);
+            case 'show_topic':
+                return question.topic;
+            case 'first_letter':
+                return question.answer[0];
+            default:
+                return null;
+        }
+    }
+
+    removeIncorrectOptions(count) {
+        const question = this.getCurrentQuestion();
+        const incorrectIndexes = question.options
+            .map((opt, idx) => idx)
+            .filter(idx => idx !== question.correctAnswer);
+        
+        // Randomly select 'count' incorrect options to remove
+        const toRemove = incorrectIndexes
+            .sort(() => Math.random() - 0.5)
+            .slice(0, count);
+        
+        return toRemove;
+    }
+
+    calculateXP() {
+        const baseXP = 20;
+        const perfectBonus = this.score === this.questions.length ? 50 : 0;
+        const hintPenalty = this.hintsUsed * 2;
+        
+        return Math.max(baseXP + perfectBonus - hintPenalty, 10);
+    }
+
+    calculateCoins() {
+        const baseCoins = 10;
+        const perfectBonus = this.score === this.questions.length ? 25 : 0;
+        
+        return baseCoins + perfectBonus;
+    }
+
+    getResults() {
+        return {
+            score: this.score,
+            total: this.questions.length,
+            percentage: (this.score / this.questions.length) * 100,
+            hintsUsed: this.hintsUsed,
+            xpEarned: this.calculateXP(),
+            coinsEarned: this.calculateCoins(),
+            answers: this.userAnswers
+        };
+    }
+}
+
+// Initialize quiz
+async function initQuiz() {
+    const questions = await fetchQuizQuestions(subjectId, topicId);
+    const quiz = new QuizEngine(questions);
+    
+    displayQuestion(quiz);
+}
+
+function displayQuestion(quiz) {
+    const question = quiz.getCurrentQuestion();
+    const container = document.getElementById('quiz-content');
+    
+    container.innerHTML = `
+        <div class="quiz-question">
+            <p>${question.question}</p>
+        </div>
+        <div class="quiz-options">
+            ${question.options.map((opt, idx) => `
+                <button class="option-btn" data-index="${idx}">
+                    ${opt}
+                </button>
+            `).join('')}
+        </div>
+    `;
+    
+    // Update progress
+    document.getElementById('current-question').textContent = quiz.currentIndex + 1;
+    document.getElementById('progress-fill').style.width = quiz.getProgress() + '%';
+    
+    // Add event listeners
+    setupOptionListeners(quiz);
+}
+
+function setupOptionListeners(quiz) {
+    const options = document.querySelectorAll('.option-btn');
+    options.forEach(btn => {
+        btn.addEventListener('click', () => {
+            options.forEach(o => o.classList.remove('selected'));
+            btn.classList.add('selected');
+        });
+    });
+    
+    document.getElementById('submit-btn').addEventListener('click', () => {
+        submitQuizAnswer(quiz);
+    });
+    
+    document.getElementById('hint-btn').addEventListener('click', () => {
+        useQuizHint(quiz);
+    });
+}
+
+async function submitQuizAnswer(quiz) {
+    const selected = document.querySelector('.option-btn.selected');
+    if (!selected) {
+        alert('Please select an answer');
+        return;
+    }
+    
+    const answerIndex = parseInt(selected.dataset.index);
+    const isCorrect = quiz.submitAnswer(answerIndex);
+    
+    // Show feedback
+    showAnswerFeedback(selected, isCorrect);
+    
+    // Wait then move to next question
+    setTimeout(() => {
+        if (quiz.nextQuestion()) {
+            displayQuestion(quiz);
+        } else {
+            showResults(quiz);
+        }
+    }, 2000);
+}
+
+function showAnswerFeedback(element, isCorrect) {
+    element.classList.add(isCorrect ? 'correct' : 'incorrect');
+    
+    const feedback = document.createElement('div');
+    feedback.className = 'feedback-popup';
+    feedback.textContent = isCorrect ? '✓ Correct!' : '✗ Incorrect';
+    feedback.style.color = isCorrect ? '#48BB78' : '#F56565';
+    element.appendChild(feedback);
+}
+
+async function showResults(quiz) {
+    const results = quiz.getResults();
+    
+    // Save to database
+    await saveQuizResults(results);
+    
+    // Award XP and coins
+    await awardXP(results.xpEarned);
+    await awardCoins(results.coinsEarned);
+    
+    // Display results screen
+    displayResultsScreen(results);
+}
+
+async function useQuizHint(quiz) {
+    const user = await getCurrentUser();
+    
+    if (user.hint_tokens < 1) {
+        alert('No hint tokens available. Purchase more in the shop!');
+        return;
+    }
+    
+    const hintType = 'remove_two'; // or show modal to choose
+    const toRemove = quiz.useHint(hintType);
+    
+    // Update UI to disable removed options
+    toRemove.forEach(idx => {
+        const btn = document.querySelector(`[data-index="${idx}"]`);
+        btn.disabled = true;
+        btn.style.opacity = '0.3';
+    });
+    
+    // Deduct hint token
+    await deductHintToken(user.id);
+}</code></pre>
+            </div>
+
+            <h4>Step 4: Database Integration</h4>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">javascript</span>
+                </div>
+                <pre><code>// Fetch quiz questions from database
+async function fetchQuizQuestions(subjectId, topicId, count = 10) {
+    const { data, error } = await supabase
+        .from('quiz_questions')
+        .select('*')
+        .eq('subject_id', subjectId)
+        .eq('topic', topicId)
+        .limit(count);
+    
+    if (error) {
+        console.error('Error fetching questions:', error);
+        return [];
+    }
+    
+    return data;
+}
+
+// Save quiz results
+async function saveQuizResults(results) {
+    const user = await getCurrentUser();
+    
+    const { error } = await supabase
+        .from('quizzes')
+        .insert({
+            user_id: user.id,
+            subject_id: currentSubjectId,
+            score: results.score,
+            total_questions: results.total,
+            xp_earned: results.xpEarned,
+            coins_earned: results.coinsEarned,
+            hints_used: results.hintsUsed
+        });
+    
+    if (error) {
+        console.error('Error saving results:', error);
+    }
+}
+
+// Award XP to user
+async function awardXP(amount) {
+    const user = await getCurrentUser();
+    
+    const { data, error } = await supabase
+        .rpc('increment_xp', {
+            user_uuid: user.id,
+            xp_amount: amount
+        });
+    
+    if (!error && data.leveled_up) {
+        showLevelUpAnimation(data.new_level);
+    }
+}
+
+// Award Brain Coins
+async function awardCoins(amount) {
+    const user = await getCurrentUser();
+    
+    await supabase
+        .from('users')
+        .update({ 
+            brain_coins: user.brain_coins + amount 
+        })
+        .eq('id', user.id);
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- Styling -->
+        <section class="doc-section" id="styling">
+            <h2>7. Styling Guidelines</h2>
+
+            <h3>CSS Conventions</h3>
+            <ul>
+                <li>Use BEM (Block Element Modifier) naming for components</li>
+                <li>Use CSS custom properties for theming</li>
+                <li>Mobile-first responsive design</li>
+                <li>Consistent spacing using 8px grid (8, 16, 24, 32, 40px)</li>
+                <li>Animations should be smooth and purposeful</li>
+            </ul>
+
+            <h3>BEM Example</h3>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">css</span>
+                </div>
+                <pre><code>/* Block */
+.quiz-card {
+    background: var(--card-bg);
+    border-radius: 15px;
+}
+
+/* Element */
+.quiz-card__header {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.quiz-card__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* Modifier */
+.quiz-card--completed {
+    opacity: 0.6;
+}
+
+.quiz-card--highlighted {
+    border: 2px solid var(--accent-primary);
+}</code></pre>
+            </div>
+
+            <h3>Responsive Design</h3>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">css</span>
+                </div>
+                <pre><code>/* Mobile first */
+.feature-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+    .feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    .feature-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 40px;
+    }
+}</code></pre>
+            </div>
+
+            <h3>Dark Mode Support</h3>
+            <p>Always test features in both light and dark modes. Use CSS variables:</p>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">css</span>
+                </div>
+                <pre><code>/* GOOD: Uses theme variables */
+.card {
+    background: var(--card-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+/* BAD: Hardcoded colors */
+.card {
+    background: white;
+    color: #333;
+    border: 1px solid #ddd;
+}</code></pre>
+            </div>
+
+            <h3>Accessibility</h3>
+            <ul>
+                <li>Minimum color contrast ratio of 4.5:1</li>
+                <li>All interactive elements must be keyboard accessible</li>
+                <li>Use semantic HTML</li>
+                <li>Include ARIA labels where needed</li>
+                <li>Focus states should be visible</li>
+            </ul>
+
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">html</span>
+                </div>
+                <pre><code>&lt;button 
+    class="btn btn-primary" 
+    aria-label="Start quiz"
+    aria-describedby="quiz-description"&gt;
+    Start Quiz
+&lt;/button&gt;
+
+&lt;p id="quiz-description" class="sr-only"&gt;
+    Begin a 10 question mathematics quiz
+&lt;/p&gt;</code></pre>
+            </div>
+        </section>
+
+        <!-- Testing -->
+        <section class="doc-section" id="testing">
+            <h2>8. Testing</h2>
+
+            <h3>Manual Testing Checklist</h3>
+            <p>Before submitting a PR, ensure you've tested:</p>
+            <ul>
+                <li>✓ Feature works in Chrome, Firefox, Safari, Edge</li>
+                <li>✓ Responsive on mobile, tablet, desktop</li>
+                <li>✓ Works in both light and dark mode</li>
+                <li>✓ Keyboard navigation works</li>
+                <li>✓ No console errors</li>
+                <li>✓ Database operations succeed</li>
+                <li>✓ Error states handled gracefully</li>
+            </ul>
+
+            <h3>Browser Testing</h3>
+            <p>Test on:</p>
+            <ul>
+                <li>Chrome/Edge (latest)</li>
+                <li>Firefox (latest)</li>
+                <li>Safari (latest)</li>
+                <li>Mobile browsers (iOS Safari, Chrome Mobile)</li>
+            </ul>
+
+            <h3>Testing Database Functions</h3>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">javascript</span>
+                </div>
+                <pre><code>// Test in browser console
+async function testXPFunction() {
+    const user = await getCurrentUser();
+    console.log('Current XP:', user.xp);
+    
+    const result = await supabase
+        .rpc('increment_xp', {
+            user_uuid: user.id,
+            xp_amount: 100
+        });
+    
+    console.log('Result:', result.data);
+}
+
+testXPFunction();</code></pre>
+            </div>
+
+            <h3>Error Handling</h3>
+            <p>Always handle errors gracefully:</p>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">javascript</span>
+                </div>
+                <pre><code>async function loadQuizData() {
+    try {
+        const questions = await fetchQuizQuestions(subjectId);
+        
+        if (!questions || questions.length === 0) {
+            showError('No questions available for this topic');
+            return;
+        }
+        
+        initQuiz(questions);
+        
+    } catch (error) {
+        console.error('Error loading quiz:', error);
+        showError('Failed to load quiz. Please try again later.');
+    }
+}
+
+function showError(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.textContent = message;
+    document.body.appendChild(errorDiv);
+    
+    setTimeout(() => errorDiv.remove(), 5000);
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- Deployment -->
+        <section class="doc-section" id="deployment">
+            <h2>9. Deployment</h2>
+
+            <h3>GitHub Pages Deployment</h3>
+            <p>The site is hosted on GitHub Pages and automatically deploys from the main branch.</p>
+
+            <ol>
+                <li>Push changes to main branch (or merge PR)</li>
+                <li>GitHub Actions builds and deploys automatically</li>
+                <li>Site updates at: <code>https://jayden4400338.github.io/BrainMapRevision</code></li>
+            </ol>
+
+            <h3>Environment Variables</h3>
+            <p>For production, use environment variables for sensitive data:</p>
+
+            <div class="info-box warning">
+                <h4>⚠️ Security Warning</h4>
+                <p>Never commit API keys or secrets to the repository. Use environment variables or GitHub Secrets for sensitive configuration.</p>
+            </div>
+
+            <h3>Database Migrations</h3>
+            <p>When updating the database schema:</p>
+            <ol>
+                <li>Create migration file in <code>supabase/migrations/</code></li>
+                <li>Name it with timestamp: <code>20250121_add_achievements_table.sql</code></li>
+                <li>Run migration in Supabase dashboard or CLI</li>
+                <li>Test thoroughly before deploying to production</li>
+            </ol>
+
+            <h3>Pre-deployment Checklist</h3>
+            <ul>
+                <li>✓ All tests passing</li>
+                <li>✓ No console errors or warnings</li>
+                <li>✓ Database migrations completed</li>
+                <li>✓ Updated documentation</li>
+                <li>✓ Version number bumped</li>
+                <li>✓ CHANGELOG updated</li>
+            </ul>
+        </section>
+
+        <!-- Contributing -->
+        <section class="doc-section" id="contributing">
+            <h2>10. Contributing Guidelines</h2>
+
+            <h3>Code of Conduct</h3>
+            <p>Please read and follow our <a href="../markdown/CODE_OF_CONDUCT.md">Code of Conduct</a>. We're committed to providing a welcoming and inclusive environment.</p>
+
+            <h3>Contribution Workflow</h3>
+            <ol>
+                <li><strong>Find an issue</strong> - Check existing issues or create one</li>
+                <li><strong>Fork & Clone</strong> - Fork the repo and clone to your machine</li>
+                <li><strong>Create branch</strong> - <code>git checkout -b feature/your-feature</code></li>
+                <li><strong>Make changes</strong> - Implement your feature/fix</li>
+                <li><strong>Test</strong> - Thoroughly test your changes</li>
+                <li><strong>Commit</strong> - Use meaningful commit messages</li>
+                <li><strong>Push</strong> - Push to your fork</li>
+                <li><strong>Pull Request</strong> - Create PR with description</li>
+            </ol>
+
+            <h3>Commit Message Format</h3>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <span class="code-language">plaintext</span>
+                </div>
+                <pre><code>Type: Brief description (max 50 chars)
+
+Detailed explanation of changes if needed.
+- What was changed
+- Why it was changed
+- Any breaking changes
+
+Closes #issue-number</code></pre>
+            </div>
+
+            <p><strong>Types:</strong></p>
+            <ul>
+                <li><code>feat:</code> New feature</li>
+                <li><code>fix:</code> Bug fix</li>
+                <li><code>docs:</code> Documentation changes</li>
+                <li><code>style:</code> Code style changes (formatting, etc.)</li>
+                <li><code>refactor:</code> Code refactoring</li>
+                <li><code>test:</code> Adding or updating tests</li>
+                <li><code>chore:</code> Maintenance tasks</li>
+            </ul>
+
+            <h3>Pull Request Guidelines</h3>
+            <p>Your PR should:</p>
+            <ul>
+                <li>Have a clear, descriptive title</li>
+                <li>Reference related issues</li>
+                <li>Include screenshots for UI changes</li>
+                <li>Pass all checks (if CI is set up)</li>
+                <li>Be reviewed by at least one maintainer</li>
+                <li>Update documentation if needed</li>
+            </ul>
+
+            <h3>What to Contribute</h3>
+            <p><strong>Content:</strong></p>
+            <ul>
+                <li>Past paper questions with mark schemes</li>
+                <li>Revision guides for key topics</li>
+                <li>Quiz questions</li>
+                <li>Flashcard decks</li>
+            </ul>
+
+            <p><strong>Code:</strong></p>
+            <ul>
+                <li>New features from the roadmap</li>
+                <li>Bug fixes</li>
+                <li>Performance improvements</li>
+                <li>Accessibility enhancements</li>
+                <li>Test coverage</li>
+            </ul>
+
+            <p><strong>Documentation:</strong></p>
+            <ul>
+                <li>Improve existing docs</li>
+                <li>Add code examples</li>
+                <li>Create tutorials</li>
+                <li>Translate content</li>
+            </ul>
+
+            <h3>Getting Help</h3>
+            <p>If you need help:</p>
+            <ul>
+                <li>Check existing documentation</li>
+                <li>Search closed issues for solutions</li>
+                <li>Ask in GitHub Discussions</li>
+                <li>Create an issue with the "question" label</li>
+                <li>Join our community forum</li>
+            </ul>
+
+            <div class="info-box success">
+                <h4>🎉 Thank You!</h4>
+                <p>Every contribution, no matter how small, helps make BrainMapRevision better for students everywhere. We appreciate your time and effort!</p>
+            </div>
+        </section>
+
+        <!-- Back to Top -->
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="#" class="btn btn-primary">Back to Top</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="footer-title">BrainMapRevision</h3>
+                    <p class="footer-text">An open-source revision platform empowering students to master all subjects effectively.</p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-heading">Documentation</h4>
+                    <a href="user-guide.html" class="footer-link">User Guide</a>
+                    <a href="developer-guide.html" class="footer-link">Developer Guide</a>
+                    <a href="api-documentation.html" class="footer-link">API Documentation</a>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-heading">Resources</h4>
+                    <a href="../pages/past-papers.html" class="footer-link">Past Papers</a>
+                    <a href="../pages/subjects.html" class="footer-link">Subjects</a>
+                    <a href="../pages/community.html" class="footer-link">Community</a>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-heading">Legal</h4>
+                    <a href="../legal/license.html" class="footer-link">MIT License</a>
+                    <a href="../legal/privacy.html" class="footer-link">Privacy Policy</a>
+                    <a href="../legal/terms.html" class="footer-link">Terms of Service</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 BrainMapRevision. Open source and free forever.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>
