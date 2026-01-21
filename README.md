@@ -3,7 +3,7 @@
 An open-source, customizable revision platform for students to review and master all subjects effectively.
 
 Description
-AllSubjectRevise is a flexible and community-driven platform designed to help students prepare for exams across all subjects. With an easy-to-use interface, comprehensive study materials, interactive quizzes, and the ability to create your own revision boards, it empowers learners to tailor their study sessions to fit their needs.
+ReviseWorld is a flexible and community-driven platform designed to help students prepare for exams across all subjects. With an easy-to-use interface, comprehensive study materials, interactive quizzes, and the ability to create your own revision boards, it empowers learners to tailor their study sessions to fit their needs.
 
 This project is open source, welcoming contributions, and aims to provide detailed documentation to assist users and developers alike.
 
@@ -27,10 +27,10 @@ Node.js and npm
 Installation
 Clone the repo:
 CopyRun
-git clone https://github.com/yourusername/AllSubjectRevise.git
+git clone https://github.com/yourusername/ReviseWorld.git
 Install dependencies:
 CopyRun
-cd AllSubjectRevise
+cd ReviseWorld
 npm install
 Run the development server:
 CopyRun
