@@ -1,166 +1,210 @@
-// Dashboard JavaScript - COMPLETE FINAL VERSION
-// Use existing Supabase client (created in HTML)
+// dashboard.js - Enhanced with loading states and error handling
+(() => {
+  // ======================
+  // SUPABASE CLIENT
+  // ======================
+  const supabaseClient = window.supabaseClient;
 
-const supabase = window.supabaseClient;
-
-if (!supabase) {
-    console.error('Supabase not initialized!');
+  if (!supabaseClient) {
+    console.error('❌ Supabase not initialized!');
     window.location.href = '../auth/login.html';
-}
+    return;
+  }
 
-// DOM Elements
-const usernameEl = document.getElementById('username');
-const userLevelEl = document.getElementById('userLevel');
-const userXPEl = document.getElementById('userXP');
-const userCoinsEl = document.getElementById('userCoins');
-const userHintsEl = document.getElementById('userHints');
-const logoutBtn = document.getElementById('logoutBtn');
-const themeToggle = document.getElementById('themeToggle');
-const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-const navMenu = document.getElementById('navMenu');
+  // ======================
+  // DOM ELEMENTS
+  // ======================
+  const usernameEl = document.getElementById('username');
+  const userLevelEl = document.getElementById('userLevel');
+  const userXPEl = document.getElementById('userXP');
+  const userCoinsEl = document.getElementById('userCoins');
+  const userHintsEl = document.getElementById('userHints');
+  const logoutBtn = document.getElementById('logoutBtn');
 
-let currentUser = null;
-let userProfile = null;
+  let currentUser = null;
+  let userProfile = null;
 
-// ======================
-// THEME TOGGLE
-// ======================
-// Check for saved theme preference or default to light mode
-const currentTheme = localStorage.getItem('theme') || 'light';
-if (currentTheme === 'dark') {
-    document.body.classList.add('dark-mode');
-}
+  // ======================
+  // LOADING STATE
+  // ======================
+  function showLoading(show = true) {
+    const container = document.querySelector('.dashboard-container');
+    if (!container) return;
 
-// Toggle theme on button click
-if (themeToggle) {
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        
-        // Save preference to localStorage
-        const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
-        localStorage.setItem('theme', theme);
-        
-        // Add animation effect
-        themeToggle.style.transform = 'rotate(360deg)';
-        setTimeout(() => {
-            themeToggle.style.transform = '';
-        }, 300);
-    });
-}
+    if (show) {
+      container.style.opacity = '0.5';
+      container.style.pointerEvents = 'none';
+    } else {
+      container.style.opacity = '1';
+      container.style.pointerEvents = 'auto';
+    }
+  }
 
-// ======================
-// MOBILE MENU TOGGLE
-// ======================
-if (mobileMenuBtn && navMenu) {
-    mobileMenuBtn.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-        
-        // Animate hamburger menu
-        const spans = mobileMenuBtn.querySelectorAll('span');
-        if (navMenu.classList.contains('active')) {
-            spans[0].style.transform = 'rotate(45deg) translateY(10px)';
-            spans[1].style.opacity = '0';
-            spans[2].style.transform = 'rotate(-45deg) translateY(-10px)';
-        } else {
-            spans[0].style.transform = '';
-            spans[1].style.opacity = '1';
-            spans[2].style.transform = '';
-        }
-    });
-}
+  // ======================
+  // ERROR NOTIFICATION
+  // ======================
+  function showError(message) {
+    console.error('❌', message);
+    
+    // Create toast notification
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #F56565;
+      color: white;
+      padding: 16px 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 9999;
+      animation: slideIn 0.3s ease;
+    `;
+    toast.textContent = message;
+    document.body.appendChild(toast);
 
-// ======================
-// CHECK AUTHENTICATION
-// ======================
-async function checkAuthentication() {
+    setTimeout(() => {
+      toast.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => toast.remove(), 300);
+    }, 4000);
+  }
+
+  // ======================
+  // CHECK AUTHENTICATION
+  // ======================
+  async function checkAuthentication() {
     try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
-        if (error) throw error;
-        
-        if (!session) {
-            window.location.href = '../auth/login.html';
-            return false;
-        }
+      const { data: { session }, error } = await supabaseClient.auth.getSession();
 
-        currentUser = session.user;
-        return true;
-    } catch (error) {
-        console.error('Auth error:', error);
+      if (error) throw error;
+
+      if (!session) {
+        console.log('No session found, redirecting to login...');
         window.location.href = '../auth/login.html';
         return false;
-    }
-}
+      }
 
-// ======================
-// LOAD USER PROFILE
-// ======================
-async function loadUserProfile() {
+      currentUser = session.user;
+      console.log('✅ User authenticated:', currentUser.email);
+      return true;
+    } catch (error) {
+      console.error('❌ Auth error:', error);
+      showError('Authentication failed. Please log in again.');
+      
+      setTimeout(() => {
+        window.location.href = '../auth/login.html';
+      }, 2000);
+      
+      return false;
+    }
+  }
+
+  // ======================
+  // LOAD USER PROFILE
+  // ======================
+  async function loadUserProfile(retryCount = 0) {
     if (!currentUser) return;
 
     try {
-        const { data, error } = await supabase
-            .from('users')
-            .select('*')
-            .eq('id', currentUser.id)
-            .single();
+      showLoading(true);
+      
+      const { data, error } = await supabaseClient
+        .from('users')
+        .select('*')
+        .eq('id', currentUser.id)
+        .single();
 
-        if (error) {
-            if (error.code === 'PGRST116') {
-                await createUserProfile();
-                return;
-            }
-            throw error;
+      if (error) {
+        // Profile doesn't exist - create it
+        if (error.code === 'PGRST116') {
+          console.log('Profile not found, creating new profile...');
+          await createUserProfile();
+          return;
         }
-
-        userProfile = data;
-        updateDashboardUI();
         
-    } catch (error) {
-        console.error('Error loading profile:', error);
-    }
-}
+        // RLS policy error - might need to wait for trigger
+        if (error.message?.includes('row-level security') && retryCount < 3) {
+          console.log(`RLS policy issue, retrying... (${retryCount + 1}/3)`);
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          return loadUserProfile(retryCount + 1);
+        }
+        
+        throw error;
+      }
 
-// ======================
-// CREATE USER PROFILE
-// ======================
-async function createUserProfile() {
+      userProfile = data;
+      console.log('✅ Profile loaded:', userProfile);
+      updateDashboardUI();
+      showLoading(false);
+      
+    } catch (error) {
+      console.error('❌ Error loading profile:', error);
+      showError('Failed to load profile data. Please refresh the page.');
+      showLoading(false);
+    }
+  }
+
+  // ======================
+  // CREATE USER PROFILE
+  // ======================
+  async function createUserProfile() {
     try {
-        const { data, error } = await supabase
-            .from('users')
-            .insert({
-                id: currentUser.id,
-                email: currentUser.email,
-                username: currentUser.user_metadata?.username || currentUser.email.split('@')[0],
-                role: currentUser.user_metadata?.role || 'student',
-                year_group: currentUser.user_metadata?.year_group || null,
-                xp: 0,
-                level: 1,
-                brain_coins: 0,
-                hint_tokens: 5
-            })
-            .select()
-            .single();
+      console.log('Creating profile for user:', currentUser.id);
+      
+      const profileData = {
+        id: currentUser.id,
+        email: currentUser.email,
+        username: currentUser.user_metadata?.username || currentUser.email.split('@')[0],
+        role: currentUser.user_metadata?.role || 'student',
+        year_group: currentUser.user_metadata?.year_group || null,
+        xp: 0,
+        level: 1,
+        brain_coins: 0,
+        hint_tokens: 5
+      };
 
-        if (error) throw error;
+      const { data, error } = await supabaseClient
+        .from('users')
+        .insert(profileData)
+        .select()
+        .single();
 
-        userProfile = data;
-        updateDashboardUI();
-        
+      if (error) {
+        // Profile might have been created by trigger
+        if (error.code === '23505') { // Unique constraint violation
+          console.log('Profile already exists, fetching...');
+          await loadUserProfile();
+          return;
+        }
+        throw error;
+      }
+
+      userProfile = data;
+      console.log('✅ Profile created:', userProfile);
+      updateDashboardUI();
+      showLoading(false);
+      
     } catch (error) {
-        console.error('Error creating profile:', error);
+      console.error('❌ Error creating profile:', error);
+      showError('Failed to create user profile. Please contact support.');
+      showLoading(false);
     }
-}
+  }
 
-// ======================
-// UPDATE DASHBOARD UI
-// ======================
-function updateDashboardUI() {
-    if (!userProfile) return;
+  // ======================
+  // UPDATE DASHBOARD UI
+  // ======================
+  function updateDashboardUI() {
+    if (!userProfile) {
+      console.warn('No user profile to display');
+      return;
+    }
+
+    console.log('Updating dashboard UI...');
 
     // Update username
     if (usernameEl) {
-        usernameEl.textContent = userProfile.username || 'Student';
+      usernameEl.textContent = userProfile.username || 'Student';
     }
 
     // Update stats
@@ -170,102 +214,146 @@ function updateDashboardUI() {
     if (userHintsEl) userHintsEl.textContent = userProfile.hint_tokens || 5;
 
     updateLevelProgress();
-    animateStats();
-}
+    animateDashboardStats();
+  }
 
-// ======================
-// UPDATE LEVEL PROGRESS
-// ======================
-function updateLevelProgress() {
+  // ======================
+  // LEVEL PROGRESS
+  // ======================
+  function updateLevelProgress() {
     if (!userProfile) return;
     
-    const currentLevel = userProfile.level || 1;
-    const currentXP = userProfile.xp || 0;
-    
-    const currentLevelXP = ((currentLevel - 1) * (currentLevel - 1)) * 100;
-    const nextLevelXP = (currentLevel * currentLevel) * 100;
-    
-    const xpInCurrentLevel = currentXP - currentLevelXP;
-    const xpNeededForLevel = nextLevelXP - currentLevelXP;
-    const progressPercentage = Math.max(0, Math.min(100, (xpInCurrentLevel / xpNeededForLevel) * 100));
+    const level = userProfile.level || 1;
+    const xp = userProfile.xp || 0;
 
-    const progressBar = document.querySelector('.progress-bar-fill');
-    if (progressBar) {
-        progressBar.style.width = progressPercentage + '%';
+    // XP formula: (level - 1)^2 * 100
+    const currentLevelXP = (level - 1) ** 2 * 100;
+    const nextLevelXP = level ** 2 * 100;
+
+    const xpInLevel = xp - currentLevelXP;
+    const xpNeeded = nextLevelXP - currentLevelXP;
+    const progress = Math.max(0, Math.min(100, (xpInLevel / xpNeeded) * 100));
+
+    const bar = document.querySelector('.progress-bar-fill');
+    if (bar) {
+      bar.style.width = `${progress}%`;
     }
 
-    const progressLabel = document.querySelector('.progress-label');
-    if (progressLabel) {
-        progressLabel.innerHTML = `
-            <span>Level ${currentLevel}</span>
-            <span>${xpInCurrentLevel} / ${xpNeededForLevel} XP</span>
-        `;
+    const label = document.querySelector('.progress-label');
+    if (label) {
+      label.innerHTML = `
+        <span>Level ${level}</span>
+        <span>${xpInLevel} / ${xpNeeded} XP</span>
+      `;
     }
-}
+  }
 
-// ======================
-// ANIMATE STATS
-// ======================
-function animateStats() {
-    const statValues = document.querySelectorAll('.stat-value');
+  // ======================
+  // DASHBOARD-ONLY STAT ANIMATION
+  // ======================
+  function animateDashboardStats() {
+    const statCards = document.querySelectorAll('.stat-card');
     
-    statValues.forEach((stat, index) => {
-        stat.style.opacity = '0';
-        stat.style.transform = 'translateY(20px)';
-        
-        setTimeout(() => {
-            stat.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            stat.style.opacity = '1';
-            stat.style.transform = 'translateY(0)';
-        }, index * 100);
+    statCards.forEach((card, i) => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+
+      setTimeout(() => {
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, i * 100);
     });
-}
+  }
 
-// ======================
-// LOGOUT
-// ======================
-async function handleLogout() {
+  // ======================
+  // LOGOUT
+  // ======================
+  async function handleLogout() {
     try {
-        const { error } = await supabase.auth.signOut();
-        if (error) throw error;
+      showLoading(true);
+      
+      const { error } = await supabaseClient.auth.signOut();
+      if (error) throw error;
 
-        localStorage.removeItem('rememberMe');
+      localStorage.removeItem('rememberMe');
+      
+      // Show success message briefly before redirect
+      console.log('✅ Logged out successfully');
+      
+      setTimeout(() => {
         window.location.href = '../index.html';
+      }, 500);
+      
     } catch (error) {
-        console.error('Logout error:', error);
-        alert('Failed to log out');
+      console.error('❌ Logout error:', error);
+      showError('Failed to log out. Please try again.');
+      showLoading(false);
     }
-}
+  }
 
-// ======================
-// INITIALIZE DASHBOARD
-// ======================
-async function initializeDashboard() {
-    const isAuthenticated = await checkAuthentication();
-    if (!isAuthenticated) return;
+  // ======================
+  // INIT
+  // ======================
+  async function init() {
+    console.log('🚀 Initializing dashboard...');
+    
+    const isAuth = await checkAuthentication();
+    if (!isAuth) return;
 
     await loadUserProfile();
-}
+  }
 
-// ======================
-// EVENT LISTENERS
-// ======================
-if (logoutBtn) {
+  // ======================
+  // EVENT LISTENERS
+  // ======================
+  if (logoutBtn) {
     logoutBtn.addEventListener('click', handleLogout);
-}
+  }
 
-// ======================
-// RUN ON PAGE LOAD
-// ======================
-document.addEventListener('DOMContentLoaded', initializeDashboard);
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    // DOM already loaded
+    init();
+  }
 
-// ======================
-// AUTH STATE LISTENER
-// ======================
-if (supabase?.auth) {
-    supabase.auth.onAuthStateChange((event) => {
-        if (event === 'SIGNED_OUT') {
-            window.location.href = '../auth/login.html';
-        }
-    });
-}
+  // Auth state listener
+  supabaseClient.auth.onAuthStateChange((event, session) => {
+    console.log('Auth state changed:', event);
+    
+    if (event === 'SIGNED_OUT') {
+      window.location.href = '../auth/login.html';
+    } else if (event === 'SIGNED_IN' && !userProfile) {
+      // User just signed in, load profile
+      loadUserProfile();
+    }
+  });
+
+  // Add CSS for animations
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    @keyframes slideOut {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+})();

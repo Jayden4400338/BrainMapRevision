@@ -9,7 +9,6 @@
     <link rel="shortcut icon" href="../assets/images/shortcut-icon.png">
 </head>
 <body>
-    <!-- Loading Overlay -->
 
 
     <!-- Navigation -->
@@ -185,7 +184,7 @@
         </div>
     </div>
 
-   <!-- Load Supabase Library FIRST -->
+    <!-- Load Supabase Library FIRST -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <!-- THEN Initialize Supabase ONCE -->
@@ -201,10 +200,11 @@
         })();
     </script>
     
-    <!-- Load Dashboard JS ONLY -->
+    <!-- Load Global Scripts (theme toggle, mobile menu) -->
+    <script src="../script.js"></script>
+    
+    <!-- Load Dashboard-Specific JS LAST -->
     <script src="../assets/js/dashboard.js"></script>
     
-</body>
-</html>
 </body>
 </html>
