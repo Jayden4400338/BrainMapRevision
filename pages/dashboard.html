@@ -10,9 +10,7 @@
 </head>
 <body>
     <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="loading-overlay">
-        <div class="loading-spinner"></div>
-    </div>
+
 
     <!-- Navigation -->
     <nav class="navbar">
@@ -173,16 +171,6 @@
                 </a>
             </div>
 
-            <!-- Recent Activity (Optional) -->
-            <div class="recent-activity" style="display: none;">
-                <div class="section-header">
-                    <h2 class="section-title">Recent Activity</h2>
-                </div>
-                <div class="activity-list" id="activityList">
-                    <!-- Activity items will be loaded dynamically -->
-                </div>
-            </div>
-
             <!-- Logout Button -->
             <div class="logout-section">
                 <button class="btn btn-secondary logout-btn" id="logoutBtn">
@@ -197,23 +185,26 @@
         </div>
     </div>
 
-    <!-- Load Supabase Library -->
+   <!-- Load Supabase Library FIRST -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
-    <!-- Initialize Supabase -->
+    <!-- THEN Initialize Supabase ONCE -->
     <script>
-        // TODO: Replace with your actual Supabase credentials
-       const SUPABASE_URL = 'https://qqbyxydxxcuklakvjlfr.supabase.co';
-       const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxYnl4eWR4eGN1a2xha3ZqbGZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwMjg2MTYsImV4cCI6MjA4NDYwNDYxNn0.2I-uy7ghGa6Ou7uuzDfpYbd75qrNivlBEQBthilYHxw';
-        
-        // Create global Supabase client
-        window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        (function() {
+            const SUPABASE_URL = 'https://qqbyxydxxcuklakvjlfr.supabase.co';
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxYnl4eWR4eGN1a2xha3ZqbGZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwMjg2MTYsImV4cCI6MjA4NDYwNDYxNn0.2I-uy7ghGa6Ou7uuzDfpYbd75qrNivlBEQBthilYHxw';
+            
+            if (!window.supabaseClient) {
+                window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('✅ Supabase client initialized');
+            }
+        })();
     </script>
     
-    <!-- Load Dashboard JS -->
+    <!-- Load Dashboard JS ONLY -->
     <script src="../assets/js/dashboard.js"></script>
     
-    <!-- Load Global Scripts -->
-    <script src="../script.js"></script>
+</body>
+</html>
 </body>
 </html>
