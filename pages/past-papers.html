@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Past Papers - BrainMapRevision</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../assets/css/past-papers.css">
+    <link rel="shortcut icon" href="../assets/images/shortcut-icon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/>
+                    <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/>
+                </svg>
+                <span class="logo-text">BrainMapRevision</span>
+            </div>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="subjects.html" class="nav-link">Subjects</a>
+                <a href="past-papers.html" class="nav-link active">Past Papers</a>
+                <a href="quizzes.html" class="nav-link">Quizzes</a>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Past Papers Page Content -->
+    <div class="past-papers-container">
+        <div class="container">
+            <!-- Header -->
+            <div class="page-header">
+                <h1 class="page-title">Past Paper <span class="gradient-text">Questions</span></h1>
+                <p class="page-description">Practice with real exam questions from major UK exam boards</p>
+            </div>
+
+            <!-- Filters Section -->
+            <div class="filters-section">
+                <div class="filters-header">
+                    <h3><i class="fa-solid fa-filter"></i> Filter Questions</h3>
+                    <button class="btn btn-secondary btn-small" id="clearFiltersBtn">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        Clear Filters
+                    </button>
+                </div>
+
+                <div class="filters-grid">
+                    <!-- Subject Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i class="fa-solid fa-book"></i>
+                            Subject
+                        </label>
+                        <select id="subjectFilter" class="filter-select">
+                            <option value="">All Subjects</option>
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+
+                    <!-- Exam Board Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i class="fa-solid fa-building-columns"></i>
+                            Exam Board
+                        </label>
+                        <select id="examBoardFilter" class="filter-select">
+                            <option value="">All Boards</option>
+                            <option value="AQA">AQA</option>
+                            <option value="Edexcel">Edexcel</option>
+                            <option value="OCR">OCR</option>
+                            <option value="WJEC">WJEC</option>
+                            <option value="SQA">SQA</option>
+                        </select>
+                    </div>
+
+                    <!-- Year Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i class="fa-solid fa-calendar"></i>
+                            Year
+                        </label>
+                        <select id="yearFilter" class="filter-select">
+                            <option value="">All Years</option>
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+
+                    <!-- Difficulty Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i class="fa-solid fa-signal"></i>
+                            Difficulty
+                        </label>
+                        <select id="difficultyFilter" class="filter-select">
+                            <option value="">All Levels</option>
+                            <option value="Foundation">Foundation</option>
+                            <option value="Higher">Higher</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="search-section">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input 
+                            type="text" 
+                            id="searchInput" 
+                            class="search-input" 
+                            placeholder="Search by topic or keyword..."
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Info -->
+            <div class="results-info">
+                <p id="resultsCount">Loading questions...</p>
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="list">
+                        <i class="fa-solid fa-list"></i>
+                        List
+                    </button>
+                    <button class="view-btn" data-view="grid">
+                        <i class="fa-solid fa-grip"></i>
+                        Grid
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="loading-state">
+                <div class="loading-spinner"></div>
+                <p>Loading past paper questions...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="error-state" style="display: none;">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <h3>Unable to load questions</h3>
+                <p>Please check your connection and try again</p>
+                <button class="btn btn-primary" onclick="loadQuestions()">Retry</button>
+            </div>
+
+            <!-- Questions List -->
+            <div class="questions-container" id="questionsContainer">
+                <!-- Questions loaded dynamically -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <i class="fa-solid fa-inbox"></i>
+                <h3>No questions found</h3>
+                <p>Try adjusting your filters or search terms</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="footer-title">BrainMapRevision</h3>
+                    <p class="footer-text">An open-source revision platform empowering students to master all subjects effectively.</p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-heading">Quick Links</h4>
+                    <a href="dashboard.html" class="footer-link">Dashboard</a>
+                    <a href="subjects.html" class="footer-link">Subjects</a>
+                    <a href="past-papers.html" class="footer-link">Past Papers</a>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-heading">Resources</h4>
+                    <a href="quizzes.html" class="footer-link">Quizzes</a>
+                    <a href="flashcards.html" class="footer-link">Flashcards</a>
+                    <a href="revision-boards.html" class="footer-link">Revision Boards</a>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-heading">Legal</h4>
+                    <a href="../legal/license.html" class="footer-link">MIT License</a>
+                    <a href="../legal/privacy.html" class="footer-link">Privacy Policy</a>
+                    <a href="../legal/terms.html" class="footer-link">Terms of Service</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 BrainMapRevision. Open source and free forever.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Initialize Supabase -->
+    <script>
+        (function() {
+            const SUPABASE_URL = 'https://qqbyxydxxcuklakvjlfr.supabase.co';
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxYnl4eWR4eGN1a2xha3ZqbGZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwMjg2MTYsImV4cCI6MjA4NDYwNDYxNn0.2I-uy7ghGa6Ou7uuzDfpYbd75qrNivlBEQBthilYHxw';
+            
+            if (!window.supabaseClient) {
+                window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            }
+        })();
+    </script>
+
+    <!-- Auth Check -->
+    <script src="../assets/js/auth-check.js"></script>
+
+    <!-- Global Scripts -->
+    <script src="../script.js"></script>
+    
+    <!-- Past Papers Script -->
+    <script src="../assets/js/past-papers.js"></script>
+</body>
+</html>
