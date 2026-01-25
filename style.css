@@ -112,6 +112,48 @@ body {
     gap: 32px;
 }
 
+.nav-profile {
+    display: flex;
+    align-items: center;
+    margin-left: 15px;
+}
+
+.nav-profile-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--accent-primary);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.nav-profile-picture:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}
+
+.nav-profile-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: 2px solid var(--accent-primary);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.nav-profile-placeholder:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}
+
 .nav-link {
     color: var(--text-primary);
     text-decoration: none;

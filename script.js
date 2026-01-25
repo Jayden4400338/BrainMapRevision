@@ -188,6 +188,59 @@ if (hero) {
     });
 }
 
+// Load and display navbar profile picture
+async function loadNavbarProfile() {
+  const navProfile = document.getElementById('navProfile');
+  if (!navProfile) return;
+
+  try {
+    // Get Supabase client
+    const supabase = window.supabaseClient;
+    if (!supabase) return;
+
+    // Check if user is authenticated
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      navProfile.style.display = 'none';
+      return;
+    }
+
+    // Get user profile
+    const { data: profile, error: profileError } = await supabase
+      .from('users')
+      .select('username, profile_picture_url')
+      .eq('id', user.id)
+      .single();
+
+    if (profileError || !profile) {
+      // Show placeholder with initials
+      const initials = (user.email || 'U').substring(0, 2).toUpperCase();
+      navProfile.innerHTML = `<div class="nav-profile-placeholder" onclick="window.location.href='pages/profile.html'">${initials}</div>`;
+      return;
+    }
+
+    // Display profile picture or placeholder
+    // Determine correct path based on current page location
+    const isInPages = window.location.pathname.includes('/pages/');
+    const profilePath = isInPages ? 'profile.html' : 'pages/profile.html';
+    
+    if (profile.profile_picture_url) {
+      navProfile.innerHTML = `<img src="${profile.profile_picture_url}" alt="Profile" class="nav-profile-picture" onclick="window.location.href='${profilePath}'">`;
+    } else {
+      const initials = (profile.username || user.email || 'U').substring(0, 2).toUpperCase();
+      navProfile.innerHTML = `<div class="nav-profile-placeholder" onclick="window.location.href='${profilePath}'">${initials}</div>`;
+    }
+  } catch (error) {
+    console.error('Error loading navbar profile:', error);
+    navProfile.style.display = 'none';
+  }
+}
+
+// Load navbar profile on page load (if Supabase is available)
+if (window.supabaseClient) {
+  document.addEventListener('DOMContentLoaded', loadNavbarProfile);
+}
+
 // Console message for developers
 console.log('%cBrainMapRevision', 'color: #FF8C42; font-size: 24px; font-weight: bold;');
 console.log('%cOpen Source & Free Forever 🚀', 'color: #FFB366; font-size: 14px;');

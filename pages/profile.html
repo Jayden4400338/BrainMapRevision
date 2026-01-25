@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile - BrainMapRevision</title>
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="../assets/css/profile.css" />
+    <link rel="stylesheet" href="../assets/css/custom-select.css" />
+    <link rel="shortcut icon" href="../assets/images/shortcut-icon.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <svg
+            class="logo-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"
+            />
+            <path
+              d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"
+            />
+          </svg>
+          <span class="logo-text">BrainMapRevision</span>
+        </div>
+
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <div class="nav-menu" id="navMenu">
+          <a href="dashboard.html" class="nav-link">Dashboard</a>
+          <a href="subjects.html" class="nav-link">Subjects</a>
+          <a href="past-papers.html" class="nav-link">Past Papers</a>
+          <a href="progress.html" class="nav-link">Progress</a>
+          <a href="profile.html" class="nav-link active">Profile</a>
+          <div class="nav-profile" id="navProfile">
+            <!-- Profile picture will be inserted here by script.js -->
+          </div>
+          <button
+            class="theme-toggle"
+            id="themeToggle"
+            aria-label="Toggle dark mode"
+          >
+            <svg
+              class="sun-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="5" />
+              <line x1="12" y1="1" x2="12" y2="3" />
+              <line x1="12" y1="21" x2="12" y2="23" />
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+              <line x1="1" y1="12" x2="3" y2="12" />
+              <line x1="21" y1="12" x2="23" y2="12" />
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            <svg
+              class="moon-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Profile Content -->
+    <div class="profile-container">
+      <div class="container">
+        <!-- Profile Header -->
+        <div class="profile-header">
+          <div class="profile-avatar-section">
+            <div class="avatar-wrapper">
+              <img
+                id="profileAvatar"
+                src=""
+                alt="Profile Picture"
+                class="profile-avatar"
+              />
+              <div class="avatar-overlay">
+                <label for="avatarInput" class="avatar-upload-btn">
+                  <i class="fas fa-camera"></i>
+                  <span>Change Photo</span>
+                </label>
+                <input
+                  type="file"
+                  id="avatarInput"
+                  accept="image/*"
+                  style="display: none"
+                />
+              </div>
+            </div>
+            <div class="avatar-info">
+              <h1 class="profile-username" id="profileUsername">Loading...</h1>
+              <p class="profile-email" id="profileEmail">Loading...</p>
+              <div class="profile-stats">
+                <div class="profile-stat">
+                  <span class="stat-value" id="profileLevel">1</span>
+                  <span class="stat-label">Level</span>
+                </div>
+                <div class="profile-stat">
+                  <span class="stat-value" id="profileXP">0</span>
+                  <span class="stat-label">XP</span>
+                </div>
+                <div class="profile-stat">
+                  <span class="stat-value" id="profileCoins">0</span>
+                  <span class="stat-label">Coins</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profile Sections -->
+        <div class="profile-sections">
+          <!-- Personal Information -->
+          <section class="profile-section">
+            <div class="section-header">
+              <h2 class="section-title">
+                <i class="fas fa-user"></i> Personal Information
+              </h2>
+            </div>
+            <div class="section-content">
+              <form id="personalInfoForm" class="profile-form">
+                <div class="form-group">
+                  <label for="usernameInput" class="form-label">Username</label>
+                  <input
+                    type="text"
+                    id="usernameInput"
+                    class="form-input"
+                    placeholder="Enter username"
+                    required
+                  />
+                  <small class="form-hint"
+                    >3-50 characters, letters, numbers, and underscores only</small
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label for="emailInput" class="form-label">Email</label>
+                  <input
+                    type="email"
+                    id="emailInput"
+                    class="form-input"
+                    placeholder="Enter email"
+                    disabled
+                  />
+                  <small class="form-hint">Email cannot be changed</small>
+                </div>
+
+                <div class="form-group">
+                  <label for="yearGroupInput" class="form-label"
+                    >Year Group</label
+                  >
+                  <select id="yearGroupInput" class="form-input">
+                    <option value="">Select year group</option>
+                    <option value="Year 7">Year 7</option>
+                    <option value="Year 8">Year 8</option>
+                    <option value="Year 9">Year 9</option>
+                    <option value="Year 10">Year 10</option>
+                    <option value="Year 11">Year 11</option>
+                    <option value="Year 12">Year 12</option>
+                    <option value="Year 13">Year 13</option>
+                  </select>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary" id="savePersonalBtn">
+                    <i class="fas fa-save"></i> Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
+          </section>
+
+          <!-- Change Password -->
+          <section class="profile-section">
+            <div class="section-header">
+              <h2 class="section-title">
+                <i class="fas fa-lock"></i> Change Password
+              </h2>
+            </div>
+            <div class="section-content">
+              <form id="passwordForm" class="profile-form">
+                <div class="form-group">
+                  <label for="currentPasswordInput" class="form-label"
+                    >Current Password</label
+                  >
+                  <input
+                    type="password"
+                    id="currentPasswordInput"
+                    class="form-input"
+                    placeholder="Enter current password"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="newPasswordInput" class="form-label"
+                    >New Password</label
+                  >
+                  <input
+                    type="password"
+                    id="newPasswordInput"
+                    class="form-input"
+                    placeholder="Enter new password"
+                    required
+                    minlength="8"
+                  />
+                  <small class="form-hint"
+                    >Must be at least 8 characters long</small
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label for="confirmPasswordInput" class="form-label"
+                    >Confirm New Password</label
+                  >
+                  <input
+                    type="password"
+                    id="confirmPasswordInput"
+                    class="form-input"
+                    placeholder="Confirm new password"
+                    required
+                    minlength="8"
+                  />
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary" id="savePasswordBtn">
+                    <i class="fas fa-key"></i> Update Password
+                  </button>
+                </div>
+              </form>
+            </div>
+          </section>
+
+          <!-- Account Settings -->
+          <section class="profile-section">
+            <div class="section-header">
+              <h2 class="section-title">
+                <i class="fas fa-cog"></i> Account Settings
+              </h2>
+            </div>
+            <div class="section-content">
+              <div class="settings-list">
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <h3 class="setting-title">Role</h3>
+                    <p class="setting-description" id="userRole">Student</p>
+                  </div>
+                </div>
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <h3 class="setting-title">Member Since</h3>
+                    <p class="setting-description" id="memberSince">
+                      Loading...
+                    </p>
+                  </div>
+                </div>
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <h3 class="setting-title">Last Login</h3>
+                    <p class="setting-description" id="lastLogin">
+                      Loading...
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- Load Environment Configuration FIRST -->
+    <script src="../assets/js/env-config.js"></script>
+    
+    <!-- Load Supabase Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Initialize Supabase -->
+    <script>
+      (function () {
+        // Get configuration from environment (set by env-config.js)
+        const SUPABASE_URL = window.__ENV__?.SUPABASE_URL || "https://qqbyxydxxcuklakvjlfr.supabase.co";
+        const SUPABASE_ANON_KEY = window.__ENV__?.SUPABASE_ANON_KEY || "Your-anon-key-here";
+
+        if (!window.supabaseClient) {
+          window.supabaseClient = window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY,
+          );
+          console.log("✅ Supabase client initialized");
+        }
+      })();
+    </script>
+
+    <!-- Load Scripts -->
+    <script src="../script.js"></script>
+    <script src="../assets/js/custom-select.js"></script>
+    <script src="../assets/js/profile.js"></script>
+  </body>
+</html>
