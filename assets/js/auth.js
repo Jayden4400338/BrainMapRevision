@@ -1,15 +1,9 @@
-// Enhanced Authentication Functions for BrainMapRevision
-// Includes username and email uniqueness validation
 
-// Get Supabase client from global scope
 const supabase = window.supabaseClient || window.supabase?.createClient(
     'https://qqbyxydxxcuklakvjlfr.supabase.co',
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxYnl4eWR4eGN1a2xha3ZqbGZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwMjg2MTYsImV4cCI6MjA4NDYwNDYxNn0.2I-uy7ghGa6Ou7uuzDfpYbd75qrNivlBEQBthilYHxw'
 );
 
-// ======================
-// VALIDATION FUNCTIONS
-// ======================
 
 /**
  * Validate username format
@@ -140,9 +134,6 @@ function validatePassword(password, confirmPassword) {
     return { valid: true };
 }
 
-// ======================
-// SIGN UP
-// ======================
 
 /**
  * Sign up a new user
@@ -232,9 +223,6 @@ async function signUp(userData) {
     }
 }
 
-// ======================
-// LOGIN
-// ======================
 
 /**
  * Sign in a user
@@ -283,10 +271,6 @@ async function signIn(email, password, rememberMe = false) {
     }
 }
 
-// ======================
-// SIGN OUT
-// ======================
-
 /**
  * Sign out the current user
  * @returns {Promise<Object>} - {success: boolean, error: string}
@@ -311,9 +295,7 @@ async function signOut() {
     }
 }
 
-// ======================
-// GET CURRENT USER
-// ======================
+
 
 /**
  * Get the current authenticated user
@@ -351,9 +333,7 @@ async function getUserProfile(userId) {
     }
 }
 
-// ======================
-// CHECK AUTHENTICATION
-// ======================
+
 
 /**
  * Check if user is authenticated
@@ -364,9 +344,7 @@ async function isAuthenticated() {
     return user !== null;
 }
 
-// ======================
-// PASSWORD RESET
-// ======================
+
 
 /**
  * Request password reset email
@@ -420,11 +398,8 @@ async function updatePassword(newPassword) {
     }
 }
 
-// ======================
-// EXPORT FUNCTIONS
-// ======================
 
-// Make functions available globally
+
 if (typeof window !== 'undefined') {
     window.BrainMapAuth = {
         signUp,

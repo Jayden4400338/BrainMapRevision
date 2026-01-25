@@ -1,8 +1,8 @@
-// dashboard.js - Enhanced with loading states and error handling
+
 (() => {
-  // ======================
-  // SUPABASE CLIENT
-  // ======================
+  
+  
+  
   const supabaseClient = window.supabaseClient;
 
   if (!supabaseClient) {
@@ -11,9 +11,9 @@
     return;
   }
 
-  // ======================
-  // DOM ELEMENTS
-  // ======================
+  
+  
+  
   const usernameEl = document.getElementById('username');
   const userLevelEl = document.getElementById('userLevel');
   const userXPEl = document.getElementById('userXP');
@@ -24,9 +24,9 @@
   let currentUser = null;
   let userProfile = null;
 
-  // ======================
-  // LOADING STATE
-  // ======================
+  
+  
+  
   function showLoading(show = true) {
     const container = document.querySelector('.dashboard-container');
     if (!container) return;
@@ -40,13 +40,13 @@
     }
   }
 
-  // ======================
-  // ERROR NOTIFICATION
-  // ======================
+  
+  
+  
   function showError(message) {
     console.error('❌', message);
     
-    // Create toast notification
+    
     const toast = document.createElement('div');
     toast.style.cssText = `
       position: fixed;
@@ -69,9 +69,9 @@
     }, 4000);
   }
 
-  // ======================
-  // CHECK AUTHENTICATION
-  // ======================
+  
+  
+  
   async function checkAuthentication() {
     try {
       const { data: { session }, error } = await supabaseClient.auth.getSession();
@@ -99,16 +99,16 @@
     }
   }
 
-  // ======================
-  // LOAD USER PROFILE
-  // ======================
+  
+  
+  
   async function loadUserProfile(retryCount = 0) {
     if (!currentUser) return;
 
     try {
       showLoading(true);
       
-      // Update study streak first
+      
       try {
         const { data: streakData, error: streakError } = await supabaseClient
           .rpc('update_study_streak', {
@@ -132,14 +132,14 @@
         .single();
 
       if (error) {
-        // Profile doesn't exist - create it
+        
         if (error.code === 'PGRST116') {
           console.log('Profile not found, creating new profile...');
           await createUserProfile();
           return;
         }
         
-        // RLS policy error - might need to wait for trigger
+        
         if (error.message?.includes('row-level security') && retryCount < 3) {
           console.log(`RLS policy issue, retrying... (${retryCount + 1}/3)`);
           await new Promise(resolve => setTimeout(resolve, 1000));
@@ -161,9 +161,9 @@
     }
   }
 
-  // ======================
-  // SHOW STREAK BONUS
-  // ======================
+  
+  
+  
   function showStreakBonus(streak, xp, coins) {
     const notification = document.createElement('div');
     notification.style.cssText = `
@@ -196,9 +196,9 @@
     }, 4000);
   }
 
-  // ======================
-  // CREATE USER PROFILE
-  // ======================
+  
+  
+  
   async function createUserProfile() {
     try {
       console.log('Creating profile for user:', currentUser.id);
@@ -222,8 +222,8 @@
         .single();
 
       if (error) {
-        // Profile might have been created by trigger
-        if (error.code === '23505') { // Unique constraint violation
+        
+        if (error.code === '23505') { 
           console.log('Profile already exists, fetching...');
           await loadUserProfile();
           return;
@@ -243,9 +243,9 @@
     }
   }
 
-  // ======================
-  // UPDATE DASHBOARD UI
-  // ======================
+  
+  
+  
   function updateDashboardUI() {
     if (!userProfile) {
       console.warn('No user profile to display');
@@ -254,12 +254,12 @@
 
     console.log('Updating dashboard UI for role:', userProfile.role);
 
-    // Update username
+    
     if (usernameEl) {
       usernameEl.textContent = userProfile.username || 'Student';
     }
 
-    // Update stats
+    
     if (userLevelEl) userLevelEl.textContent = userProfile.level || 1;
     if (userXPEl) userXPEl.textContent = (userProfile.xp || 0).toLocaleString();
     if (userCoinsEl) userCoinsEl.textContent = (userProfile.brain_coins || 0).toLocaleString();
@@ -268,7 +268,7 @@
     updateLevelProgress();
     animateDashboardStats();
     
-    // Show role-specific content
+    
     if (userProfile.role === 'teacher') {
       console.log('User is a teacher, loading teacher dashboard');
       showTeacherDashboard();
@@ -278,9 +278,9 @@
     }
   }
   
-  // ======================
-  // TEACHER DASHBOARD
-  // ======================
+  
+  
+  
   function showTeacherDashboard() {
     const quickActionsGrid = document.querySelector('.quick-actions');
     if (!quickActionsGrid) {
@@ -290,7 +290,7 @@
     
     console.log('Loading teacher dashboard for:', userProfile.username);
     
-    // Add teacher-specific action cards
+    
     const teacherCard = document.createElement('a');
     teacherCard.href = 'classroom/dashboard.html';
     teacherCard.className = 'action-card teacher-only';
@@ -310,10 +310,10 @@
       <p class="action-description">Manage your classes and students</p>
     `;
     
-    // Insert teacher card at the beginning
+    
     quickActionsGrid.insertBefore(teacherCard, quickActionsGrid.firstChild);
     
-    // Add a second teacher-only card for assignments
+    
     const assignmentsCard = document.createElement('a');
     assignmentsCard.href = 'classroom/assignments.html';
     assignmentsCard.className = 'action-card teacher-only';
@@ -334,50 +334,50 @@
       <p class="action-description">Create and track student assignments</p>
     `;
     
-    // Insert after the first teacher card
+    
     quickActionsGrid.insertBefore(assignmentsCard, quickActionsGrid.children[1]);
     
-    // Update welcome message with teacher emoji
+    
     const welcomeTitle = document.querySelector('.welcome-title');
     if (welcomeTitle) {
       const usernameSpan = welcomeTitle.querySelector('#username');
       if (usernameSpan) {
         usernameSpan.textContent = userProfile.username;
       }
-      // Change emoji to teacher
+      
       welcomeTitle.innerHTML = welcomeTitle.innerHTML.replace('👋', '👨‍🏫');
     }
     
-    // Add visual indicator
+    
     const welcomeSection = document.querySelector('.welcome-section');
     if (welcomeSection) {
       welcomeSection.style.borderTop = '4px solid #10B981';
     }
     
-    console.log('✅ Teacher dashboard loaded with', quickActionsGrid.querySelectorAll('.teacher-only').length, 'teacher cards');
+    
   }
   
-  // ======================
-  // STUDENT DASHBOARD
-  // ======================
+  
+  
+  
   function showStudentDashboard() {
-    // Remove any teacher-only elements that might exist
+    
     const teacherElements = document.querySelectorAll('.teacher-only');
     teacherElements.forEach(el => el.remove());
     
-    console.log('✅ Student dashboard loaded');
+   
   }
 
-  // ======================
-  // LEVEL PROGRESS
-  // ======================
+  
+  
+  
   function updateLevelProgress() {
     if (!userProfile) return;
     
     const level = userProfile.level || 1;
     const xp = userProfile.xp || 0;
 
-    // XP formula: (level - 1)^2 * 100
+    
     const currentLevelXP = (level - 1) ** 2 * 100;
     const nextLevelXP = level ** 2 * 100;
 
@@ -399,9 +399,9 @@
     }
   }
 
-  // ======================
-  // DASHBOARD-ONLY STAT ANIMATION
-  // ======================
+  
+  
+  
   function animateDashboardStats() {
     const statCards = document.querySelectorAll('.stat-card');
     
@@ -417,9 +417,9 @@
     });
   }
 
-  // ======================
-  // LOGOUT
-  // ======================
+  
+  
+  
   async function handleLogout() {
     try {
       showLoading(true);
@@ -429,25 +429,25 @@
 
       localStorage.removeItem('rememberMe');
       
-      // Show success message briefly before redirect
-      console.log('✅ Logged out successfully');
+      
+  
       
       setTimeout(() => {
         window.location.href = '../index.html';
       }, 500);
       
     } catch (error) {
-      console.error('❌ Logout error:', error);
+ 
       showError('Failed to log out. Please try again.');
       showLoading(false);
     }
   }
 
-  // ======================
-  // INIT
-  // ======================
+  
+  
+  
   async function init() {
-    console.log('🚀 Initializing dashboard...');
+
     
     const isAuth = await checkAuthentication();
     if (!isAuth) return;
@@ -455,34 +455,34 @@
     await loadUserProfile();
   }
 
-  // ======================
-  // EVENT LISTENERS
-  // ======================
+  
+  
+  
   if (logoutBtn) {
     logoutBtn.addEventListener('click', handleLogout);
   }
 
-  // Initialize on page load
+  
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
-    // DOM already loaded
+    
     init();
   }
 
-  // Auth state listener
+  
   supabaseClient.auth.onAuthStateChange((event, session) => {
     console.log('Auth state changed:', event);
     
     if (event === 'SIGNED_OUT') {
       window.location.href = '../auth/login.html';
     } else if (event === 'SIGNED_IN' && !userProfile) {
-      // User just signed in, load profile
+      
       loadUserProfile();
     }
   });
 
-  // Add CSS for animations
+  
   const style = document.createElement('style');
   style.textContent = `
     @keyframes slideIn {

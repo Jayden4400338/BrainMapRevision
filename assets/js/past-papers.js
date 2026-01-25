@@ -1,8 +1,8 @@
-// assets/js/past-papers.js
-// Past Papers Page Logic
+
+
 
 (function() {
-    // State
+    
     let allQuestions = [];
     let allSubjects = [];
     let currentView = 'list';
@@ -14,7 +14,7 @@
         search: ''
     };
 
-    // DOM Elements
+    
     const subjectFilter = document.getElementById('subjectFilter');
     const examBoardFilter = document.getElementById('examBoardFilter');
     const yearFilter = document.getElementById('yearFilter');
@@ -28,9 +28,9 @@
     const resultsCount = document.getElementById('resultsCount');
     const viewBtns = document.querySelectorAll('.view-btn');
 
-    // ==========================================
-    // LOAD DATA
-    // ==========================================
+    
+    
+    
 
     async function loadSubjects() {
         try {
@@ -76,9 +76,9 @@
         }
     }
 
-    // ==========================================
-    // POPULATE FILTERS
-    // ==========================================
+    
+    
+    
 
     function populateSubjectFilter(subjects) {
         subjects.forEach(subject => {
@@ -88,7 +88,7 @@
             subjectFilter.appendChild(option);
         });
 
-        // Check for subject from URL params
+        
         const urlParams = new URLSearchParams(window.location.search);
         const subjectId = urlParams.get('subject');
         if (subjectId) {
@@ -108,34 +108,34 @@
         });
     }
 
-    // ==========================================
-    // FILTER LOGIC
-    // ==========================================
+    
+    
+    
 
     function applyFilters() {
         let filtered = [...allQuestions];
 
-        // Subject filter
+        
         if (filters.subject) {
             filtered = filtered.filter(q => q.subject_id == filters.subject);
         }
 
-        // Exam board filter
+        
         if (filters.examBoard) {
             filtered = filtered.filter(q => q.exam_board === filters.examBoard);
         }
 
-        // Year filter
+        
         if (filters.year) {
             filtered = filtered.filter(q => q.year == filters.year);
         }
 
-        // Difficulty filter
+        
         if (filters.difficulty) {
             filtered = filtered.filter(q => q.difficulty === filters.difficulty);
         }
 
-        // Search filter
+        
         if (filters.search) {
             const searchLower = filters.search.toLowerCase();
             filtered = filtered.filter(q => {
@@ -167,9 +167,9 @@
         applyFilters();
     }
 
-    // ==========================================
-    // DISPLAY QUESTIONS
-    // ==========================================
+    
+    
+    
 
     function displayQuestions(questions) {
         if (questions.length === 0) {
@@ -185,7 +185,7 @@
             questionsContainer.appendChild(card);
         });
 
-        // Apply view mode
+        
         questionsContainer.className = `questions-container ${currentView === 'grid' ? 'grid-view' : ''}`;
     }
 
@@ -264,9 +264,9 @@
         return card;
     }
 
-    // ==========================================
-    // MARK SCHEME TOGGLE
-    // ==========================================
+    
+    
+    
 
     window.toggleMarkScheme = function(questionId) {
         const markScheme = document.getElementById(`markScheme${questionId}`);
@@ -275,9 +275,9 @@
         }
     };
 
-    // ==========================================
-    // VIEW TOGGLE
-    // ==========================================
+    
+    
+    
 
     function toggleView(view) {
         currentView = view;
@@ -292,9 +292,9 @@
         questionsContainer.className = `questions-container ${view === 'grid' ? 'grid-view' : ''}`;
     }
 
-    // ==========================================
-    // UI HELPERS
-    // ==========================================
+    
+    
+    
 
     function showLoading() {
         loadingState.style.display = 'flex';
@@ -328,12 +328,12 @@
         resultsCount.textContent = `Showing ${count} question${count !== 1 ? 's' : ''}`;
     }
 
-    // ==========================================
-    // EVENT LISTENERS
-    // ==========================================
+    
+    
+    
 
     function setupEventListeners() {
-        // Filter changes
+        
         subjectFilter.addEventListener('change', (e) => {
             filters.subject = e.target.value;
             applyFilters();
@@ -354,7 +354,7 @@
             applyFilters();
         });
 
-        // Search with debounce
+        
         let searchTimeout;
         searchInput.addEventListener('input', (e) => {
             clearTimeout(searchTimeout);
@@ -364,10 +364,10 @@
             }, 300);
         });
 
-        // Clear filters
+        
         clearFiltersBtn.addEventListener('click', clearFilters);
 
-        // View toggle
+        
         viewBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 toggleView(btn.dataset.view);
@@ -375,21 +375,21 @@
         });
     }
 
-    // ==========================================
-    // INITIALIZATION
-    // ==========================================
+    
+    
+    
 
     async function init() {
-        console.log('🚀 Initializing past papers page...');
+       
         
         setupEventListeners();
         await loadSubjects();
         await loadQuestions();
         
-        console.log('✅ Past papers page loaded');
+    
     }
 
-    // Initialize when DOM is ready
+    
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {

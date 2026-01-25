@@ -1,8 +1,8 @@
-// Board Creator Logic for BrainMapRevision - Enhanced UI
+
 (function() {
-    // ======================
-    // STATE
-    // ======================
+    
+    
+    
     let currentUser = null;
     let allBoards = [];
     let allSubjects = [];
@@ -11,9 +11,9 @@
     let editingBoard = null;
     let currentBoardContent = [];
 
-    // ======================
-    // DOM ELEMENTS
-    // ======================
+    
+    
+    
     const loadingState = document.getElementById('loadingState');
     const errorState = document.getElementById('errorState');
     const emptyState = document.getElementById('emptyState');
@@ -21,14 +21,14 @@
     const createBoardBtn = document.getElementById('createBoardBtn');
     const viewBtns = document.querySelectorAll('.view-btn');
     
-    // Modals
+    
     const boardModal = document.getElementById('boardModal');
     const editorModal = document.getElementById('editorModal');
     const boardForm = document.getElementById('boardForm');
 
-    // ======================
-    // CUSTOM SELECT COMPONENT
-    // ======================
+    
+    
+    
     class CustomSelect {
         constructor(selectId, options = []) {
             this.selectId = selectId;
@@ -83,7 +83,7 @@
                 });
             });
 
-            // Close on outside click
+            
             document.addEventListener('click', () => {
                 if (this.isOpen) this.close();
             });
@@ -120,7 +120,7 @@
             
             if (textEl) textEl.textContent = text;
 
-            // Update selected state
+            
             const dropdown = trigger?.nextElementSibling;
             dropdown?.querySelectorAll('.select-option').forEach(opt => {
                 opt.classList.toggle('selected', opt.dataset.value === value);
@@ -141,9 +141,9 @@
         }
     }
 
-    // ======================
-    // CUSTOM CONFIRMATION DIALOG
-    // ======================
+    
+    
+    
     function showConfirm(title, message, onConfirm) {
         const overlay = document.createElement('div');
         overlay.className = 'modal-overlay';
@@ -176,23 +176,23 @@
         overlay.onclick = close;
     }
 
-    // ======================
-    // INITIALIZATION
-    // ======================
+    
+    
+    
     async function init() {
-        console.log('🚀 Initializing Revision Boards...');
+      
         
         await loadCurrentUser();
         await loadSubjects();
         await loadBoards();
         setupEventListeners();
         
-        console.log('✅ Revision Boards initialized');
+        
     }
 
-    // ======================
-    // LOAD CURRENT USER
-    // ======================
+    
+    
+    
     async function loadCurrentUser() {
         try {
             const { data: { user }, error } = await window.supabaseClient.auth.getUser();
@@ -205,17 +205,17 @@
             }
 
             currentUser = user;
-            console.log('✅ User loaded:', user.email);
+           
             
         } catch (error) {
-            console.error('Error loading user:', error);
+            
             showError('Failed to load user data');
         }
     }
 
-    // ======================
-    // LOAD SUBJECTS
-    // ======================
+    
+    
+    
     let subjectFilter, boardSubjectSelect;
 
     async function loadSubjects() {
@@ -229,7 +229,7 @@
 
             allSubjects = data;
             
-            // Create custom selects
+            
             const filterOptions = [
                 { value: '', text: 'All Subjects' },
                 ...data.map(s => ({ value: s.id.toString(), text: s.name }))
@@ -249,13 +249,13 @@
             boardSubjectSelect = new CustomSelect('boardSubject', boardOptions);
             
         } catch (error) {
-            console.error('Error loading subjects:', error);
+            
         }
     }
 
-    // ======================
-    // LOAD BOARDS
-    // ======================
+    
+    
+    
     async function loadBoards() {
         try {
             showLoading();
@@ -285,14 +285,14 @@
             hideLoading();
             
         } catch (error) {
-            console.error('Error loading boards:', error);
+            
             showError();
         }
     }
 
-    // ======================
-    // DISPLAY BOARDS
-    // ======================
+    
+    
+    
     function displayBoards(boards) {
         if (boards.length === 0) {
             showEmpty();
@@ -361,9 +361,9 @@
         return card;
     }
 
-    // ======================
-    // CREATE/EDIT BOARD
-    // ======================
+    
+    
+    
     window.openCreateModal = function() {
         editingBoard = null;
         document.getElementById('modalTitle').textContent = 'Create New Board';
@@ -423,15 +423,15 @@
                 await loadBoards();
                 
             } catch (error) {
-                console.error('Error saving board:', error);
+               
                 showNotification('Failed to save board', 'error');
             }
         });
     }
 
-    // ======================
-    // BOARD EDITOR
-    // ======================
+    
+    
+    
     window.openBoardEditor = async function(boardId) {
         try {
             const { data, error } = await window.supabaseClient
@@ -451,7 +451,7 @@
             editorModal.style.display = 'flex';
             
         } catch (error) {
-            console.error('Error loading board:', error);
+           
             showNotification('Failed to load board', 'error');
         }
     };
@@ -483,7 +483,7 @@
             }
         }).join('');
 
-        // Attach event listeners for rich text
+        
         attachRichTextListeners();
     }
 
@@ -588,7 +588,7 @@
                 <div class="link-content">
                     <div class="link-input-group">
                         <input type="text" class="link-input" data-index="${index}" data-field="title" placeholder="Link title" value="${item.title || ''}">
-                        <input type="url" class="link-input" data-index="${index}" data-field="url" placeholder="https://..." value="${item.url || ''}">
+                        <input type="url" class="link-input" data-index="${index}" data-field="url" placeholder="https:
                     </div>
                 </div>
             </div>
@@ -596,7 +596,7 @@
     }
 
     function attachRichTextListeners() {
-        // Rich text toolbar buttons
+        
         document.querySelectorAll('.text-tool-btn[data-command]').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -606,7 +606,7 @@
             });
         });
 
-        // Color picker
+        
         document.querySelectorAll('.color-picker-wrapper > button').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -625,7 +625,7 @@
             });
         });
 
-        // Font size picker
+        
         document.querySelectorAll('.font-size-picker > button').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -644,7 +644,7 @@
             });
         });
 
-        // Save content on blur
+        
         document.querySelectorAll('.rich-text-editor').forEach(editor => {
             editor.addEventListener('blur', () => {
                 const index = parseInt(editor.dataset.index);
@@ -654,7 +654,7 @@
             });
         });
 
-        // Flashcard inputs
+        
         document.querySelectorAll('.flashcard-input').forEach(input => {
             input.addEventListener('blur', () => {
                 const index = parseInt(input.dataset.index);
@@ -665,7 +665,7 @@
             });
         });
 
-        // Link inputs
+        
         document.querySelectorAll('.link-input').forEach(input => {
             input.addEventListener('blur', () => {
                 const index = parseInt(input.dataset.index);
@@ -676,7 +676,7 @@
             });
         });
 
-        // Close dropdowns on outside click
+        
         document.addEventListener('click', () => {
             document.querySelectorAll('.color-picker.active, .font-size-dropdown.active').forEach(el => {
                 el.classList.remove('active');
@@ -684,9 +684,9 @@
         });
     }
 
-    // ======================
-    // ADD CONTENT ITEMS
-    // ======================
+    
+    
+    
     window.addNote = function() {
         currentBoardContent.push({
             type: 'note',
@@ -744,14 +744,14 @@
             await loadBoards();
             
         } catch (error) {
-            console.error('Error saving board:', error);
+         
             showNotification('Failed to save board', 'error');
         }
     };
 
-    // ======================
-    // DELETE BOARD
-    // ======================
+    
+    
+    
     window.deleteBoard = async function(boardId) {
         showConfirm(
             'Delete Board?',
@@ -769,16 +769,16 @@
                     await loadBoards();
                     
                 } catch (error) {
-                    console.error('Error deleting board:', error);
+                  
                     showNotification('Failed to delete board', 'error');
                 }
             }
         );
     };
 
-    // ======================
-    // DUPLICATE BOARD
-    // ======================
+    
+    
+    
     window.duplicateBoard = async function(boardId) {
         try {
             const { data: original, error: fetchError } = await window.supabaseClient
@@ -808,14 +808,14 @@
             await loadBoards();
             
         } catch (error) {
-            console.error('Error duplicating board:', error);
+
             showNotification('Failed to duplicate board', 'error');
         }
     };
 
-    // ======================
-    // XP SYSTEM
-    // ======================
+    
+    
+    
     async function awardXP(amount, reason) {
         try {
             await window.supabaseClient
@@ -824,15 +824,15 @@
                     xp_amount: amount
                 });
 
-            console.log(`✅ Awarded ${amount} XP for: ${reason}`);
+
         } catch (error) {
-            console.error('Error awarding XP:', error);
+
         }
     }
 
-    // ======================
-    // UI HELPERS
-    // ======================
+    
+    
+    
     function showLoading() {
         loadingState.style.display = 'flex';
         errorState.style.display = 'none';
@@ -890,16 +890,16 @@
     }
 
    
-    // ======================
-    // EVENT LISTENERS
-    // ======================
+    
+    
+    
     function setupEventListeners() {
-        // Create board button
+        
         if (createBoardBtn) {
             createBoardBtn.addEventListener('click', openCreateModal);
         }
 
-        // Subject filter
+        
         if (subjectFilter) {
             subjectFilter.addEventListener('change', (e) => {
                 currentFilter = e.target.value;
@@ -907,7 +907,7 @@
             });
         }
 
-        // View toggle
+        
         viewBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 currentView = btn.dataset.view;
@@ -920,9 +920,9 @@
         });
     }
 
-    // ======================
-    // INITIALIZE
-    // ======================
+    
+    
+    
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {

@@ -1,23 +1,23 @@
-// Theme Toggle Functionality
+
 const themeToggle = document.getElementById('themeToggle');
 const body = document.body;
 
-// Check for saved theme preference or default to light mode
+
 const currentTheme = localStorage.getItem('theme') || 'light';
 if (currentTheme === 'dark') {
     body.classList.add('dark-mode');
 }
 
-// Toggle theme on button click
+
 if (themeToggle) {
     themeToggle.addEventListener('click', () => {
         body.classList.toggle('dark-mode');
         
-        // Save preference to localStorage
+
         const theme = body.classList.contains('dark-mode') ? 'dark' : 'light';
         localStorage.setItem('theme', theme);
         
-        // Add animation effect
+
         themeToggle.style.transform = 'rotate(360deg)';
         setTimeout(() => {
             themeToggle.style.transform = '';
@@ -25,7 +25,7 @@ if (themeToggle) {
     });
 }
 
-// Mobile Menu Toggle
+
 const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 const navMenu = document.getElementById('navMenu');
 
@@ -33,7 +33,7 @@ if (mobileMenuBtn && navMenu) {
     mobileMenuBtn.addEventListener('click', () => {
         navMenu.classList.toggle('active');
         
-        // Animate hamburger menu
+
         const spans = mobileMenuBtn.querySelectorAll('span');
         if (navMenu.classList.contains('active')) {
             spans[0].style.transform = 'rotate(45deg) translateY(10px)';
@@ -47,7 +47,7 @@ if (mobileMenuBtn && navMenu) {
     });
 }
 
-// Close mobile menu when clicking on a link
+
 const navLinks = document.querySelectorAll('.nav-link');
 navLinks.forEach(link => {
     link.addEventListener('click', () => {
@@ -63,7 +63,6 @@ navLinks.forEach(link => {
     });
 });
 
-// Smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -77,7 +76,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Add scroll animation to feature cards
 const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
