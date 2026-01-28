@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -5,45 +7,81 @@
 }
 
 :root {
-    /* Light Mode Colors (Beige & Orange) */
-    --bg-primary: linear-gradient(135deg, #FFF5E6 0%, #FFE4CC 50%, #FFF8DC 100%);
+    --bg-primary: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 50%, #F0F9FF 100%);
     --bg-secondary: #FFFFFF;
-    --text-primary: #2D1810;
-    --text-secondary: #5C4033;
-    --accent-primary: #FF8C42;
-    --accent-secondary: #FFB366;
-    --accent-gradient: linear-gradient(135deg, #FF8C42 0%, #FFB366 100%);
-    --border-color: #FFD4A3;
-    --card-bg: rgba(255, 255, 255, 0.7);
-    --nav-bg: rgba(255, 255, 255, 0.9);
-    --shadow: rgba(255, 140, 66, 0.1);
+    --text-primary: #0F172A;
+    --text-secondary: #64748B;
+    --accent-primary: #3B82F6;
+    --accent-secondary: #60A5FA;
+    --accent-gradient: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+    --border-color: #E2E8F0;
+    --card-bg: rgba(255, 255, 255, 0.8);
+    --nav-bg: rgba(255, 255, 255, 0.95);
+    --shadow: rgba(59, 130, 246, 0.15);
+    --hover-overlay: rgba(59, 130, 246, 0.08);
+    
+    /* Status Colors */
+    --success: #10B981;
+    --error: #EF4444;
+    --warning: #F59E0B;
+    --info: #06B6D4;
+    
+    --purple: #8B5CF6;
+    --pink: #EC4899;
+    --orange: #F97316;
+    --green: #10B981;
+    --cyan: #06B6D4;
     
     /* Transition */
     --transition: all 0.3s ease;
 }
 
 body.dark-mode {
-    /* Dark Mode Colors */
-    --bg-primary: linear-gradient(135deg, #0F1419 0%, #1A1F2E 50%, #0F1419 100%);
-    --bg-secondary: #1A1F2E;
-    --text-primary: #FFFFFF;
-    --text-secondary: #B4B4B4;
-    --accent-primary: #A78BFA;
-    --accent-secondary: #C4B5FD;
-    --accent-gradient: linear-gradient(135deg, #A78BFA 0%, #EC4899 100%);
-    --border-color: #2D3748;
-    --card-bg: rgba(26, 31, 46, 0.7);
-    --nav-bg: rgba(26, 31, 46, 0.95);
-    --shadow: rgba(167, 139, 250, 0.1);
+    --bg-primary: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+    --bg-secondary: #1E293B;
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --accent-primary: #60A5FA;
+    --accent-secondary: #93C5FD;
+    --accent-gradient: linear-gradient(135deg, #60A5FA 0%, #A78BFA 100%);
+    --border-color: #334155;
+    --card-bg: rgba(30, 41, 59, 0.8);
+    --nav-bg: rgba(30, 41, 59, 0.95);
+    --shadow: rgba(96, 165, 250, 0.2);
+    --hover-overlay: rgba(96, 165, 250, 0.1);
+    
+    /* Status Colors */
+    --success: #34D399;
+    --error: #F87171;
+    --warning: #FBBF24;
+    --info: #22D3EE;
+    
+
+    --purple: #A78BFA;
+    --pink: #F472B6;
+    --orange: #FB923C;
+    --green: #34D399;
+    --cyan: #22D3EE;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background: var(--bg-primary);
     color: var(--text-primary);
     line-height: 1.6;
     transition: var(--transition);
     overflow-x: hidden;
+}
+
+
+h1, h2, h3, h4, h5, h6,
+.hero-title,
+.section-title,
+.cta-title,
+.feature-title,
+.footer-title,
+.nav-logo {
+    font-family: 'Poppins', sans-serif;
 }
 
 .container {
@@ -147,7 +185,7 @@ body {
 
 .nav-profile-picture:hover {
     transform: scale(1.1);
-    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+    box-shadow: 0 0 10px var(--shadow);
 }
 
 .nav-profile-placeholder {
@@ -168,7 +206,7 @@ body {
 
 .nav-profile-placeholder:hover {
     transform: scale(1.1);
-    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+    box-shadow: 0 0 10px var(--shadow);
 }
 
 .nav-link {
@@ -242,8 +280,8 @@ body:not(.dark-mode) .moon-icon {
     align-items: center;
     gap: 8px;
     padding: 8px 20px;
-    background: rgba(167, 139, 250, 0.1);
-    border: 1px solid rgba(167, 139, 250, 0.3);
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.3);
     border-radius: 50px;
     margin-bottom: 30px;
     font-size: 0.9rem;
@@ -642,7 +680,7 @@ body:not(.dark-mode) .moon-icon {
     }
 }
 
-a{
+a {
     text-decoration: none;
     color: inherit;
 }
