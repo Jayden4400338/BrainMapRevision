@@ -44,14 +44,17 @@
       currentUser = session.user;
       console.log('✅ User authenticated:', currentUser.email);
 
-      // Check if user is a student (teachers can also join, but typically they create)
       const { data: profile } = await supabaseClient
         .from('users')
         .select('role')
         .eq('id', currentUser.id)
         .single();
 
-      // Allow both students and teachers to join (in case a teacher wants to join another teacher's class)
+      // Only students can join classrooms; teachers are redirected
+      if (profile?.role === 'teacher') {
+        window.userRole = 'teacher';
+        return true; // still "authenticated", but join form will be hidden and message shown
+      }
       return true;
     } catch (error) {
       console.error('❌ Auth error:', error);
@@ -383,10 +386,41 @@
     });
   }
 
+  // Show teacher-only message and hide join form (teachers cannot join classrooms)
+  function showTeacherOnlyState() {
+    const welcomeSection = document.querySelector('.welcome-section');
+    const formContainer = document.querySelector('.form-container');
+    if (welcomeSection) {
+      welcomeSection.innerHTML = `
+        <h1 class="welcome-title">Join a Classroom</h1>
+        <div class="notice notice-info" style="margin-top: 16px; padding: 20px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px;">
+          <p style="margin: 0; color: var(--text-primary);">
+            <strong>Only students can join classrooms.</strong> As a teacher, you create and manage your own classrooms from the dashboard.
+          </p>
+          <a href="dashboard.html" class="btn btn-primary" style="margin-top: 16px; display: inline-block;">Go to Classroom Dashboard</a>
+        </div>
+      `;
+    }
+    if (formContainer) formContainer.style.display = 'none';
+    const myClassroomsBlock = document.getElementById('myClassroomsList')?.parentElement;
+    if (myClassroomsBlock) myClassroomsBlock.style.display = 'none';
+  }
+
   // Initialize
   async function init() {
     const isAuth = await checkAuthentication();
     if (!isAuth) return;
+
+    // Teachers cannot join; show message and hide form
+    const { data: profile } = await supabaseClient
+      .from('users')
+      .select('role')
+      .eq('id', currentUser.id)
+      .single();
+    if (profile?.role === 'teacher') {
+      showTeacherOnlyState();
+      return;
+    }
 
     await loadMyClassrooms();
 
@@ -394,7 +428,6 @@
       joinForm.addEventListener('submit', handleSubmit);
     }
 
-    // Focus on invite code input
     if (inviteCodeInput) {
       inviteCodeInput.focus();
     }

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assignments - BrainMapRevision</title>
+    <link rel="stylesheet" href="../../style.css" />
+    <link rel="stylesheet" href="../../assets/css/dashboard.css" />
+    <link rel="stylesheet" href="../../assets/css/classroom.css" />
+    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="../../assets/images/shortcut-icon.png" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="dashboard.html" class="nav-logo-link" style="text-decoration: none; color: inherit; display: flex; align-items: center;">
+          <div class="nav-logo">
+            <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/>
+              <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/>
+            </svg>
+            <span class="logo-text">BrainMapRevision</span>
+          </div>
+        </a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn"><span></span><span></span><span></span></button>
+        <div class="nav-menu" id="navMenu">
+          <a href="../dashboard.html" class="nav-link">Main</a>
+          <a href="dashboard.html" class="nav-link">Classrooms</a>
+          <a href="join.html" class="nav-link">Join</a>
+          <div class="nav-profile" id="navProfile"></div>
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+            <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="dashboard-container">
+      <div class="container">
+        <div id="loadingState" class="loading-state" style="text-align: center; padding: 60px 20px;">
+          <div class="loading-spinner"></div>
+          <p>Loading...</p>
+        </div>
+        <div id="errorState" class="empty-state" style="display: none;">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <h3>Unable to load</h3>
+          <p id="errorMessage">Select a classroom from the dashboard.</p>
+          <a href="dashboard.html" class="btn btn-primary">Back to Classrooms</a>
+        </div>
+        <div id="assignmentsContent" style="display: none;">
+          <div class="section-header" style="margin-bottom: 24px;">
+            <div>
+              <a href="dashboard.html" class="nav-link" style="font-size: 0.9rem; margin-bottom: 8px; display: inline-block;">← Classrooms</a>
+              <h1 class="welcome-title" style="margin-bottom: 4px;">Assignments</h1>
+              <p class="section-description" id="classroomSubtitle">—</p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <a href="#" id="backToViewLink" class="btn btn-secondary">View classroom</a>
+              <button type="button" id="createAssignmentBtn" class="btn btn-primary" style="display: none;">Create assignment</button>
+            </div>
+          </div>
+          <div class="classroom-section">
+            <div class="section-header">
+              <h2 class="section-title">Assignments</h2>
+            </div>
+            <div id="assignmentsList" class="assignments-list">
+              <div class="loading-state"><div class="loading-spinner"></div><p>Loading assignments...</p></div>
+            </div>
+            <div id="assignmentsEmpty" class="empty-state" style="display: none;">
+              <p>No assignments yet. Teachers can create assignments from the classroom view.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Create Assignment Modal -->
+    <div id="createAssignmentModal" class="modal-overlay" style="display: none;">
+      <div class="modal-content assignment-create-modal" style="max-width: 640px; max-height: 90vh; overflow-y: auto;">
+        <h3 style="margin-bottom: 16px;">Create assignment</h3>
+        <form id="createAssignmentForm">
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label for="assignmentTitle" class="form-label">Title <span class="required">*</span></label>
+            <input type="text" id="assignmentTitle" name="title" class="form-input" placeholder="e.g. Chapter 5 Quiz" required maxlength="200" />
+          </div>
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label">Description (rich text)</label>
+            <div id="assignmentDescriptionEditor" class="assignment-rich-editor" style="min-height: 120px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px;"></div>
+            <input type="hidden" id="assignmentDescriptionHtml" name="description_html" />
+          </div>
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label for="assignmentDueDate" class="form-label">Due date</label>
+            <input type="datetime-local" id="assignmentDueDate" name="due_date" class="form-input" />
+          </div>
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label">Linked resources</label>
+            <p class="form-hint" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 10px;">Link subjects, past papers, revision guides, flashcards, quizzes, or external URLs.</p>
+            <div class="add-resource-row" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+              <select id="resourceKind" class="form-input" style="width: auto; min-width: 140px;">
+                <option value="">— Choose type —</option>
+                <option value="subject">Subject</option>
+                <option value="past_papers">Past papers (subject + exam board)</option>
+                <option value="revision_guide">Revision guide</option>
+                <option value="flashcards">Flashcards (by subject)</option>
+                <option value="quiz">Quizzes (by subject)</option>
+                <option value="link">External link</option>
+              </select>
+              <span id="resourcePickerWrap" style="display: none;">
+                <select id="resourceSubjectId" class="form-input" style="width: auto; min-width: 140px;"></select>
+                <select id="resourceExamBoard" class="form-input" style="width: auto; min-width: 100px; display: none;"></select>
+                <select id="resourceRevisionGuideId" class="form-input" style="width: auto; min-width: 180px; display: none;"></select>
+                <input type="url" id="resourceUrl" class="form-input" placeholder="https://..." style="width: 180px; display: none;" />
+                <input type="text" id="resourceLabel" class="form-input" placeholder="Link label" style="width: 120px; display: none;" />
+              </span>
+              <button type="button" id="addResourceBtn" class="btn btn-secondary btn-small">Add</button>
+            </div>
+            <div id="addedResourcesList" class="added-resources-chips" style="display: flex; flex-wrap: wrap; gap: 8px; min-height: 24px;"></div>
+          </div>
+          <div style="display: flex; gap: 12px; justify-content: flex-end;">
+            <button type="button" class="btn btn-secondary" id="createAssignmentCancelBtn">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="createAssignmentSubmitBtn">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Delete assignment confirm -->
+    <div id="deleteAssignmentModal" class="modal-overlay" style="display: none;">
+      <div class="modal-content" style="max-width: 400px;">
+        <h3 style="margin-bottom: 12px;">Delete assignment</h3>
+        <p id="deleteAssignmentText" style="color: var(--text-secondary); margin-bottom: 20px;">Are you sure? This cannot be undone.</p>
+        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+          <button type="button" class="btn btn-secondary" id="deleteAssignmentCancelBtn">Cancel</button>
+          <button type="button" class="btn btn-primary" id="deleteAssignmentConfirmBtn" style="background: #DC2626;">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3 class="footer-title">BrainMapRevision</h3>
+            <p class="footer-text">An open-source revision platform empowering students to master all subjects effectively.</p>
+          </div>
+          <div class="footer-section">
+            <h4 class="footer-heading">Quick Links</h4>
+            <a href="../dashboard.html" class="footer-link">Dashboard</a>
+            <a href="dashboard.html" class="footer-link">Classrooms</a>
+            <a href="join.html" class="footer-link">Join Classroom</a>
+          </div>
+          <div class="footer-section">
+            <h4 class="footer-heading">Resources</h4>
+            <a href="../subjects.html" class="footer-link">Subjects</a>
+            <a href="../past-papers.html" class="footer-link">Past Papers</a>
+            <a href="../quizzes.html" class="footer-link">Quizzes</a>
+          </div>
+          <div class="footer-section">
+            <h4 class="footer-heading">Legal</h4>
+            <a href="../../legal/license.html" class="footer-link">MIT License</a>
+            <a href="../../legal/privacy.html" class="footer-link">Privacy Policy</a>
+            <a href="../../legal/terms.html" class="footer-link">Terms of Service</a>
+          </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2025 BrainMapRevision. Open source and free forever.</p></div>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../assets/js/env-config.js"></script>
+    <script>
+      (function () {
+        const SUPABASE_URL = window.__ENV__?.SUPABASE_URL || "https://qqbyxydxxcuklakvjlfr.supabase.co";
+        const SUPABASE_ANON_KEY = window.__ENV__?.SUPABASE_ANON_KEY || "Your-anon-key-here";
+        if (!window.supabaseClient) window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      })();
+    </script>
+    <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+    <script src="../../script.js"></script>
+    <script src="../../assets/js/auth-check.js"></script>
+    <script src="../../assets/js/classroom-assignments.js"></script>
+  </body>
+</html>

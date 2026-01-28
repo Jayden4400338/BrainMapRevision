@@ -604,6 +604,104 @@ body.dark-mode .form-input:focus {
   border-color: var(--accent-primary);
 }
 
+.students-list-full {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.student-row {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.student-row:hover {
+  border-color: var(--accent-primary);
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-overlay .modal-content {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.assignment-create-modal .assignment-rich-editor {
+  min-height: 120px;
+}
+.assignment-create-modal .ql-container {
+  min-height: 100px;
+}
+.assignment-create-modal .ql-editor {
+  min-height: 100px;
+}
+
+.resource-chip,
+.resource-chip-added {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  background: var(--accent-primary);
+  color: #fff;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.resource-chip:hover,
+.resource-chip-added {
+  opacity: 0.9;
+}
+.assignment-resources .resource-chip {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--accent-primary);
+  border: 1px solid var(--accent-primary);
+}
+.assignment-resources .resource-chip:hover {
+  background: rgba(16, 185, 129, 0.3);
+}
+
+.resource-chip-added {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+.resource-chip-remove {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0 2px;
+  font-size: 1rem;
+  line-height: 1;
+}
+.resource-chip-remove:hover {
+  color: #DC2626;
+}
+
+.add-resource-row select,
+.add-resource-row input {
+  max-width: 180px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .classrooms-grid {

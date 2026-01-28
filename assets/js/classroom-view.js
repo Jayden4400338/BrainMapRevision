@@ -402,63 +402,67 @@
     }
   }
 
-  // Load students (teacher only)
+  // Load students (teacher only) – uses RPC for name, pfp, year_group
   async function loadStudents() {
     try {
       const studentsList = document.getElementById('studentsList');
       if (!studentsList) return;
 
-      // Get students in this classroom
-      const { data: students, error } = await supabaseClient
-        .from('classroom_students')
-        .select(`
-          student_id,
-          joined_at,
-          users:student_id (
-            id,
-            username,
-            email
-          )
-        `)
-        .eq('classroom_id', classroomId)
-        .order('joined_at', { ascending: false })
-        .limit(10);
+      let rows = [];
+      const { data: rpcData, error: rpcError } = await supabaseClient
+        .rpc('get_classroom_students_with_profiles', {
+          p_classroom_id: parseInt(classroomId, 10),
+          p_teacher_id: currentUser.id
+        });
 
-      if (error) {
-        console.error('Error loading students:', error);
-        studentsList.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">Unable to load students</p>';
-        return;
+      if (!rpcError && rpcData && rpcData.length > 0) {
+        rows = rpcData.slice(0, 10);
+      } else if (rpcError) {
+        console.warn('RPC get_classroom_students_with_profiles not available or error:', rpcError);
+        const { data: fallback, error } = await supabaseClient
+          .from('classroom_students')
+          .select('student_id, joined_at')
+          .eq('classroom_id', classroomId)
+          .order('joined_at', { ascending: false })
+          .limit(10);
+        if (!error && fallback?.length) {
+          rows = fallback.map(r => ({ student_id: r.student_id, username: null, year_group: null, profile_picture_url: null, joined_at: r.joined_at }));
+        }
       }
 
-      if (!students || students.length === 0) {
+      if (!rows || rows.length === 0) {
         studentsList.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 40px;">No students yet.</p>';
         return;
       }
 
-      studentsList.innerHTML = students.map(membership => {
-        const student = membership.users;
-        const username = student?.username || student?.email?.split('@')[0] || 'Unknown';
-        const joinedDate = new Date(membership.joined_at).toLocaleDateString();
-        
+      studentsList.innerHTML = rows.map(row => {
+        const name = row.username || (row.email ? row.email.split('@')[0] : 'Unknown');
+        const yearGroup = row.year_group || '—';
+        const joinedDate = row.joined_at ? new Date(row.joined_at).toLocaleDateString() : '—';
+        const imgUrl = row.profile_picture_url || '';
+        const sid = row.student_id;
+        const avatarHtml = imgUrl
+          ? `<img src="${escapeHtml(imgUrl)}" alt="" class="student-avatar-img" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">`
+          : `<span class="student-avatar-placeholder" style="width:40px;height:40px;border-radius:50%;background:var(--accent-primary);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:600;font-size:0.9rem;">${escapeHtml(String(name).charAt(0).toUpperCase())}</span>`;
         return `
-          <div class="student-item">
-            <div>
-              <h4 style="margin-bottom: 5px; color: var(--text-primary);">${escapeHtml(username)}</h4>
-              <p style="margin: 0; color: var(--text-secondary); font-size: 0.85rem;">
-                Joined: ${joinedDate}
-              </p>
+          <div class="student-item" data-student-id="${sid || ''}">
+            <div style="display:flex;align-items:center;gap:12px;">
+              ${avatarHtml}
+              <div>
+                <h4 style="margin-bottom:2px; color: var(--text-primary);">${escapeHtml(name)}</h4>
+                <p style="margin:0; color: var(--text-secondary); font-size:0.85rem;">Year: ${escapeHtml(yearGroup)} · Joined: ${joinedDate}</p>
+              </div>
             </div>
             <div>
-              <a href="students.html?classroom=${classroomId}&student=${student?.id}" class="btn btn-secondary btn-small">
-                View Profile
-              </a>
+              <a href="students.html?classroom=${classroomId}" class="btn btn-secondary btn-small">View all</a>
             </div>
           </div>
         `;
       }).join('');
-
     } catch (error) {
       console.error('Error loading students:', error);
+      const studentsList = document.getElementById('studentsList');
+      if (studentsList) studentsList.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">Unable to load students</p>';
     }
   }
 

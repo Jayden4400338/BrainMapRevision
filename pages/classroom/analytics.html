@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Analytics - BrainMapRevision</title>
+    <link rel="stylesheet" href="../../style.css" />
+    <link rel="stylesheet" href="../../assets/css/dashboard.css" />
+    <link rel="stylesheet" href="../../assets/css/classroom.css" />
+    <link rel="shortcut icon" href="../../assets/images/shortcut-icon.png" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="dashboard.html" class="nav-logo-link" style="text-decoration: none; color: inherit; display: flex; align-items: center;">
+          <div class="nav-logo">
+            <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/>
+              <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/>
+            </svg>
+            <span class="logo-text">BrainMapRevision</span>
+          </div>
+        </a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn"><span></span><span></span><span></span></button>
+        <div class="nav-menu" id="navMenu">
+          <a href="../dashboard.html" class="nav-link">Main</a>
+          <a href="dashboard.html" class="nav-link">Classrooms</a>
+          <a href="join.html" class="nav-link">Join</a>
+          <div class="nav-profile" id="navProfile"></div>
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+            <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="dashboard-container">
+      <div class="container">
+        <div id="loadingState" class="loading-state" style="text-align: center; padding: 60px 20px;">
+          <div class="loading-spinner"></div>
+          <p>Loading...</p>
+        </div>
+        <div id="errorState" class="empty-state" style="display: none;">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <h3>Unable to load</h3>
+          <p id="errorMessage">Only teachers can view analytics.</p>
+          <a href="dashboard.html" class="btn btn-primary">Back to Classrooms</a>
+        </div>
+        <div id="analyticsContent" style="display: none;">
+          <div class="section-header" style="margin-bottom: 24px;">
+            <div>
+              <a href="dashboard.html" class="nav-link" style="font-size: 0.9rem; margin-bottom: 8px; display: inline-block;">← Classrooms</a>
+              <h1 class="welcome-title" style="margin-bottom: 4px;">Classroom Analytics</h1>
+              <p class="section-description">Overview of all your classrooms</p>
+            </div>
+          </div>
+          <div class="classroom-section">
+            <div class="section-header">
+              <h2 class="section-title">Summary</h2>
+            </div>
+            <div class="user-stats" id="summaryStats">
+              <div class="stat-card">
+                <div class="stat-value" id="totalClassrooms">0</div>
+                <div class="stat-label">Classrooms</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="totalStudents">0</div>
+                <div class="stat-label">Total Students</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="totalAssignments">0</div>
+                <div class="stat-label">Assignments</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="completedSubmissions">0</div>
+                <div class="stat-label">Submissions</div>
+              </div>
+            </div>
+          </div>
+          <div class="classroom-section">
+            <div class="section-header">
+              <h2 class="section-title">By classroom</h2>
+            </div>
+            <div id="classroomsAnalyticsList" class="classrooms-grid">
+              <div class="loading-state"><div class="loading-spinner"></div><p>Loading...</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3 class="footer-title">BrainMapRevision</h3>
+            <p class="footer-text">An open-source revision platform empowering students to master all subjects effectively.</p>
+          </div>
+          <div class="footer-section">
+            <h4 class="footer-heading">Quick Links</h4>
+            <a href="../dashboard.html" class="footer-link">Dashboard</a>
+            <a href="dashboard.html" class="footer-link">Classrooms</a>
+            <a href="join.html" class="footer-link">Join Classroom</a>
+          </div>
+          <div class="footer-section">
+            <h4 class="footer-heading">Resources</h4>
+            <a href="../subjects.html" class="footer-link">Subjects</a>
+            <a href="../past-papers.html" class="footer-link">Past Papers</a>
+            <a href="../quizzes.html" class="footer-link">Quizzes</a>
+          </div>
+          <div class="footer-section">
+            <h4 class="footer-heading">Legal</h4>
+            <a href="../../legal/license.html" class="footer-link">MIT License</a>
+            <a href="../../legal/privacy.html" class="footer-link">Privacy Policy</a>
+            <a href="../../legal/terms.html" class="footer-link">Terms of Service</a>
+          </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2025 BrainMapRevision. Open source and free forever.</p></div>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../assets/js/env-config.js"></script>
+    <script>
+      (function () {
+        const SUPABASE_URL = window.__ENV__?.SUPABASE_URL || "https://qqbyxydxxcuklakvjlfr.supabase.co";
+        const SUPABASE_ANON_KEY = window.__ENV__?.SUPABASE_ANON_KEY || "Your-anon-key-here";
+        if (!window.supabaseClient) window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      })();
+    </script>
+    <script src="../../script.js"></script>
+    <script src="../../assets/js/auth-check.js"></script>
+    <script src="../../assets/js/classroom-analytics.js"></script>
+  </body>
+</html>
