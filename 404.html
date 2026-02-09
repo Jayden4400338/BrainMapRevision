@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | BrainMapRevision</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="assets/images/shortcut-icon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .error-container {
+            min-height: calc(100vh - 70px - 400px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 20px;
+        }
+
+        .error-content {
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .error-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            background: var(--accent-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .error-icon svg {
+            width: 70px;
+            height: 70px;
+            color: white;
+        }
+
+        .error-code {
+            font-size: 8rem;
+            font-weight: 800;
+            line-height: 1;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .error-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .error-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .suggested-links {
+            margin-top: 60px;
+            padding: 40px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+        }
+
+        .suggested-links h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .link-card {
+            padding: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            text-align: center;
+            transition: var(--transition);
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .link-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 6px 20px var(--shadow);
+        }
+
+        .link-card i {
+            font-size: 2rem;
+            color: var(--accent-primary);
+            margin-bottom: 12px;
+        }
+
+        .link-card span {
+            display: block;
+            font-weight: 600;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 6rem;
+            }
+
+            .error-title {
+                font-size: 2rem;
+            }
+
+            .error-description {
+                font-size: 1rem;
+            }
+
+            .error-actions {
+                flex-direction: column;
+            }
+
+            .error-actions .btn {
+                width: 100%;
+            }
+
+            .suggested-links {
+                padding: 30px 20px;
+            }
+
+            .links-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .error-icon {
+                width: 100px;
+                height: 100px;
+            }
+
+            .error-icon svg {
+                width: 60px;
+                height: 60px;
+            }
+
+            .error-code {
+                font-size: 5rem;
+            }
+
+            .error-title {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/>
+                    <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/>
+                </svg>
+                <span class="logo-text">BrainMapRevision</span>
+            </div>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="pages/dashboard.html" class="nav-link">Dashboard</a>
+                <a href="pages/subjects.html" class="nav-link">Subjects</a>
+                <a href="pages/past-papers.html" class="nav-link">Past Papers</a>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 404 Error Content -->
+    <div class="error-container">
+        <div class="container">
+            <div class="error-content">
+                <div class="error-icon">
+                    <!-- OPTION 1: Your Brain Logo -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/>
+                        <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/>
+                    </svg>
+
+                    <!-- OPTION 2: Compass Icon (Alternative - swap with above if preferred)
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+                    </svg>
+                    -->
+
+                    <!-- OPTION 3: Map Pin Icon (Alternative - swap with above if preferred)
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    -->
+                </div>
+
+                <div class="error-code">404</div>
+
+                <h1 class="error-title">Page Not Found</h1>
+
+                <p class="error-description">
+                    Oops! The page you're looking for seems to have wandered off. 
+                    Don't worry though - there's plenty to explore on BrainMapRevision!
+                </p>
+
+                <div class="error-actions">
+                    <button class="btn btn-primary" onclick="window.location.href='index.html'">
+                        <i class="fa-solid fa-home"></i>
+                        Go Home
+                    </button>
+                    <button class="btn btn-secondary" onclick="history.back()">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Go Back
+                    </button>
+                </div>
+
+                <!-- Suggested Links -->
+                <div class="suggested-links">
+                    <h3>Popular Pages</h3>
+                    <div class="links-grid">
+                        <a href="pages/dashboard.html" class="link-card">
+                            <i class="fa-solid fa-gauge"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="pages/subjects.html" class="link-card">
+                            <i class="fa-solid fa-book"></i>
+                            <span>Subjects</span>
+                        </a>
+                        <a href="pages/quizzes.html" class="link-card">
+                            <i class="fa-solid fa-circle-question"></i>
+                            <span>Quizzes</span>
+                        </a>
+                        <a href="pages/past-papers.html" class="link-card">
+                            <i class="fa-solid fa-file-lines"></i>
+                            <span>Past Papers</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="footer-title">BrainMapRevision</h3>
+                    <p class="footer-text">
+                        An open-source revision platform empowering students to master all subjects effectively.
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-heading">Quick Links</h4>
+                    <a href="pages/dashboard.html" class="footer-link">Dashboard</a>
+                    <a href="pages/subjects.html" class="footer-link">Subjects</a>
+                    <a href="pages/past-papers.html" class="footer-link">Past Papers</a>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-heading">Resources</h4>
+                    <a href="pages/quizzes.html" class="footer-link">Quizzes</a>
+                    <a href="pages/flashcards.html" class="footer-link">Flashcards</a>
+                    <a href="pages/revision-boards.html" class="footer-link">Revision Boards</a>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-heading">Legal</h4>
+                    <a href="legal/license.html" class="footer-link">MIT License</a>
+                    <a href="legal/privacy.html" class="footer-link">Privacy Policy</a>
+                    <a href="legal/terms.html" class="footer-link">Terms of Service</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 BrainMapRevision. Open source and free forever.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
