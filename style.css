@@ -684,3 +684,32 @@ a {
     text-decoration: none;
     color: inherit;
 }
+
+/* Hide scrollbar completely by default */
+* {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+*::-webkit-scrollbar {
+    display: none; /* Chrome/Safari/Opera */
+}
+
+/* Show on body hover */
+body:hover {
+    scrollbar-width: thin;
+}
+
+body:hover::-webkit-scrollbar {
+    display: block;
+    width: 12px;
+}
+
+body:hover::-webkit-scrollbar-thumb {
+    background: var(--accent-primary);
+    border-radius: 6px;
+}
+
+body:hover::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-secondary);
+}
