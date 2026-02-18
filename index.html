@@ -72,10 +72,10 @@
             </p>
 
             <div class="hero-buttons">
-                <a href="auth/signup.html">
+                <a href="auth/signup.html" id="heroPrimaryCtaLink">
                 <button class="btn btn-primary">
                     
-                    Get Started Free
+                    <span id="heroPrimaryCtaText">Get Started Free</span>
                     <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="5" y1="12" x2="19" y2="12"/>
                         <polyline points="12 5 19 12 12 19"/>
@@ -241,6 +241,17 @@
         </div>
     </footer>
 
+    <script src="assets/js/env-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      (function () {
+        const SUPABASE_URL = window.__ENV__?.SUPABASE_URL || "https://qqbyxydxxcuklakvjlfr.supabase.co";
+        const SUPABASE_ANON_KEY = window.__ENV__?.SUPABASE_ANON_KEY || "Your-anon-key-here";
+        if (window.supabase && !window.supabaseClient) {
+          window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
+      })();
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

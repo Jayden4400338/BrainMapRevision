@@ -252,9 +252,33 @@ async function loadNavbarProfile() {
   }
 }
 
+// Update homepage primary CTA based on auth state
+async function updateHeroPrimaryCta() {
+  const ctaLink = document.getElementById('heroPrimaryCtaLink');
+  const ctaText = document.getElementById('heroPrimaryCtaText');
+
+  if (!ctaLink || !ctaText || !window.supabaseClient) return;
+
+  try {
+    const { data: { user }, error } = await window.supabaseClient.auth.getUser();
+    if (error) return;
+
+    if (user) {
+      ctaLink.href = 'pages/dashboard.html';
+      ctaText.textContent = 'Dashboard';
+    } else {
+      ctaLink.href = 'auth/signup.html';
+      ctaText.textContent = 'Get Started Free';
+    }
+  } catch (err) {
+    console.warn('Could not update hero CTA from auth state:', err);
+  }
+}
+
 // Load navbar profile on page load (if Supabase is available)
 if (window.supabaseClient) {
   document.addEventListener('DOMContentLoaded', loadNavbarProfile);
+  document.addEventListener('DOMContentLoaded', updateHeroPrimaryCta);
 }
 
 // Console message for developers
