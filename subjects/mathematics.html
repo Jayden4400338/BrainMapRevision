@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mathematics - BrainMapRevision</title>
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="../assets/css/math.css" />
+    <link rel="shortcut icon" href="../assets/images/shortcut-icon.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  </head>
+  <body>
+
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo" onclick="window.location.href='../index.html'" style="cursor:pointer;">
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/>
+            <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/>
+          </svg>
+          <span class="logo-text">BrainMapRevision</span>
+        </div>
+        <button class="mobile-menu-btn" id="mobileMenuBtn"><span></span><span></span><span></span></button>
+        <div class="nav-menu" id="navMenu">
+          <a href="../pages/dashboard.html" class="nav-link">Dashboard</a>
+          <a href="../pages/subjects.html" class="nav-link">Subjects</a>
+          <a href="../pages/quizzes.html" class="nav-link">Quizzes</a>
+          <a href="../pages/past-papers.html" class="nav-link">Past Papers</a>
+          <div class="nav-profile" id="navProfile"></div>
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+            <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <div class="math-hero">
+      <div class="math-hero-bg">
+        <div class="math-grid-overlay"></div>
+        <div class="math-symbol" style="top:10%;left:5%;font-size:3rem;opacity:.08;">π</div>
+        <div class="math-symbol" style="top:25%;right:8%;font-size:2.5rem;opacity:.08;">∑</div>
+        <div class="math-symbol" style="bottom:20%;left:12%;font-size:2rem;opacity:.08;">∫</div>
+        <div class="math-symbol" style="top:60%;right:15%;font-size:2rem;opacity:.08;">√</div>
+        <div class="math-symbol" style="bottom:10%;right:5%;font-size:3rem;opacity:.08;">∞</div>
+        <div class="math-symbol" style="top:40%;left:2%;font-size:1.8rem;opacity:.06;">θ</div>
+        <div class="math-symbol" style="top:15%;left:45%;font-size:1.5rem;opacity:.06;">÷</div>
+      </div>
+      <div class="container">
+        <div class="math-hero-content">
+          <div class="math-hero-icon">
+            <i class="fa-solid fa-calculator"></i>
+          </div>
+          <div class="math-subject-badge">GCSE Mathematics</div>
+          <h1 class="math-hero-title">Mathematics</h1>
+          <p class="math-hero-subtitle">Master every topic from number theory to geometry. Build the skills to ace your exams.</p>
+          <div class="math-hero-stats">
+            <div class="math-hero-stat">
+              <span class="math-stat-num" id="totalTopics">9</span>
+              <span class="math-stat-label">Topics</span>
+            </div>
+            <div class="math-hero-stat">
+              <span class="math-stat-num" id="totalQuizzes">—</span>
+              <span class="math-stat-label">Quizzes</span>
+            </div>
+            <div class="math-hero-stat">
+              <span class="math-stat-num">GCSE</span>
+              <span class="math-stat-label">Level</span>
+            </div>
+          </div>
+          <div class="math-hero-actions">
+            <a href="../pages/quizzes.html?subject=mathematics" class="btn btn-primary">
+              <i class="fa-solid fa-play"></i> Start a Quiz
+            </a>
+            <a href="../pages/past-papers.html?subject=mathematics" class="btn btn-secondary">
+              <i class="fa-solid fa-file-lines"></i> Past Papers
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Nav Tabs -->
+    <div class="math-tabs-bar">
+      <div class="container">
+        <div class="math-tabs">
+          <button class="math-tab active" data-filter="all">All Topics</button>
+          <button class="math-tab" data-filter="number">Number</button>
+          <button class="math-tab" data-filter="geometry">Geometry</button>
+          <button class="math-tab" data-filter="algebra">Algebra</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="math-main">
+      <div class="container">
+
+        <!-- Topics Grid -->
+        <section class="math-section" id="topicsSection">
+          <div class="math-section-header">
+            <h2 class="math-section-title"><i class="fa-solid fa-layer-group"></i> Topics</h2>
+            <p class="math-section-desc">Select a topic to explore key concepts, worked examples, and practice questions.</p>
+          </div>
+
+          <div class="math-topics-grid" id="topicsGrid">
+
+            <!-- Angles Around a Point -->
+            <div class="math-topic-card" data-category="geometry" data-topic="Angles Around a Point">
+              <div class="topic-card-accent" style="background: linear-gradient(135deg,#3B82F6,#60A5FA);"></div>
+              <div class="topic-card-inner">
+                <div class="topic-icon" style="background:rgba(59,130,246,.15);color:#3B82F6;">
+                  <i class="fa-solid fa-circle-dot"></i>
+                </div>
+                <div class="topic-info">
+                  <span class="topic-category-tag geometry">Geometry</span>
+                  <h3 class="topic-title">Angles Around a Point</h3>
+                  <p class="topic-desc">Angles at a point sum to 360°. Master vertically opposite, supplementary and complementary angles.</p>
+                </div>
+                <div class="topic-key-facts">
+                  <div class="key-fact"><span class="fact-symbol">∠</span><span>Angles on a straight line = 180°</span></div>
+                  <div class="key-fact"><span class="fact-symbol">○</span><span>Angles around a point = 360°</span></div>
+                  <div class="key-fact"><span class="fact-symbol">↕</span><span>Vertically opposite angles are equal</span></div>
+                </div>
+                <div class="topic-actions">
+                  <button class="topic-expand-btn" onclick="toggleConcept(this)"><i class="fa-solid fa-book-open"></i> Key Concepts</button>
+                  <a href="../pages/quizzes.html?subject=mathematics&topic=Angles Around a Point" class="topic-quiz-btn"><i class="fa-solid fa-circle-question"></i> Quiz</a>
+                </div>
+                <div class="topic-concept-panel" style="display:none;">
+                  <h4>Key Rules</h4>
+                  <ul>
+                    <li>Angles on a straight line add up to <strong>180°</strong></li>
+                    <li>Angles around a point add up to <strong>360°</strong></li>
+                    <li>Vertically opposite angles are <strong>equal</strong></li>
+                    <li>Complementary angles sum to <strong>90°</strong></li>
+                    <li>Supplementary angles sum to <strong>180°</strong></li>
+                  </ul>
+                  <h4>Exam Tip</h4>
+                  <p>Always write the angle rule you are using as your working — examiners award method marks for this.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reflections -->
+            <div class="math-topic-card" data-category="geometry" data-topic="Reflections">
+              <div class="topic-card-accent" style="background: linear-gradient(135deg,#10B981,#34D399);"></div>
+              <div class="topic-card-inner">
+                <div class="topic-icon" style="background:rgba(16,185,129,.15);color:#10B981;">
+                  <i class="fa-solid fa-arrows-left-right"></i>
+                </div>
+                <div class="topic-info">
+                  <span class="topic-category-tag geometry">Geometry</span>
+                  <h3 class="topic-title">Reflections</h3>
+                  <p class="topic-desc">Reflect shapes in horizontal, vertical and diagonal mirror lines, including y = x and y = −x.</p>
+                </div>
+                <div class="topic-key-facts">
+                  <div class="key-fact"><span class="fact-symbol">↔</span><span>Shape size & angles unchanged</span></div>
+                  <div class="key-fact"><span class="fact-symbol">⊥</span><span>Mirror line is perpendicular bisector</span></div>
+                  <div class="key-fact"><span class="fact-symbol">≡</span><span>Object and image are congruent</span></div>
+                </div>
+                <div class="topic-actions">
+                  <button class="topic-expand-btn" onclick="toggleConcept(this)"><i class="fa-solid fa-book-open"></i> Key Concepts</button>
+                  <a href="../pages/quizzes.html?subject=mathematics&topic=Reflections" class="topic-quiz-btn"><i class="fa-solid fa-circle-question"></i> Quiz</a>
+                </div>
+                <div class="topic-concept-panel" style="display:none;">
+                  <h4>Key Rules</h4>
+                  <ul>
+                    <li>Each point maps to the same distance on the <strong>other side</strong> of the mirror line</li>
+                    <li>The mirror line is the <strong>perpendicular bisector</strong> of each object–image line segment</li>
+                    <li>Reflecting in <strong>y-axis</strong>: (x, y) → (−x, y)</li>
+                    <li>Reflecting in <strong>x-axis</strong>: (x, y) → (x, −y)</li>
+                    <li>Reflecting in <strong>y = x</strong>: (x, y) → (y, x)</li>
+                    <li>Reflecting in <strong>y = −x</strong>: (x, y) → (−y, −x)</li>
+                  </ul>
+                  <h4>Exam Tip</h4>
+                  <p>When asked to describe a reflection, always state: "Reflection in the line y = ..."</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Transformations -->
+            <div class="math-topic-card" data-category="geometry" data-topic="Transformations">
+              <div class="topic-card-accent" style="background: linear-gradient(135deg,#8B5CF6,#A78BFA);"></div>
+              <div class="topic-card-inner">
+                <div class="topic-icon" style="background:rgba(139,92,246,.15);color:#8B5CF6;">
+                  <i class="fa-solid fa-up-down-left-right"></i>
+                </div>
+                <div class="topic-info">
+                  <span class="topic-category-tag geometry">Geometry</span>
+                  <h3 class="topic-title">Transformations</h3>
+                  <p class="topic-desc">Translation, rotation, reflection and enlargement — understand and describe all four transformations fully.</p>
+                </div>
+                <div class="topic-key-facts">
+                  <div class="key-fact"><span class="fact-symbol">T</span><span>Translation: column vector</span></div>
+                  <div class="key-fact"><span class="fact-symbol">R</span><span>Rotation: centre, angle, direction</span></div>
+                  <div class="key-fact"><span class="fact-symbol">E</span><span>Enlargement: scale factor &amp; centre</span></div>
+                </div>
+                <div class="topic-actions">
+                  <button class="topic-expand-btn" onclick="toggleConcept(this)"><i class="fa-solid fa-book-open"></i> Key Concepts</button>
+                  <a href="../pages/quizzes.html?subject=mathematics&topic=Transformations" class="topic-quiz-btn"><i class="fa-solid fa-circle-question"></i> Quiz</a>
+                </div>
+                <div class="topic-concept-panel" style="display:none;">
+                  <h4>The Four Transformations</h4>
+                  <ul>
+                    <li><strong>Translation</strong> — describe using a column vector (x over y)</li>
+                    <li><strong>Rotation</strong> — state centre, angle and direction (CW/CCW)</li>
+                    <li><strong>Reflection</strong> — state the mirror line equation</li>
+                    <li><strong>Enlargement</strong> — state scale factor and centre of enlargement</li>
+                  </ul>
+                  <h4>Exam Tip</h4>
+                  <p>A negative scale factor means the image is on the opposite side of the centre and is also flipped.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Standard Form -->
+            <div class="math-topic-card" data-category="number" data-topic="Standard Form">
+              <div class="topic-card-accent" style="background: linear-gradient(135deg,#F59E0B,#FBBF24);"></div>
+              <div class="topic-card-inner">
+                <div class="topic-icon" style="background:rgba(245,158,11,.15);color:#F59E0B;">
+                  <i class="fa-solid fa-superscript"></i>
+                </div>
+                <div class="topic-info">
+                  <span class="topic-category-tag number">Number</span>
+                  <h3 class="topic-title">Standard Form</h3>
+                  <p class="topic-desc">Write very large and very small numbers in the form A × 10ⁿ where 1 ≤ A &lt; 10.</p>
+                </div>
+                <div class="topic-key-facts">
+                  <div class="key-fact"><span class="fact-symbol">A</span><span>1 ≤ A &lt; 10</span></div>
+                  <div class="key-fact"><span class="fact-symbol">n</span><span>n is a positive or negative integer</span></div>
+                  <div class="key-fact"><span class="fact-symbol">×</span><span>Multiply: add the powers of 10</span></div>
+                </div>
+                <div class="topic-actions">
+                  <button class="topic-expand-btn" onclick="toggleConcept(this)"><i class="fa-solid fa-book-open"></i> Key Concepts</button>
+                  <a href="../pages/quizzes.html?subject=mathematics&topic=Standard Form" class="topic-quiz-btn"><i class="fa-solid fa-circle-question"></i> Quiz</a>
+                </div>
+                <div class="topic-concept-panel" style="display:none;">
+                  <h4>Key Rules</h4>
+                  <ul>
+                    <li>Form: <strong>A × 10ⁿ</strong>, where 1 ≤ A &lt; 10</li>
+                    <li>Positive n → large number; Negative n → small number</li>
+                    <li><strong>Multiplying</strong>: multiply the A values, add the powers</li>
+                    <li><strong>Dividing</strong>: divide the A values, subtract the powers</li>
+                    <li>Re-adjust if A is not in range after calculation</li>
+                  </ul>
+                  <h4>Exam Tip</h4>
+                  <p>Check your answer: 3.5 × 10⁴ = 35,000. Count the decimal places carefully.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- HCF -->
+            <div class="math-topic-card" data-category="number" data-topic="HCF">
+              <div class="topic-card-accent" style="background: linear-gradient(135deg,#EF4444,#F87171);"></div>
+              <div class="topic-card-inner">
+                <div class="topic-icon" style="background:rgba(239,68,68,.15);color:#EF4444;">
+                  <i class="fa-solid fa-arrows-to-dot"></i>
+                </div>
+                <div class="topic-info">
+                  <span class="topic-category-tag number">Number</span>
+                  <h3 class="topic-title">Highest Common Factor (HCF)</h3>
+                  <p class="topic-desc">Find the largest number that divides exactly into two or more numbers using prime decomposition.</p>
+                </div>
+                <div class="topic-key-facts">
+                  <div class="key-fact"><span class="fact-symbol">∩</span><span>HCF uses shared prime factors</span></div>
+                  <div class="key-fact"><span class="fact-symbol">↓</span><span>Use Venn diagram method</span></div>
+                  <div class="key-fact"><span class="fact-symbol">×</span><span>Multiply the intersection primes</span></div>
+                </div>
+                <div class="topic-actions">
+                  <button class="topic-expand-btn" onclick="toggleConcept(this)"><i class="fa-solid fa-book-open"></i> Key Concepts</button>
+                  <a href="../pages/quizzes.html?subject=mathematics&topic=HCF" class="topic-quiz-btn"><i class="fa-solid fa-circle-question"></i> Quiz</a>
+                </div>
+                <div class="topic-concept-panel" style="display:none;">
+                  <h4>Method</h4>
+                  <ul>
+                    <li>Write each number as a <strong>product of prime factors</strong></li>
+                    <li>Place common factors in the <strong>intersection</strong> of a Venn diagram</li>
+                    <li>HCF = <strong>product of the intersection</strong></li>
+                  </ul>
+                  <h4>Example</h4>
+                  <p>HCF(12, 18): 12 = 2² × 3, 18 = 2 × 3² → HCF = 2 × 3 = <strong>6</strong></p>
+                </div>
+              </div>
+            </div>
+
+            <!-- LCM -->
+            <div class="math-topic-card" data-category="number" data-topic="LCM">
+              <div class="topic-card-accent" style="background: linear-gradient(135deg,#06B6D4,#22D3EE);"></div>
+              <div class="topic-card-inner">
+                <div class="topic-icon" style="background:rgba(6,182,212,.15);color:#06B6D4;">
+                  <i class="fa-solid fa-arrows-from-line"></i>
+                </div>
+                <div class="topic-info">
+                  <span class="topic-category-tag number">Number</span>
+                  <h3 class="topic-title">Lowest Common Multiple (LCM)</h3>
+                  <p class="topic-desc">Find the smallest number that is a multiple of two or more numbers using prime factor trees.</p>
+                </div>
+                <div class="topic-key-facts">
+                  <div class="key-fact"><span class="fact-symbol">∪</span><span>LCM uses all prime factors</span></div>
+                  <div class="key-fact"><span class="fact-symbol">↑</span><span>Use highest power of each prime</span></div>
+                  <div class="key-fact"><span class="fact-symbol">×</span><span>Multiply all unique primes</span></div>
+                </div>
+                <div class="topic-actions">
+                  <button class="topic-expand-btn" onclick="toggleConcept(this)"><i class="fa-solid fa-book-open"></i> Key Concepts</button>
+                  <a href="../pages/quizzes.html?subject=mathematics&topic=LCM" class="topic-quiz-btn"><i class="fa-solid fa-circle-question"></i> Quiz</a>
+                </div>
+                <div class="topic-concept-panel" style="display:none;">
+                  <h4>Method</h4>
+                  <ul>
+                    <li>Write each number as a <strong>product of prime factors</strong></li>
+                    <li>Use the <strong>highest power</strong> of every prime that appears</li>
+                    <li>LCM = product of all those highest powers</li>
+                  </ul>
+                  <h4>Example</h4>
+                  <p>LCM(12, 18): 12 = 2² × 3, 18 = 2 × 3² → LCM = 2² × 3² = <strong>36</strong></p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Factors, Multiples & Primes -->
+            <div class="math-topic-card" data-category="number" data-topic="Factors, Multiples and Primes">
+              <div class="topic-card-accent" style="background: linear-gradient(135deg,#EC4899,#F472B6);"></div>
+              <div class="topic-card-inner">
+                <div class="topic-icon" style="background:rgba(236,72,153,.15);color:#EC4899;">
+                  <i class="fa-solid fa-hashtag"></i>
+                </div>
+                <div class="topic-info">
+                  <span class="topic-category-tag number">Number</span>
+                  <h3 class="topic-title">Factors, Multiples &amp; Primes</h3>
+                  <p class="topic-desc">Identify factors, multiples and prime numbers, and understand their properties and applications.</p>
+                </div>
+                <div class="topic-key-facts">
+                  <div class="key-fact"><span class="fact-symbol">F</span><span>Factor: divides evenly into a number</span></div>
+                  <div class="key-fact"><span class="fact-symbol">M</span><span>Multiple: in the times table of a number</span></div>
+                  <div class="key-fact"><span class="fact-symbol">P</span><span>Prime: exactly 2 factors (1 and itself)</span></div>
+                </div>
+                <div class="topic-actions">
+                  <button class="topic-expand-btn" onclick="toggleConcept(this)"><i class="fa-solid fa-book-open"></i> Key Concepts</button>
+                  <a href="../pages/quizzes.html?subject=mathematics&topic=Factors, Multiples and Primes" class="topic-quiz-btn"><i class="fa-solid fa-circle-question"></i> Quiz</a>
+                </div>
+                <div class="topic-concept-panel" style="display:none;">
+                  <h4>Definitions</h4>
+                  <ul>
+                    <li><strong>Factor</strong>: divides exactly into the number with no remainder</li>
+                    <li><strong>Multiple</strong>: the result of multiplying a number by a positive integer</li>
+                    <li><strong>Prime</strong>: has exactly two factors — 1 and itself</li>
+                    <li><strong>1 is NOT prime</strong> (only one factor)</li>
+                    <li><strong>2 is the only even prime</strong></li>
+                  </ul>
+                  <h4>Primes to remember</h4>
+                  <p>2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37...</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Prime Decomposition -->
+            <div class="math-topic-card" data-category="number" data-topic="Prime Decomposition">
+              <div class="topic-card-accent" style="background: linear-gradient(135deg,#F97316,#FB923C);"></div>
+              <div class="topic-card-inner">
+                <div class="topic-icon" style="background:rgba(249,115,22,.15);color:#F97316;">
+                  <i class="fa-solid fa-sitemap"></i>
+                </div>
+                <div class="topic-info">
+                  <span class="topic-category-tag number">Number</span>
+                  <h3 class="topic-title">Prime Decomposition</h3>
+                  <p class="topic-desc">Write any integer as a unique product of prime factors using a factor tree or repeated division.</p>
+                </div>
+                <div class="topic-key-facts">
+                  <div class="key-fact"><span class="fact-symbol">🌳</span><span>Use a factor tree</span></div>
+                  <div class="key-fact"><span class="fact-symbol">×</span><span>Write as product of primes</span></div>
+                  <div class="key-fact"><span class="fact-symbol">²</span><span>Use index notation for repeats</span></div>
+                </div>
+                <div class="topic-actions">
+                  <button class="topic-expand-btn" onclick="toggleConcept(this)"><i class="fa-solid fa-book-open"></i> Key Concepts</button>
+                  <a href="../pages/quizzes.html?subject=mathematics&topic=Prime Decomposition" class="topic-quiz-btn"><i class="fa-solid fa-circle-question"></i> Quiz</a>
+                </div>
+                <div class="topic-concept-panel" style="display:none;">
+                  <h4>Method</h4>
+                  <ul>
+                    <li>Divide by the <strong>smallest prime</strong> that goes in</li>
+                    <li>Keep dividing until you reach 1</li>
+                    <li>Write result using <strong>index notation</strong>: 60 = 2² × 3 × 5</li>
+                    <li>Every integer &gt; 1 has a <strong>unique</strong> prime factorisation</li>
+                  </ul>
+                  <h4>Exam Tip</h4>
+                  <p>Always check your answer by multiplying the primes back together.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Squares, Cubes & Roots -->
+            <div class="math-topic-card" data-category="number" data-topic="Squares, Cubes and Roots">
+              <div class="topic-card-accent" style="background: linear-gradient(135deg,#14B8A6,#2DD4BF);"></div>
+              <div class="topic-card-inner">
+                <div class="topic-icon" style="background:rgba(20,184,166,.15);color:#14B8A6;">
+                  <i class="fa-solid fa-cube"></i>
+                </div>
+                <div class="topic-info">
+                  <span class="topic-category-tag number">Number</span>
+                  <h3 class="topic-title">Squares, Cubes &amp; Roots</h3>
+                  <p class="topic-desc">Recall square and cube numbers, calculate square roots and cube roots, and apply them to problems.</p>
+                </div>
+                <div class="topic-key-facts">
+                  <div class="key-fact"><span class="fact-symbol">²</span><span>Square: n × n</span></div>
+                  <div class="key-fact"><span class="fact-symbol">³</span><span>Cube: n × n × n</span></div>
+                  <div class="key-fact"><span class="fact-symbol">√</span><span>Inverse of squaring / cubing</span></div>
+                </div>
+                <div class="topic-actions">
+                  <button class="topic-expand-btn" onclick="toggleConcept(this)"><i class="fa-solid fa-book-open"></i> Key Concepts</button>
+                  <a href="../pages/quizzes.html?subject=mathematics&topic=Squares, Cubes and Roots" class="topic-quiz-btn"><i class="fa-solid fa-circle-question"></i> Quiz</a>
+                </div>
+                <div class="topic-concept-panel" style="display:none;">
+                  <h4>Key Values</h4>
+                  <ul>
+                    <li>Squares: 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225</li>
+                    <li>Cubes: 1, 8, 27, 64, 125, 216, 343, 512, 729, 1000</li>
+                    <li>√169 = 13, √225 = 15, ∛125 = 5</li>
+                  </ul>
+                  <h4>Exam Tip</h4>
+                  <p>Learn all square numbers to 15² and cube numbers to 10³ — they come up constantly.</p>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /math-topics-grid -->
+        </section>
+
+        <!-- Quick Stats Strip -->
+        <section class="math-stats-strip">
+          <div class="math-stat-strip-item">
+            <i class="fa-solid fa-circle-question" style="color:#3B82F6;"></i>
+            <div>
+              <strong id="statQuizQuestions">90+</strong>
+              <span>Quiz Questions</span>
+            </div>
+          </div>
+          <div class="math-stat-strip-item">
+            <i class="fa-solid fa-layer-group" style="color:#10B981;"></i>
+            <div>
+              <strong>9</strong>
+              <span>Core Topics</span>
+            </div>
+          </div>
+          <div class="math-stat-strip-item">
+            <i class="fa-solid fa-signal" style="color:#F59E0B;"></i>
+            <div>
+              <strong>3</strong>
+              <span>Difficulty Levels</span>
+            </div>
+          </div>
+          <div class="math-stat-strip-item">
+            <i class="fa-solid fa-trophy" style="color:#EC4899;"></i>
+            <div>
+              <strong>GCSE</strong>
+              <span>Aligned</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Exam Tips Section -->
+        <section class="math-section">
+          <div class="math-section-header">
+            <h2 class="math-section-title"><i class="fa-solid fa-lightbulb"></i> General Exam Tips</h2>
+          </div>
+          <div class="math-tips-grid">
+            <div class="math-tip-card">
+              <div class="math-tip-icon"><i class="fa-solid fa-pencil"></i></div>
+              <h4>Show Your Working</h4>
+              <p>Even if your final answer is wrong, method marks are available. Never skip steps.</p>
+            </div>
+            <div class="math-tip-card">
+              <div class="math-tip-icon"><i class="fa-solid fa-ruler"></i></div>
+              <h4>Check Units &amp; Labels</h4>
+              <p>Make sure your answer includes the correct units (cm², m, etc.) when asked.</p>
+            </div>
+            <div class="math-tip-card">
+              <div class="math-tip-icon"><i class="fa-solid fa-rotate-left"></i></div>
+              <h4>Check Inverse</h4>
+              <p>Verify your answer by applying the inverse operation — especially for roots and powers.</p>
+            </div>
+            <div class="math-tip-card">
+              <div class="math-tip-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+              <h4>Re-read the Question</h4>
+              <p>Underline key words like "exact", "integer", "estimate" — they change what's needed.</p>
+            </div>
+          </div>
+        </section>
+
+      </div><!-- /container -->
+    </div><!-- /math-main -->
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3 class="footer-title">BrainMapRevision</h3>
+            <p class="footer-text">An open-source revision platform empowering students to master all subjects effectively.</p>
+          </div>
+          <div class="footer-section">
+            <h4 class="footer-heading">Quick Links</h4>
+            <a href="../pages/dashboard.html" class="footer-link">Dashboard</a>
+            <a href="../pages/subjects.html" class="footer-link">Subjects</a>
+            <a href="../pages/quizzes.html" class="footer-link">Quizzes</a>
+          </div>
+          <div class="footer-section">
+            <h4 class="footer-heading">Resources</h4>
+            <a href="../pages/past-papers.html" class="footer-link">Past Papers</a>
+            <a href="../pages/revision-boards.html" class="footer-link">Revision Boards</a>
+            <a href="../pages/flashcards.html" class="footer-link">Flashcards</a>
+          </div>
+          <div class="footer-section">
+            <h4 class="footer-heading">Legal</h4>
+            <a href="../legal/license.html" class="footer-link">MIT License</a>
+            <a href="../legal/privacy.html" class="footer-link">Privacy Policy</a>
+            <a href="../legal/terms.html" class="footer-link">Terms of Service</a>
+          </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2025 BrainMapRevision. Open source and free forever.</p></div>
+      </div>
+    </footer>
+
+    <script src="../assets/js/env-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      (function () {
+        const SUPABASE_URL = window.__ENV__?.SUPABASE_URL || "https://qqbyxydxxcuklakvjlfr.supabase.co";
+        const SUPABASE_ANON_KEY = window.__ENV__?.SUPABASE_ANON_KEY || "Your-anon-key-here";
+        if (!window.supabaseClient) window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      })();
+    </script>
+    <script src="../script.js"></script>
+    <script src="../assets/js/math.js"></script>
+  </body>
+</html>
