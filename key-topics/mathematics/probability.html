@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Probability | BrainMapRevision</title>
+    <link rel="stylesheet" href="../../style.css" />
+    <link rel="stylesheet" href="../../assets/css/math.css" />
+    <link rel="stylesheet" href="../../assets/css/key-topic-mathematics.css" />
+    <link rel="shortcut icon" href="../../assets/images/shortcut-icon.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  </head>
+  <body class="topic-page">
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo" onclick="window.location.href='../../index.html'" style="cursor:pointer;">
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/>
+            <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/>
+          </svg>
+          <span class="logo-text">BrainMapRevision</span>
+        </div>
+        <button class="mobile-menu-btn" id="mobileMenuBtn"><span></span><span></span><span></span></button>
+        <div class="nav-menu" id="navMenu">
+          <a href="../../pages/dashboard.html" class="nav-link">Dashboard</a>
+          <a href="../../pages/subjects.html" class="nav-link">Subjects</a>
+          <a href="../../pages/quizzes.html" class="nav-link">Quizzes</a>
+          <a href="../../pages/past-papers.html" class="nav-link">Past Papers</a>
+          <div class="nav-profile" id="navProfile"></div>
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+            <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/></svg>
+            <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="math-hero">
+      <div class="math-hero-bg">
+        <div class="math-grid-overlay"></div>
+        <div class="math-symbol" style="top:10%;left:5%;font-size:3rem;opacity:.08;">&pi;</div>
+        <div class="math-symbol" style="top:25%;right:8%;font-size:2.5rem;opacity:.08;">&sum;</div>
+        <div class="math-symbol" style="bottom:20%;left:12%;font-size:2rem;opacity:.08;">&int;</div>
+        <div class="math-symbol" style="top:60%;right:15%;font-size:2rem;opacity:.08;">&radic;</div>
+        <div class="math-symbol" style="bottom:10%;right:5%;font-size:3rem;opacity:.08;">&infin;</div>
+      </div>
+      <div class="container">
+        <div class="math-hero-content">
+          <div class="topic-breadcrumb"><a href="../../subjects/mathematics.html">Mathematics</a> <i class="fa-solid fa-angle-right"></i> <span>Probability</span></div>
+          <div class="math-hero-icon"><i class="fa-solid fa-calculator"></i></div>
+          <div class="math-subject-badge">Key Topic</div>
+          <h1 class="math-hero-title">Probability</h1>
+          <p class="math-hero-subtitle">Handle chance, expected frequency, and event combinations with clear probability methods.</p>
+          <div class="math-hero-stats">
+            <div class="math-hero-stat"><span class="math-stat-num">12+</span><span class="math-stat-label">Concept Points</span></div>
+            <div class="math-hero-stat"><span class="math-stat-num">8</span><span class="math-stat-label">Practice Questions</span></div>
+            <div class="math-hero-stat"><span class="math-stat-num">GCSE</span><span class="math-stat-label">Level</span></div>
+          </div>
+          <div class="math-hero-actions">
+            <a href="../../pages/quizzes.html?subject=mathematics&topic=Probability" class="btn btn-primary"><i class="fa-solid fa-play"></i> Start Topic Quiz</a>
+            <a href="../../subjects/mathematics.html" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back to Maths Hub</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main class="topic-content">
+      <div class="container topic-layout">
+        <section class="topic-main">
+          <article class="topic-panel" id="overview">
+            <h2><i class="fa-solid fa-layer-group"></i> Core Concepts</h2>
+            <div class="topic-grid-3"><div class="topic-chip"><strong>Probability</strong><span>Single event probability</span></div>
+<div class="topic-chip"><strong>Probability</strong><span>Complements and not events</span></div>
+<div class="topic-chip"><strong>Probability</strong><span>Sample space diagrams</span></div>
+<div class="topic-chip"><strong>Probability</strong><span>Tree diagrams</span></div>
+<div class="topic-chip"><strong>Probability</strong><span>Independent and dependent events</span></div>
+<div class="topic-chip"><strong>Probability</strong><span>Expected frequency</span></div></div>
+          </article>
+
+          <article class="topic-panel" id="formulas">
+            <h2><i class="fa-solid fa-square-root-variable"></i> Key Rules And Formulas</h2>
+            <ul class="formula-list"><li><code>P(event) = favorable / total</code></li>
+<li><code>0 <= P(event) <= 1</code></li>
+<li><code>P(not A) = 1 - P(A)</code></li>
+<li><code>Independent: P(A and B) = P(A) * P(B)</code></li>
+<li><code>Expected frequency = probability * trials</code></li></ul>
+          </article>
+
+          <article class="topic-panel" id="examples">
+            <h2><i class="fa-solid fa-pen-ruler"></i> Worked Examples</h2>
+            <div class="worked-item"><h3>Coin and die</h3><ol class="worked-steps"><li>Multiply 1/2 and 1/6</li></ol><p><strong>Answer:</strong> 1/12</p></div>
+<div class="worked-item"><h3>Use complement from P(rain)=0.35</h3><ol class="worked-steps"><li>Subtract from 1</li></ol><p><strong>Answer:</strong> 0.65</p></div>
+<div class="worked-item"><h3>Expected success with p=0.2 over 50</h3><ol class="worked-steps"><li>Multiply 0.2 by 50</li></ol><p><strong>Answer:</strong> 10</p></div>
+          </article>
+
+          <article class="topic-panel" id="practice">
+            <h2><i class="fa-solid fa-dumbbell"></i> Exam-Style Practice</h2>
+            <div class="practice-item"><p><strong>Q:</strong> Bag has 4 red and 6 blue. P(red)</p><button class="practice-answer-btn">Show answer</button><div class="practice-answer">2/5</div></div>
+<div class="practice-item"><p><strong>Q:</strong> If P(A)=0.72 find P(not A)</p><button class="practice-answer-btn">Show answer</button><div class="practice-answer">0.28</div></div>
+<div class="practice-item"><p><strong>Q:</strong> Fair die P(odd)</p><button class="practice-answer-btn">Show answer</button><div class="practice-answer">1/2</div></div>
+<div class="practice-item"><p><strong>Q:</strong> P(A)=0.3 and P(B)=0.4 independent, find P(A and B)</p><button class="practice-answer-btn">Show answer</button><div class="practice-answer">0.12</div></div>
+<div class="practice-item"><p><strong>Q:</strong> Spinner p(win)=0.25 over 120 spins, expected wins</p><button class="practice-answer-btn">Show answer</button><div class="practice-answer">30</div></div>
+<div class="practice-item"><p><strong>Q:</strong> Probability of impossible event</p><button class="practice-answer-btn">Show answer</button><div class="practice-answer">0</div></div>
+<div class="practice-item"><p><strong>Q:</strong> Probability of certain event</p><button class="practice-answer-btn">Show answer</button><div class="practice-answer">1</div></div>
+<div class="practice-item"><p><strong>Q:</strong> Two fair coins, exactly one head</p><button class="practice-answer-btn">Show answer</button><div class="practice-answer">1/2</div></div>
+          </article>
+
+          <article class="topic-panel" id="mistakes">
+            <h2><i class="fa-solid fa-triangle-exclamation"></i> Common Mistakes</h2>
+            <ul><li>Adding when you should multiply for independent AND</li>
+<li>Forgetting totals in conditional questions</li>
+<li>Not simplifying fractions</li>
+<li>Giving probabilities outside 0 to 1</li></ul>
+          </article>
+
+          <article class="topic-panel" id="checklist">
+            <h2><i class="fa-solid fa-list-check"></i> Revision Checklist</h2>
+            <ul class="topic-checklist"><li>I can calculate single-event probability</li>
+<li>I can combine events correctly</li>
+<li>I can use complements quickly</li>
+<li>I can convert fraction decimal percent</li></ul>
+          </article>
+        </section>
+
+        <aside class="topic-aside">
+          <article class="topic-panel topic-nav">
+            <h2>Math Topics</h2>
+            <ul><li><a href="./algebra.html">Algebra</a></li>
+<li><a href="./geometry.html">Geometry</a></li>
+<li><a href="./probability.html">Probability</a></li>
+<li><a href="./pythagoras.html">Pythagoras</a></li>
+<li><a href="./statistics.html">Statistics</a></li>
+<li><a href="./trigonometry.html">Trigonometry</a></li>
+<li><a href="./quadratics.html">Quadratics</a></li></ul>
+          </article>
+
+          <article class="topic-panel topic-links">
+            <h2>Quick Jump</h2>
+            <ul>
+              <li><a href="#overview">Core Concepts</a></li>
+              <li><a href="#formulas">Rules</a></li>
+              <li><a href="#examples">Examples</a></li>
+              <li><a href="#practice">Practice</a></li>
+              <li><a href="#mistakes">Mistakes</a></li>
+              <li><a href="#checklist">Checklist</a></li>
+            </ul>
+          </article>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section"><h3 class="footer-title">BrainMapRevision</h3><p class="footer-text">An open-source revision platform empowering students to master all subjects effectively.</p></div>
+          <div class="footer-section"><h4 class="footer-heading">Quick Links</h4><a href="../../pages/dashboard.html" class="footer-link">Dashboard</a><a href="../../pages/subjects.html" class="footer-link">Subjects</a><a href="../../pages/quizzes.html" class="footer-link">Quizzes</a></div>
+          <div class="footer-section"><h4 class="footer-heading">Resources</h4><a href="../../pages/past-papers.html" class="footer-link">Past Papers</a><a href="../../pages/revision-boards.html" class="footer-link">Revision Boards</a><a href="../../pages/flashcards.html" class="footer-link">Flashcards</a></div>
+          <div class="footer-section"><h4 class="footer-heading">Legal</h4><a href="../../legal/license.html" class="footer-link">MIT License</a><a href="../../legal/privacy.html" class="footer-link">Privacy Policy</a><a href="../../legal/terms.html" class="footer-link">Terms of Service</a></div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2025 BrainMapRevision. Open source and free forever.</p></div>
+      </div>
+    </footer>
+
+    <script src="../../assets/js/env-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      (function () {
+        const SUPABASE_URL = window.__ENV__?.SUPABASE_URL || 'https://qqbyxydxxcuklakvjlfr.supabase.co';
+        const SUPABASE_ANON_KEY = window.__ENV__?.SUPABASE_ANON_KEY || 'Your-anon-key-here';
+        if (window.supabase && !window.supabaseClient) {
+          window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
+      })();
+    </script>
+    <script src="../../script.js"></script>
+    <script src="../../assets/js/key-topic-mathematics.js"></script>
+  </body>
+</html>
