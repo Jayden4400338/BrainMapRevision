@@ -76,6 +76,7 @@
 
       userProfile = data;
       updateProfileUI();
+      refreshAvatarAppearance();
     } catch (error) {
       console.error('Error loading profile:', error);
       showMessage('Failed to load profile. Please refresh the page.', 'error');
@@ -114,7 +115,11 @@
 
     // Update settings
     userRole.textContent =
-      userProfile.role === 'teacher' ? 'Teacher' : 'Student';
+      userProfile.role === 'admin'
+        ? 'Admin'
+        : userProfile.role === 'teacher'
+          ? 'Teacher'
+          : 'Student';
     
     if (userProfile.created_at) {
       const createdDate = new Date(userProfile.created_at);
@@ -147,7 +152,7 @@
    */
   function getAccentColor() {
     const style = getComputedStyle(document.documentElement);
-    const accentColor = style.getPropertyValue('--accent-color').trim();
+    const accentColor = style.getPropertyValue('--accent-primary').trim();
     // Convert color to hex if needed
     if (accentColor.startsWith('#')) {
       return accentColor.substring(1);
@@ -169,6 +174,20 @@
         .substring(0, 2)
         .toUpperCase();
       navProfile.innerHTML = `<div class="nav-profile-placeholder" onclick="window.location.href='profile.html'">${initials}</div>`;
+    }
+  }
+
+  async function refreshAvatarAppearance() {
+    if (!currentUser) return;
+    try {
+      const appearance = await window.fetchAvatarAppearanceForUser?.(currentUser.id);
+      if (appearance) {
+        window.applyAvatarAppearance?.(profileAvatar, appearance);
+        const navAvatar = document.querySelector('#navProfile .nav-profile-picture, #navProfile .nav-profile-placeholder');
+        window.applyAvatarAppearance?.(navAvatar, appearance);
+      }
+    } catch (error) {
+      console.warn('Avatar appearance refresh failed:', error);
     }
   }
 
@@ -267,6 +286,7 @@
 
       // Update navbar
       updateNavbarProfile();
+      await refreshAvatarAppearance();
 
       showMessage('Profile picture updated successfully!', 'success');
     } catch (error) {

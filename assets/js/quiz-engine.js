@@ -13,6 +13,7 @@
     let quizStartTime = null;
     let questionAnswered = false; // Track if current question is answered
     let completedQuizzes = new Set(); // Track completed quiz IDs to prevent farming
+    let allQuizQuestions = [];
 
     // ======================
     // DOM ELEMENTS
@@ -138,8 +139,8 @@
         try {
             showLoading();
 
-            // Build query with filters
-            let query = window.supabaseClient
+            // Always fetch then filter client-side for reliable filtering UX
+            const { data, error } = await window.supabaseClient
                 .from('quiz_questions')
                 .select(`
                     *,
@@ -147,28 +148,28 @@
                         name,
                         slug
                     )
-                `);
-
-            // Apply filters
-            if (subjectFilter.value) {
-                query = query.eq('subject_id', parseInt(subjectFilter.value));
-            }
-
-            if (difficultyFilter.value) {
-                query = query.eq('difficulty', difficultyFilter.value);
-            }
-
-            if (topicFilter.value) {
-                query = query.eq('topic', topicFilter.value);
-            }
-
-            const { data, error } = await query.order('topic');
+                `)
+                .order('topic');
 
             if (error) throw error;
 
-            console.log('Loaded questions:', data); // Debug
+            allQuizQuestions = Array.isArray(data) ? data : [];
+            let filtered = [...allQuizQuestions];
 
-            if (!data || data.length === 0) {
+            if (subjectFilter.value) {
+                const subjectId = Number(subjectFilter.value);
+                filtered = filtered.filter((q) => Number(q.subject_id) === subjectId);
+            }
+
+            if (difficultyFilter.value) {
+                filtered = filtered.filter((q) => q.difficulty === difficultyFilter.value);
+            }
+
+            if (topicFilter.value) {
+                filtered = filtered.filter((q) => q.topic === topicFilter.value);
+            }
+
+            if (!filtered || filtered.length === 0) {
                 quizzesGrid.innerHTML = '<p class="no-results">No quizzes match your filters. Try adjusting them.</p>';
                 quizzesListSection.style.display = 'block';
                 hideLoading();
@@ -176,9 +177,7 @@
             }
 
             // Group questions by topic
-            const quizzesByTopic = groupQuestionsByTopic(data);
-            
-            console.log('Grouped quizzes:', quizzesByTopic); // Debug
+            const quizzesByTopic = groupQuestionsByTopic(filtered);
             
             displayAvailableQuizzes(quizzesByTopic);
             hideLoading();
@@ -1059,14 +1058,13 @@
                 
                 if (subjectFilter.value) {
                     try {
-                        const { data, error } = await window.supabaseClient
-                            .from('quiz_questions')
-                            .select('topic')
-                            .eq('subject_id', parseInt(subjectFilter.value));
-                        
-                        if (!error && data) {
+                        const subjectId = Number(subjectFilter.value);
+                        const source = allQuizQuestions.length ? allQuizQuestions : [];
+                        const topicRows = source.filter((q) => Number(q.subject_id) === subjectId);
+
+                        if (topicRows.length) {
                             // Get unique topics
-                            const topics = [...new Set(data.map(q => q.topic))].sort();
+                            const topics = [...new Set(topicRows.map(q => q.topic))].sort();
                             
                             topics.forEach(topic => {
                                 const option = document.createElement('option');
@@ -1078,6 +1076,10 @@
                     } catch (err) {
                         console.error('Error loading topics:', err);
                     }
+                }
+
+                if (topicFilter.value && !Array.from(topicFilter.options).some((opt) => opt.value === topicFilter.value)) {
+                    topicFilter.value = '';
                 }
                 
                 loadAvailableQuizzes();

@@ -139,8 +139,8 @@
         if (filters.search) {
             const searchLower = filters.search.toLowerCase();
             filtered = filtered.filter(q => {
-                const questionText = q.question_text.toLowerCase();
-                const topics = q.topics ? q.topics.join(' ').toLowerCase() : '';
+                const questionText = String(q.question_text || '').toLowerCase();
+                const topics = Array.isArray(q.topics) ? q.topics.join(' ').toLowerCase() : '';
                 return questionText.includes(searchLower) || topics.includes(searchLower);
             });
         }
@@ -305,7 +305,7 @@
 
     function hideLoading() {
         loadingState.style.display = 'none';
-        questionsContainer.style.display = 'flex';
+        questionsContainer.style.display = '';
     }
 
     function showError() {
@@ -321,7 +321,7 @@
 
     function hideEmpty() {
         emptyState.style.display = 'none';
-        questionsContainer.style.display = 'flex';
+        questionsContainer.style.display = '';
     }
 
     function updateResultsCount(count) {

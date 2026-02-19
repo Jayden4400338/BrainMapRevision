@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Questions - BrainMapRevision</title>
+    <link rel="stylesheet" href="../../style.css" />
+    <link rel="stylesheet" href="../../assets/css/admin.css" />
+    <link rel="shortcut icon" href="../../assets/images/shortcut-icon.png" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo" onclick="window.location.href='../../index.html'" style="cursor:pointer;">
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></svg>
+          <span class="logo-text">BrainMapRevision</span>
+        </div>
+        <button class="mobile-menu-btn" id="mobileMenuBtn"><span></span><span></span><span></span></button>
+        <div class="nav-menu" id="navMenu">
+          <a href="../dashboard.html" class="nav-link">Dashboard</a>
+          <a href="../subjects.html" class="nav-link">Subjects</a>
+          <a href="../quizzes.html" class="nav-link">Quizzes</a>
+          <div class="nav-profile" id="navProfile"></div>
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg><svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+        </div>
+      </div>
+    </nav>
+
+    <main class="admin-shell">
+      <div class="container">
+        <header class="admin-head">
+          <div>
+            <h1>Question Manager</h1>
+            <p>Add quiz questions and review/remove recently created ones.</p>
+          </div>
+          <div class="admin-head-actions">
+            <input id="questionSearchInput" class="admin-search" type="text" placeholder="Search recent questions..." />
+            <select id="questionPageSizeSelect" class="admin-search admin-inline-select">
+              <option value="10">10 / page</option>
+              <option value="25" selected>25 / page</option>
+              <option value="50">50 / page</option>
+              <option value="100">100 / page</option>
+            </select>
+            <button id="refreshQuestionsBtn" class="btn btn-secondary">Refresh</button>
+          </div>
+        </header>
+
+        <nav class="admin-page-nav">
+          <a href="./index.html">Hub</a>
+          <a href="./users.html">Users</a>
+          <a class="is-active" href="./questions.html">Questions</a>
+          <a href="./activity.html">Activity</a>
+          <a href="./analytics.html">Analytics</a>
+          <a href="./logs.html">Logs</a>
+          <a href="./settings.html">Settings</a>
+        </nav>
+
+        <section id="adminAccessError" class="admin-access-error" style="display:none;">
+          <h2>Access denied</h2>
+          <p>This page is for users with role <code>admin</code> only.</p>
+        </section>
+
+        <section class="admin-panel-grid admin-question-grid" id="adminQuestionPanel">
+          <article class="admin-panel-card">
+            <h3>Add Question</h3>
+            <div class="admin-form-grid">
+              <input id="qSubjectSlug" placeholder="Subject slug (e.g. mathematics)" />
+              <input id="qTopic" placeholder="Topic" />
+              <select id="qDifficulty">
+                <option value="easy">easy</option>
+                <option value="medium" selected>medium</option>
+                <option value="hard">hard</option>
+              </select>
+              <input id="qCorrect" placeholder="Correct answer" />
+              <textarea id="qText" placeholder="Question text"></textarea>
+              <textarea id="qOptions" placeholder='Options JSON e.g. ["A","B","C","D"]'></textarea>
+              <textarea id="qExplanation" placeholder="Explanation (optional)"></textarea>
+              <button class="btn btn-primary" id="addQuestionBtn">Add Question</button>
+              <p class="admin-note">Options must be valid JSON array text.</p>
+            </div>
+          </article>
+
+          <article class="admin-panel-card">
+            <h3>Recent Questions</h3>
+            <div class="admin-table-wrap">
+              <table class="admin-users-table">
+                <thead><tr><th>ID</th><th>Subject</th><th>Topic</th><th>Question</th><th>Difficulty</th><th>Action</th></tr></thead>
+                <tbody id="adminQuestionTableBody"></tbody>
+              </table>
+            </div>
+            <div class="admin-pagination">
+              <button id="questionsPrevPageBtn" class="btn btn-secondary">Previous</button>
+              <span id="questionsPageInfo">Page 1 of 1</span>
+              <button id="questionsNextPageBtn" class="btn btn-secondary">Next</button>
+            </div>
+          </article>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3 class="footer-title">BrainMapRevision</h3>
+            <p class="footer-text">Admin controls for managing platform users, content, and settings.</p>
+          </div>
+          <div class="footer-section">
+            <h4 class="footer-heading">Admin</h4>
+            <a href="./index.html" class="footer-link">Hub</a>
+            <a href="./users.html" class="footer-link">Users</a>
+            <a href="./questions.html" class="footer-link">Questions</a>
+          </div>
+          <div class="footer-section">
+            <h4 class="footer-heading">Monitoring</h4>
+            <a href="./activity.html" class="footer-link">Activity</a>
+            <a href="./analytics.html" class="footer-link">Analytics</a>
+            <a href="./logs.html" class="footer-link">Logs</a>
+            <a href="./settings.html" class="footer-link">Settings</a>
+          </div>
+          <div class="footer-section">
+            <h4 class="footer-heading">Legal</h4>
+            <a href="../../legal/license.html" class="footer-link">MIT License</a>
+            <a href="../../legal/privacy.html" class="footer-link">Privacy Policy</a>
+            <a href="../../legal/terms.html" class="footer-link">Terms of Service</a>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2026 BrainMapRevision. Open source and free forever.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../../assets/js/env-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      (function () {
+        const SUPABASE_URL = window.__ENV__?.SUPABASE_URL || "https://qqbyxydxxcuklakvjlfr.supabase.co";
+        const SUPABASE_ANON_KEY = window.__ENV__?.SUPABASE_ANON_KEY || "Your-anon-key-here";
+        if (!window.supabaseClient) window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      })();
+    </script>
+    <script src="../../script.js"></script>
+    <script src="../../assets/js/admin-questions.js"></script>
+  </body>
+</html>

@@ -24,6 +24,27 @@
   let currentUser = null;
   let userProfile = null;
 
+  function normalizeRoles(profile) {
+    const roles = Array.isArray(profile?.roles) ? profile.roles : [];
+    const normalized = roles
+      .map((r) => String(r || '').trim().toLowerCase())
+      .filter((r) => ['student', 'teacher', 'admin'].includes(r));
+
+    if (!normalized.length) {
+      const fallback = String(profile?.role || 'student').toLowerCase();
+      return ['student', 'teacher', 'admin'].includes(fallback) ? [fallback] : ['student'];
+    }
+
+    return [...new Set(normalized)];
+  }
+
+  function getPrimaryRole(profile) {
+    const roles = normalizeRoles(profile);
+    if (roles.includes('admin')) return 'admin';
+    if (roles.includes('teacher')) return 'teacher';
+    return 'student';
+  }
+
   
   
   
@@ -207,7 +228,10 @@
         id: currentUser.id,
         email: currentUser.email,
         username: currentUser.user_metadata?.username || currentUser.email.split('@')[0],
-        role: currentUser.user_metadata?.role || 'student',
+        roles: [
+          String(currentUser.user_metadata?.role || 'student').toLowerCase()
+        ],
+        role: String(currentUser.user_metadata?.role || 'student').toLowerCase(),
         year_group: currentUser.user_metadata?.year_group || null,
         xp: 0,
         level: 1,
@@ -252,7 +276,8 @@
       return;
     }
 
-    console.log('Updating dashboard UI for role:', userProfile.role);
+    const primaryRole = getPrimaryRole(userProfile);
+    console.log('Updating dashboard UI for role:', primaryRole);
 
     
     if (usernameEl) {
@@ -269,7 +294,10 @@
     animateDashboardStats();
     
     
-    if (userProfile.role === 'teacher') {
+    if (primaryRole === 'admin') {
+      console.log('User is an admin, loading admin dashboard');
+      showAdminDashboard();
+    } else if (primaryRole === 'teacher') {
       console.log('User is a teacher, loading teacher dashboard');
       showTeacherDashboard();
     } else {
@@ -336,6 +364,42 @@
     
     
     quickActionsGrid.insertBefore(assignmentsCard, quickActionsGrid.children[1]);
+
+    const createClassroomCard = document.createElement('a');
+    createClassroomCard.href = 'classroom/create.html';
+    createClassroomCard.className = 'action-card teacher-only';
+    createClassroomCard.innerHTML = `
+      <div class="action-icon" style="background: linear-gradient(135deg, #10B981 0%, #34D399 100%);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 5v14M5 12h14"/>
+        </svg>
+      </div>
+      <h3 class="action-title">
+        Create Classroom
+        <span class="teacher-badge">Teacher</span>
+      </h3>
+      <p class="action-description">Set up a new classroom and invite students.</p>
+    `;
+    quickActionsGrid.insertBefore(createClassroomCard, quickActionsGrid.children[2]);
+
+    const classAnalyticsCard = document.createElement('a');
+    classAnalyticsCard.href = 'classroom/analytics.html';
+    classAnalyticsCard.className = 'action-card teacher-only';
+    classAnalyticsCard.innerHTML = `
+      <div class="action-icon" style="background: linear-gradient(135deg, #10B981 0%, #34D399 100%);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="20" x2="18" y2="10" />
+          <line x1="12" y1="20" x2="12" y2="4" />
+          <line x1="6" y1="20" x2="6" y2="14" />
+        </svg>
+      </div>
+      <h3 class="action-title">
+        Class Analytics
+        <span class="teacher-badge">Teacher</span>
+      </h3>
+      <p class="action-description">Track class performance and engagement.</p>
+    `;
+    quickActionsGrid.insertBefore(classAnalyticsCard, quickActionsGrid.children[3]);
     
     
     const welcomeTitle = document.querySelector('.welcome-title');
@@ -356,10 +420,41 @@
     
     
   }
-  
-  
-  
-  
+
+  function showAdminDashboard() {
+    const quickActionsGrid = document.querySelector('.quick-actions');
+    if (!quickActionsGrid) return;
+
+    const adminCards = [
+      { href: 'admin/index.html', title: 'Admin Hub', desc: 'Open the full admin control center.' },
+      { href: 'admin/users.html', title: 'User Management', desc: 'Grant admin perms, XP, coins and hint tokens.' },
+      { href: 'admin/questions.html', title: 'Question Manager', desc: 'Add your own quiz questions quickly.' },
+      { href: 'admin/activity.html', title: 'Live Activity', desc: 'See active, idle, and offline users.' },
+      { href: 'admin/analytics.html', title: 'Time Analytics', desc: 'Review total time spent on the platform.' },
+      { href: 'admin/settings.html', title: 'Admin Settings', desc: 'Change platform settings and defaults.' }
+    ];
+
+    adminCards.reverse().forEach((item) => {
+      const card = document.createElement('a');
+      card.href = item.href;
+      card.className = 'action-card admin-only';
+      card.innerHTML = `
+        <div class="action-icon" style="background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="9"/>
+          </svg>
+        </div>
+        <h3 class="action-title">${item.title} <span class="teacher-badge">Admin</span></h3>
+        <p class="action-description">${item.desc}</p>
+      `;
+      quickActionsGrid.insertBefore(card, quickActionsGrid.firstChild);
+    });
+
+    const welcomeTitle = document.querySelector('.welcome-title');
+    if (welcomeTitle) {
+      welcomeTitle.innerHTML = welcomeTitle.innerHTML.replace('??', '???');
+    }
+  }
   function showStudentDashboard() {
     
     const teacherElements = document.querySelectorAll('.teacher-only');
