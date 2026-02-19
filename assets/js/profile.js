@@ -28,6 +28,7 @@
   const userRole = document.getElementById('userRole');
   const memberSince = document.getElementById('memberSince');
   const lastLogin = document.getElementById('lastLogin');
+  const ownedAvatarOptions = document.getElementById('ownedAvatarOptions');
   const savePersonalBtn = document.getElementById('savePersonalBtn');
   const savePasswordBtn = document.getElementById('savePasswordBtn');
 
@@ -35,6 +36,7 @@
   document.addEventListener('DOMContentLoaded', async () => {
     await checkAuth();
     await loadUserProfile();
+    await loadOwnedAvatarOptions();
     setupEventListeners();
   });
 
@@ -206,6 +208,175 @@
 
     // Username validation
     usernameInput.addEventListener('input', validateUsername);
+
+    // Purchased avatar selection
+    ownedAvatarOptions?.addEventListener('click', handleOwnedAvatarSelect);
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? '')
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#39;');
+  }
+
+  function getAvatarCosmeticImageUrl(item) {
+    if (!item) return '';
+    const props = item.properties || {};
+    const candidates = [
+      item.image_url,
+      props.image_url,
+      props.avatar_url,
+      props.profile_picture_url,
+      props.image,
+      props.url,
+      props.src,
+      props.asset_url,
+    ];
+    const found = candidates.find(
+      (entry) => typeof entry === 'string' && entry.trim().length > 0
+    );
+    if (found) return normalizeAvatarUrl(found.trim());
+    return getGeminiAvatarFallbackUrl(item);
+  }
+
+  function getGeminiAvatarFallbackUrl(item) {
+    const props = item?.properties || {};
+    const animation = String(props.animation || '').toLowerCase();
+    const name = String(item?.name || '').toLowerCase();
+
+    if (animation.includes('star') || name.includes('star')) {
+      return normalizeAvatarUrl('assets/star.png');
+    }
+
+    if (animation.includes('brain') || name.includes('brain')) {
+      return normalizeAvatarUrl('assets/book.png');
+    }
+
+    return '';
+  }
+
+  function normalizeAvatarUrl(rawUrl) {
+    const value = String(rawUrl || '').trim();
+    if (!value) return '';
+    if (/^(https?:|data:|blob:)/i.test(value)) return value;
+    if (value.startsWith('/')) return `${window.location.origin}${value}`;
+    if (value.startsWith('assets/')) return `${window.location.origin}/${value}`;
+    return value;
+  }
+
+  async function loadOwnedAvatarOptions() {
+    if (!ownedAvatarOptions || !currentUser) return;
+    try {
+      const { data, error } = await supabase
+        .from('user_inventory')
+        .select('item_id, shop_items(id, name, category, image_url, properties)')
+        .eq('user_id', currentUser.id);
+
+      if (error) throw error;
+
+      const ownedAvatarCosmetics = (Array.isArray(data) ? data : [])
+        .map((row) => {
+          const relation = row?.shop_items;
+          const shopItem = Array.isArray(relation) ? relation[0] : relation;
+          if (!shopItem) return null;
+          return {
+            ...shopItem,
+            __inventoryItemId: row.item_id,
+          };
+        })
+        .filter((item) => {
+          if (!item || item.category !== 'cosmetic' || !item.__inventoryItemId) return false;
+          const type = String(item.properties?.type || '').toLowerCase();
+          return type === 'avatar';
+        });
+
+      const avatarItems = ownedAvatarCosmetics.filter(
+        (item) => !!getAvatarCosmeticImageUrl(item)
+      );
+
+      if (!avatarItems.length) {
+        const hasMissingImageUrls = ownedAvatarCosmetics.length > 0;
+        ownedAvatarOptions.innerHTML =
+          hasMissingImageUrls
+            ? '<p class="setting-description">You own avatar cosmetics, but no image URL is set on them yet. Add `image_url` to those shop items and they will appear here.</p>'
+            : '<p class="setting-description">No purchased profile pictures yet. Buy avatar cosmetics in Shop to select them here.</p>';
+        return;
+      }
+
+      const currentAvatarUrl = String(userProfile?.profile_picture_url || '').trim();
+      const cards = avatarItems
+        .map((item) => {
+          const imageUrl = getAvatarCosmeticImageUrl(item);
+          const isActive = currentAvatarUrl && currentAvatarUrl === imageUrl;
+          return `
+            <button
+              type="button"
+              class="owned-avatar-option${isActive ? ' is-active' : ''}"
+              data-avatar-url="${escapeHtml(imageUrl)}"
+              data-item-id="${escapeHtml(item.__inventoryItemId)}"
+              title="${escapeHtml(item.name || 'Avatar')}"
+              aria-label="Use ${escapeHtml(item.name || 'avatar')} as profile picture"
+            >
+              <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(item.name || 'Avatar')}" loading="lazy" />
+            </button>
+          `;
+        })
+        .join('');
+
+      ownedAvatarOptions.innerHTML = `
+        <p class="setting-description">Purchased profile pictures:</p>
+        <div class="owned-avatar-options-grid">${cards}</div>
+      `;
+    } catch (error) {
+      console.error('Error loading purchased avatars:', error);
+      ownedAvatarOptions.innerHTML =
+        '<p class="setting-description">Could not load purchased profile pictures.</p>';
+    }
+  }
+
+  async function handleOwnedAvatarSelect(event) {
+    const clickTarget = event.target;
+    if (!(clickTarget instanceof HTMLElement)) return;
+    const target = clickTarget.closest('.owned-avatar-option');
+    if (!(target instanceof HTMLElement) || !target.dataset.avatarUrl) return;
+
+    const avatarUrl = target.dataset.avatarUrl;
+    const itemId = Number(target.dataset.itemId || 0);
+    if (!avatarUrl || avatarUrl === userProfile?.profile_picture_url) return;
+
+    try {
+      target.disabled = true;
+      if (itemId) {
+        const { error: equipError } = await supabase.rpc('shop_equip_cosmetic', {
+          target_item_id: itemId,
+        });
+        if (equipError) {
+          // Do not block image selection if cosmetic-equip RPC fails.
+          console.warn('Equip cosmetic failed while applying avatar image:', equipError);
+        }
+      }
+      const { error } = await supabase
+        .from('users')
+        .update({ profile_picture_url: avatarUrl })
+        .eq('id', currentUser.id);
+
+      if (error) throw error;
+
+      userProfile.profile_picture_url = avatarUrl;
+      profileAvatar.src = avatarUrl;
+      updateNavbarProfile();
+      await refreshAvatarAppearance();
+      await loadOwnedAvatarOptions();
+      showMessage('Profile picture updated from purchased avatars.', 'success');
+    } catch (error) {
+      console.error('Error applying purchased avatar:', error);
+      showMessage('Could not update profile picture from purchased avatars.', 'error');
+    } finally {
+      target.disabled = false;
+    }
   }
 
   /**
@@ -287,6 +458,7 @@
       // Update navbar
       updateNavbarProfile();
       await refreshAvatarAppearance();
+      await loadOwnedAvatarOptions();
 
       showMessage('Profile picture updated successfully!', 'success');
     } catch (error) {
@@ -388,6 +560,7 @@
 
       // Reload profile
       await loadUserProfile();
+      await loadOwnedAvatarOptions();
 
       showMessage('Profile updated successfully!', 'success');
     } catch (error) {

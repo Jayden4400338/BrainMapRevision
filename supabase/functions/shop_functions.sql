@@ -71,7 +71,7 @@ BEGIN
   )
   INTO already_owns;
 
-  IF already_owns THEN
+  IF already_owns AND item_category IN ('theme', 'cosmetic') THEN
     RETURN QUERY
     SELECT TRUE, 'Already owned'::TEXT, current_coins, requested_item_id, FALSE;
     RETURN;
@@ -101,7 +101,8 @@ BEGIN
 
   INSERT INTO public.user_inventory (user_id, item_id, is_equipped)
   VALUES (current_user_uuid, requested_item_id, should_equip)
-  ON CONFLICT (user_id, item_id) DO NOTHING;
+  ON CONFLICT (user_id, item_id)
+  DO UPDATE SET purchased_at = NOW();
 
   IF item_category = 'hint_pack' AND item_hints > 0 THEN
     UPDATE public.users u

@@ -7,6 +7,9 @@
   const categoriesWrap = document.getElementById("shopCategories");
   const refreshBtn = document.getElementById("shopRefreshBtn");
   const customThemePanel = document.getElementById("customThemePanel");
+  const customThemeToggleBtn = document.getElementById("customThemeToggleBtn");
+  const customThemeToggleIcon = document.getElementById("customThemeToggleIcon");
+  const customThemePanelBody = document.getElementById("customThemePanelBody");
   const customThemeStatus = document.getElementById("customThemeStatus");
   const customThemeApplyBtn = document.getElementById("customThemeApplyBtn");
   const customThemeResetBtn = document.getElementById("customThemeResetBtn");
@@ -109,6 +112,16 @@
   let activeFilter = "all";
   let customMode = "light";
   let customPalette = defaultCustomPalette();
+  let customThemeExpanded = false;
+
+  function setCustomThemeExpanded(nextExpanded) {
+    customThemeExpanded = !!nextExpanded;
+    customThemePanelBody?.classList.toggle("is-collapsed", !customThemeExpanded);
+    customThemeToggleBtn?.setAttribute("aria-expanded", customThemeExpanded ? "true" : "false");
+    if (customThemeToggleIcon) {
+      customThemeToggleIcon.textContent = customThemeExpanded ? "−" : "+";
+    }
+  }
 
   function formatCategory(category) {
     const map = {
@@ -122,6 +135,47 @@
 
   function getCosmeticType(item) {
     return String(item?.properties?.type || "").toLowerCase();
+  }
+
+  function normalizeAvatarUrl(rawUrl) {
+    const value = String(rawUrl || "").trim();
+    if (!value) return "";
+    if (/^(https?:|data:|blob:)/i.test(value)) return value;
+    if (value.startsWith("/")) return `${window.location.origin}${value}`;
+    if (value.startsWith("assets/")) return `${window.location.origin}/${value}`;
+    return value;
+  }
+
+  function getGeminiAvatarFallbackUrl(item) {
+    const props = item?.properties || {};
+    const animation = String(props.animation || "").toLowerCase();
+    const name = String(item?.name || "").toLowerCase();
+
+    if (animation.includes("star") || name.includes("star")) {
+      return normalizeAvatarUrl("assets/Gemini_Generated_Image_8jkbgf8jkbgf8jkb.png");
+    }
+    if (animation.includes("brain") || name.includes("brain")) {
+      return normalizeAvatarUrl("assets/Gemini_Generated_Image_qtvugyqtvugyqtvu.png");
+    }
+    return "";
+  }
+
+  function getAvatarCosmeticImageUrl(item) {
+    if (!item) return "";
+    const props = item.properties || {};
+    const candidates = [
+      item.image_url,
+      props.image_url,
+      props.avatar_url,
+      props.profile_picture_url,
+      props.image,
+      props.url,
+      props.src,
+      props.asset_url,
+    ];
+    const found = candidates.find((entry) => typeof entry === "string" && entry.trim().length > 0);
+    if (found) return normalizeAvatarUrl(found.trim());
+    return getGeminiAvatarFallbackUrl(item);
   }
 
   function getInventoryRecord(itemId) {
@@ -357,19 +411,17 @@
       return;
     }
 
+    const owned = isCustomCreatorOwned();
+    const equipped = isCustomCreatorEquipped();
+    if (!owned) {
+      customThemePanel.style.display = "none";
+      return;
+    }
+
     customThemePanel.style.display = "block";
     const stored = normalizeStoredPalette(window.getStoredCustomThemePalette?.());
     customPalette = stored;
     setCustomMode(customMode);
-
-    const owned = isCustomCreatorOwned();
-    const equipped = isCustomCreatorEquipped();
-    if (!owned) {
-      customThemeStatus.textContent = "Buy Custom Theme Creator in Themes to unlock full color editing.";
-      customThemeApplyBtn.disabled = true;
-      customThemeResetBtn.disabled = true;
-      return;
-    }
 
     customThemeApplyBtn.disabled = false;
     customThemeResetBtn.disabled = false;
@@ -424,6 +476,19 @@
       target_item_id: item.id,
     });
     if (error) throw error;
+
+    // If this cosmetic is an avatar, make it the actual profile picture too.
+    if (getCosmeticType(item) === "avatar") {
+      const avatarUrl = getAvatarCosmeticImageUrl(item);
+      if (avatarUrl && currentUser?.id) {
+        const { error: avatarUpdateError } = await supabase
+          .from("users")
+          .update({ profile_picture_url: avatarUrl })
+          .eq("id", currentUser.id);
+        if (avatarUpdateError) throw avatarUpdateError;
+      }
+    }
+
     await refreshAll();
     if (window.loadNavbarProfile) {
       await window.loadNavbarProfile();
@@ -450,6 +515,7 @@
 
   customThemeLightTab?.addEventListener("click", () => setCustomMode("light"));
   customThemeDarkTab?.addEventListener("click", () => setCustomMode("dark"));
+  customThemeToggleBtn?.addEventListener("click", () => setCustomThemeExpanded(!customThemeExpanded));
 
   customThemeFields?.addEventListener("input", (event) => {
     const target = event.target;
@@ -520,6 +586,7 @@
       if (action === "equip") await handleEquip(item);
       if (action === "equip-cosmetic") await handleEquipCosmetic(item);
       if (action === "customize") {
+        setCustomThemeExpanded(true);
         customThemePanel?.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     } catch (err) {
@@ -538,11 +605,16 @@
         return;
       }
 
+      // Preserve unsaved edits in case equip flow refreshes state.
+      const pendingPalette = deepClone(customPalette);
+
       if (!isCustomCreatorEquipped()) {
         await handleEquip(creatorItem);
       }
 
+      customPalette = pendingPalette;
       window.applyCustomThemePalette?.(customPalette, true);
+      setCustomMode(customMode);
       customThemeStatus.textContent = "Custom Light/Dark palettes applied.";
     } catch (err) {
       console.error(err);
@@ -559,6 +631,7 @@
 
   document.addEventListener("DOMContentLoaded", async () => {
     try {
+      setCustomThemeExpanded(false);
       if (!(await loadCurrentUser())) return;
       await refreshAll();
     } catch (err) {

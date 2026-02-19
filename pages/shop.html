@@ -60,26 +60,31 @@
         </section>
 
         <section class="shop-custom-panel" id="customThemePanel">
-          <div class="shop-custom-head">
-            <h2>Custom Theme Creator</h2>
-            <p id="customThemeStatus">Unlock and equip Custom Theme Creator to edit full site colors.</p>
-          </div>
-          <div class="shop-custom-mode-tabs">
-            <button id="customThemeLightTab" class="is-active" data-mode="light">Light Palette</button>
-            <button id="customThemeDarkTab" data-mode="dark">Dark Palette</button>
-          </div>
-          <div class="shop-custom-grid" id="customThemeFields"></div>
-          <div class="shop-custom-note">Use swatches or type a hex code like <code>#3B82F6</code>.</div>
-          <div class="shop-custom-preview-row">
-            <div class="shop-custom-preview-card" id="customThemePreviewCard">
-              <h4>Preview</h4>
-              <p>Sample text, border, and accent color</p>
-              <button type="button">Button</button>
+          <button id="customThemeToggleBtn" class="shop-custom-toggle" type="button" aria-expanded="false">
+            <span>Custom Theme Creator</span>
+            <span id="customThemeToggleIcon" class="shop-custom-toggle-icon">+</span>
+          </button>
+          <div id="customThemePanelBody" class="shop-custom-panel-body is-collapsed">
+            <div class="shop-custom-head">
+              <p id="customThemeStatus">Unlock and equip Custom Theme Creator to edit full site colors.</p>
             </div>
-          </div>
-          <div class="shop-custom-actions">
-            <button id="customThemeApplyBtn" class="btn btn-primary">Apply Custom Theme</button>
-            <button id="customThemeResetBtn" class="btn btn-secondary">Reset Custom Theme</button>
+            <div class="shop-custom-mode-tabs">
+              <button id="customThemeLightTab" class="is-active" data-mode="light">Light Palette</button>
+              <button id="customThemeDarkTab" data-mode="dark">Dark Palette</button>
+            </div>
+            <div class="shop-custom-grid" id="customThemeFields"></div>
+            <div class="shop-custom-note">Use swatches or type a hex code like <code>#3B82F6</code>.</div>
+            <div class="shop-custom-preview-row">
+              <div class="shop-custom-preview-card" id="customThemePreviewCard">
+                <h4>Preview</h4>
+                <p>Sample text, border, and accent color</p>
+                <button type="button">Button</button>
+              </div>
+            </div>
+            <div class="shop-custom-actions">
+              <button id="customThemeApplyBtn" class="btn btn-primary">Apply Custom Theme</button>
+              <button id="customThemeResetBtn" class="btn btn-secondary">Reset Custom Theme</button>
+            </div>
           </div>
         </section>
 

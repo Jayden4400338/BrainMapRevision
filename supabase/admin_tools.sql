@@ -1368,3 +1368,238 @@ END;
 $$;
 
 GRANT EXECUTE ON FUNCTION public.admin_set_user_password(UUID, TEXT) TO authenticated;
+
+-- 12) Platform events (scheduled global boosts)
+CREATE TABLE IF NOT EXISTS public.platform_events (
+  id BIGSERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  event_key TEXT NOT NULL,
+  description TEXT,
+  starts_at TIMESTAMPTZ NOT NULL,
+  ends_at TIMESTAMPTZ NOT NULL,
+  payload JSONB NOT NULL DEFAULT '{}'::JSONB,
+  is_active BOOLEAN NOT NULL DEFAULT TRUE,
+  created_by UUID REFERENCES public.users(id) ON DELETE SET NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  CONSTRAINT platform_events_window_check CHECK (ends_at > starts_at)
+);
+
+CREATE INDEX IF NOT EXISTS idx_platform_events_window ON public.platform_events(starts_at, ends_at);
+CREATE INDEX IF NOT EXISTS idx_platform_events_active ON public.platform_events(is_active, starts_at, ends_at);
+
+CREATE OR REPLACE FUNCTION public.admin_get_platform_events(
+  limit_count INTEGER DEFAULT 200
+)
+RETURNS TABLE(
+  id BIGINT,
+  name TEXT,
+  event_key TEXT,
+  description TEXT,
+  starts_at TIMESTAMPTZ,
+  ends_at TIMESTAMPTZ,
+  payload JSONB,
+  is_active BOOLEAN,
+  created_by UUID,
+  created_at TIMESTAMPTZ,
+  updated_at TIMESTAMPTZ
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  IF NOT public.is_admin(auth.uid()) THEN
+    RAISE EXCEPTION 'Access denied: admin only';
+  END IF;
+
+  RETURN QUERY
+  SELECT
+    e.id,
+    e.name::TEXT,
+    e.event_key::TEXT,
+    e.description::TEXT,
+    e.starts_at,
+    e.ends_at,
+    COALESCE(e.payload, '{}'::JSONB),
+    e.is_active,
+    e.created_by,
+    e.created_at,
+    e.updated_at
+  FROM public.platform_events e
+  ORDER BY e.starts_at DESC
+  LIMIT GREATEST(1, LEAST(COALESCE(limit_count, 200), 500));
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.admin_get_platform_events(INTEGER) TO authenticated;
+
+CREATE OR REPLACE FUNCTION public.admin_create_platform_event(
+  p_event_name TEXT,
+  p_event_key TEXT,
+  p_event_description TEXT DEFAULT NULL,
+  p_starts_at TIMESTAMPTZ DEFAULT NULL,
+  p_ends_at TIMESTAMPTZ DEFAULT NULL,
+  p_payload JSONB DEFAULT '{}'::JSONB,
+  p_is_active BOOLEAN DEFAULT TRUE
+)
+RETURNS TABLE(
+  id BIGINT,
+  name TEXT,
+  event_key TEXT,
+  starts_at TIMESTAMPTZ,
+  ends_at TIMESTAMPTZ,
+  is_active BOOLEAN
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  clean_name TEXT;
+  clean_key TEXT;
+  clean_starts TIMESTAMPTZ;
+  clean_ends TIMESTAMPTZ;
+BEGIN
+  IF NOT public.is_admin(auth.uid()) THEN
+    RAISE EXCEPTION 'Access denied: admin only';
+  END IF;
+
+  clean_name := NULLIF(TRIM(COALESCE(p_event_name, '')), '');
+  clean_key := LOWER(NULLIF(TRIM(COALESCE(p_event_key, '')), ''));
+  clean_starts := p_starts_at;
+  clean_ends := p_ends_at;
+
+  IF clean_name IS NULL THEN
+    RAISE EXCEPTION 'Event name is required';
+  END IF;
+  IF clean_key IS NULL THEN
+    RAISE EXCEPTION 'Event key is required';
+  END IF;
+  IF clean_starts IS NULL OR clean_ends IS NULL THEN
+    RAISE EXCEPTION 'Start and end timestamps are required';
+  END IF;
+  IF clean_ends <= clean_starts THEN
+    RAISE EXCEPTION 'Event end must be after start';
+  END IF;
+
+  RETURN QUERY
+  INSERT INTO public.platform_events (
+    name, event_key, description, starts_at, ends_at, payload, is_active, created_by
+  )
+  VALUES (
+    clean_name,
+    clean_key,
+    NULLIF(TRIM(COALESCE(p_event_description, '')), ''),
+    clean_starts,
+    clean_ends,
+    COALESCE(p_payload, '{}'::JSONB),
+    COALESCE(p_is_active, TRUE),
+    auth.uid()
+  )
+  RETURNING
+    platform_events.id,
+    platform_events.name::TEXT,
+    platform_events.event_key::TEXT,
+    platform_events.starts_at,
+    platform_events.ends_at,
+    platform_events.is_active;
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.admin_create_platform_event(TEXT, TEXT, TEXT, TIMESTAMPTZ, TIMESTAMPTZ, JSONB, BOOLEAN) TO authenticated;
+
+CREATE OR REPLACE FUNCTION public.admin_set_platform_event_active(
+  target_event_id BIGINT,
+  active_state BOOLEAN
+)
+RETURNS TABLE(
+  id BIGINT,
+  is_active BOOLEAN
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  IF NOT public.is_admin(auth.uid()) THEN
+    RAISE EXCEPTION 'Access denied: admin only';
+  END IF;
+
+  UPDATE public.platform_events e
+  SET is_active = COALESCE(active_state, TRUE),
+      updated_at = NOW()
+  WHERE e.id = target_event_id;
+
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'Platform event not found: %', target_event_id;
+  END IF;
+
+  RETURN QUERY
+  SELECT e.id, e.is_active
+  FROM public.platform_events e
+  WHERE e.id = target_event_id
+  LIMIT 1;
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.admin_set_platform_event_active(BIGINT, BOOLEAN) TO authenticated;
+
+CREATE OR REPLACE FUNCTION public.admin_delete_platform_event(
+  target_event_id BIGINT
+)
+RETURNS BOOLEAN
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  rows_deleted INTEGER;
+BEGIN
+  IF NOT public.is_admin(auth.uid()) THEN
+    RAISE EXCEPTION 'Access denied: admin only';
+  END IF;
+
+  DELETE FROM public.platform_events e
+  WHERE e.id = target_event_id;
+
+  GET DIAGNOSTICS rows_deleted = ROW_COUNT;
+  RETURN rows_deleted > 0;
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.admin_delete_platform_event(BIGINT) TO authenticated;
+
+CREATE OR REPLACE FUNCTION public.get_active_platform_events()
+RETURNS TABLE(
+  id BIGINT,
+  event_key TEXT,
+  payload JSONB,
+  starts_at TIMESTAMPTZ,
+  ends_at TIMESTAMPTZ
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  IF auth.uid() IS NULL THEN
+    RETURN;
+  END IF;
+
+  RETURN QUERY
+  SELECT
+    e.id,
+    e.event_key::TEXT,
+    COALESCE(e.payload, '{}'::JSONB),
+    e.starts_at,
+    e.ends_at
+  FROM public.platform_events e
+  WHERE e.is_active = TRUE
+    AND NOW() >= e.starts_at
+    AND NOW() < e.ends_at
+  ORDER BY e.starts_at DESC;
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.get_active_platform_events() TO authenticated;

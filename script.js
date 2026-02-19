@@ -30,13 +30,24 @@ function hexToRgba(hex, alpha = 0.16) {
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
+function setThemeVariable(name, value) {
+    const root = document.documentElement;
+    root.style.setProperty(name, value);
+    body.style.setProperty(name, value);
+}
+
+function removeThemeVariable(name) {
+    const root = document.documentElement;
+    root.style.removeProperty(name);
+    body.style.removeProperty(name);
+}
+
 function applyThemeColors(primary, secondary, themeName, persist = true) {
     if (!primary || !secondary) return false;
-    const root = document.documentElement;
-    root.style.setProperty('--accent-primary', primary);
-    root.style.setProperty('--accent-secondary', secondary);
-    root.style.setProperty('--accent-gradient', `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`);
-    root.style.setProperty('--shadow', hexToRgba(primary, body.classList.contains('dark-mode') ? 0.22 : 0.16));
+    setThemeVariable('--accent-primary', primary);
+    setThemeVariable('--accent-secondary', secondary);
+    setThemeVariable('--accent-gradient', `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`);
+    setThemeVariable('--shadow', hexToRgba(primary, body.classList.contains('dark-mode') ? 0.22 : 0.16));
     if (persist && themeName) {
         localStorage.setItem(THEME_STORAGE_KEY, themeName);
     }
@@ -116,7 +127,6 @@ function getStoredCustomThemePalette() {
 
 function applyCustomThemePalette(palette, persist = true) {
     if (!palette || typeof palette !== 'object') return false;
-    const root = document.documentElement;
     const normalized = normalizeCustomThemePalette(palette);
     const mode = body.classList.contains('dark-mode') ? 'dark' : 'light';
     const activePalette = normalized[mode];
@@ -132,17 +142,17 @@ function applyCustomThemePalette(palette, persist = true) {
     const bgPrimaryStart = activePalette.bgPrimaryStart;
     const bgPrimaryEnd = activePalette.bgPrimaryEnd;
 
-    root.style.setProperty('--accent-primary', accentPrimary);
-    root.style.setProperty('--accent-secondary', accentSecondary);
-    root.style.setProperty('--accent-gradient', `linear-gradient(135deg, ${accentPrimary} 0%, ${accentSecondary} 100%)`);
-    root.style.setProperty('--text-primary', textPrimary);
-    root.style.setProperty('--text-secondary', textSecondary);
-    root.style.setProperty('--bg-secondary', bgSecondary);
-    root.style.setProperty('--border-color', borderColor);
-    root.style.setProperty('--card-bg', cardBg);
-    root.style.setProperty('--nav-bg', navBg);
-    root.style.setProperty('--bg-primary', `linear-gradient(135deg, ${bgPrimaryStart} 0%, ${bgPrimaryEnd} 100%)`);
-    root.style.setProperty('--shadow', hexToRgba(accentPrimary, body.classList.contains('dark-mode') ? 0.22 : 0.16));
+    setThemeVariable('--accent-primary', accentPrimary);
+    setThemeVariable('--accent-secondary', accentSecondary);
+    setThemeVariable('--accent-gradient', `linear-gradient(135deg, ${accentPrimary} 0%, ${accentSecondary} 100%)`);
+    setThemeVariable('--text-primary', textPrimary);
+    setThemeVariable('--text-secondary', textSecondary);
+    setThemeVariable('--bg-secondary', bgSecondary);
+    setThemeVariable('--border-color', borderColor);
+    setThemeVariable('--card-bg', cardBg);
+    setThemeVariable('--nav-bg', navBg);
+    setThemeVariable('--bg-primary', `linear-gradient(135deg, ${bgPrimaryStart} 0%, ${bgPrimaryEnd} 100%)`);
+    setThemeVariable('--shadow', hexToRgba(accentPrimary, body.classList.contains('dark-mode') ? 0.22 : 0.16));
 
     if (persist) {
         localStorage.setItem(CUSTOM_THEME_STORAGE_KEY, JSON.stringify(normalized));
@@ -153,27 +163,25 @@ function applyCustomThemePalette(palette, persist = true) {
 }
 
 function clearCustomThemePalette() {
-    const root = document.documentElement;
-    root.style.removeProperty('--text-primary');
-    root.style.removeProperty('--text-secondary');
-    root.style.removeProperty('--bg-secondary');
-    root.style.removeProperty('--border-color');
-    root.style.removeProperty('--card-bg');
-    root.style.removeProperty('--nav-bg');
-    root.style.removeProperty('--bg-primary');
-    root.style.removeProperty('--accent-primary');
-    root.style.removeProperty('--accent-secondary');
-    root.style.removeProperty('--accent-gradient');
-    root.style.removeProperty('--shadow');
+    removeThemeVariable('--text-primary');
+    removeThemeVariable('--text-secondary');
+    removeThemeVariable('--bg-secondary');
+    removeThemeVariable('--border-color');
+    removeThemeVariable('--card-bg');
+    removeThemeVariable('--nav-bg');
+    removeThemeVariable('--bg-primary');
+    removeThemeVariable('--accent-primary');
+    removeThemeVariable('--accent-secondary');
+    removeThemeVariable('--accent-gradient');
+    removeThemeVariable('--shadow');
     localStorage.removeItem(CUSTOM_THEME_STORAGE_KEY);
 }
 
 function clearThemeColors() {
-    const root = document.documentElement;
-    root.style.removeProperty('--accent-primary');
-    root.style.removeProperty('--accent-secondary');
-    root.style.removeProperty('--accent-gradient');
-    root.style.removeProperty('--shadow');
+    removeThemeVariable('--accent-primary');
+    removeThemeVariable('--accent-secondary');
+    removeThemeVariable('--accent-gradient');
+    removeThemeVariable('--shadow');
 }
 
 function applyNamedTheme(themeName, persist = true) {
@@ -292,11 +300,6 @@ async function syncEquippedThemeFromDb() {
     }
 }
 
-const persistedThemeName = localStorage.getItem(THEME_STORAGE_KEY);
-if (persistedThemeName) {
-    applyNamedTheme(persistedThemeName, false);
-}
-
 window.applyNamedTheme = applyNamedTheme;
 window.applyThemeColors = applyThemeColors;
 window.clearThemeColors = clearThemeColors;
@@ -308,6 +311,12 @@ window.clearCustomThemePalette = clearCustomThemePalette;
 const currentTheme = localStorage.getItem('theme') || 'light';
 if (currentTheme === 'dark') {
     body.classList.add('dark-mode');
+}
+
+// Apply equipped theme after dark/light mode is set so custom palettes pick the correct mode.
+const persistedThemeName = localStorage.getItem(THEME_STORAGE_KEY);
+if (persistedThemeName) {
+    applyNamedTheme(persistedThemeName, false);
 }
 
 

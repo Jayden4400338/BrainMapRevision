@@ -119,6 +119,33 @@
               <p class="admin-note">Upload avatar cosmetic images (e.g. brain/book/star). This sets <code>shop_items.image_url</code>.</p>
             </div>
           </article>
+
+          <article class="admin-panel-card admin-settings-card admin-events-card">
+            <h3>Platform Events</h3>
+            <div class="admin-form-grid">
+              <input id="eventNameInput" placeholder="Event name (e.g. Double XP Weekend)" />
+              <select id="eventTypeSelect">
+                <option value="double_xp_weekend">double_xp_weekend</option>
+                <option value="triple_xp_happy_hour">triple_xp_happy_hour</option>
+                <option value="unlimited_hints_weekend">unlimited_hints_weekend</option>
+                <option value="double_coins_weekend">double_coins_weekend</option>
+                <option value="custom_boost">custom_boost</option>
+              </select>
+              <div class="admin-event-datetime-row">
+                <button id="eventStartBtn" class="btn btn-secondary" type="button">Pick Start</button>
+                <span id="eventStartText" class="admin-event-date-label">Not set</span>
+              </div>
+              <div class="admin-event-datetime-row">
+                <button id="eventEndBtn" class="btn btn-secondary" type="button">Pick End</button>
+                <span id="eventEndText" class="admin-event-date-label">Not set</span>
+              </div>
+              <textarea id="eventDescriptionInput" placeholder="Optional event description"></textarea>
+              <label><input id="eventActiveInput" type="checkbox" checked /> Event enabled</label>
+              <button id="eventCreateBtn" class="btn btn-primary" type="button">Create Event</button>
+              <p class="admin-note">Calendar/time picker is fully custom and does not use browser date input UI.</p>
+            </div>
+            <div id="adminEventsList" class="admin-events-list"></div>
+          </article>
         </section>
 
         <section class="admin-panel-card admin-settings-table-card" id="shopItemsPanel">
@@ -168,6 +195,35 @@
         </div>
       </div>
     </footer>
+
+    <div id="eventDateModal" class="admin-event-modal" style="display:none;">
+      <div class="admin-event-modal-card">
+        <div class="admin-event-modal-head">
+          <h3 id="eventDateModalTitle">Pick Date</h3>
+          <button id="eventDateModalClose" class="btn btn-secondary" type="button">Close</button>
+        </div>
+        <div class="admin-event-cal-nav">
+          <button id="eventCalPrev" class="btn btn-secondary" type="button">Prev</button>
+          <div id="eventCalMonthLabel" class="admin-event-cal-month">Month</div>
+          <button id="eventCalNext" class="btn btn-secondary" type="button">Next</button>
+        </div>
+        <div class="admin-event-weekdays">
+          <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+        </div>
+        <div id="eventCalGrid" class="admin-event-cal-grid"></div>
+        <div class="admin-event-time-row">
+          <label>Hour
+            <select id="eventCalHour"></select>
+          </label>
+          <label>Minute
+            <select id="eventCalMinute"></select>
+          </label>
+        </div>
+        <div class="admin-event-modal-actions">
+          <button id="eventDateApplyBtn" class="btn btn-primary" type="button">Apply Date & Time</button>
+        </div>
+      </div>
+    </div>
 
     <script src="../../assets/js/env-config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

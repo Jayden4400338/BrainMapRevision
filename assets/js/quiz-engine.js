@@ -14,6 +14,13 @@
     let questionAnswered = false; // Track if current question is answered
     let completedQuizzes = new Set(); // Track completed quiz IDs to prevent farming
     let allQuizQuestions = [];
+    let activeBoosts = {
+        unlimitedHints: false,
+        hintExpiresAt: null,
+        xpMultiplier: 1,
+        xpBoostExpiresAt: null,
+        coinMultiplier: 1
+    };
 
     // ======================
     // DOM ELEMENTS
@@ -95,6 +102,7 @@
             if (profileError) throw profileError;
 
             currentUser = profile;
+            await loadActiveBoosts();
             updateHintTokenDisplay();
             
             // Load completed quizzes for this user
@@ -103,6 +111,106 @@
         } catch (error) {
             console.error('Error loading user:', error);
             showError('Failed to load user data');
+        }
+    }
+
+    // ======================
+    // LOAD ACTIVE SHOP BOOSTS
+    // ======================
+    async function loadActiveBoosts() {
+        if (!currentUser?.id) return activeBoosts;
+        try {
+            const { data, error } = await window.supabaseClient
+                .from('user_inventory')
+                .select('purchased_at, shop_items(category, properties)')
+                .eq('user_id', currentUser.id);
+
+            if (error) throw error;
+
+            const now = Date.now();
+            const boosts = {
+                unlimitedHints: false,
+                hintExpiresAt: null,
+                xpMultiplier: 1,
+                xpBoostExpiresAt: null,
+                coinMultiplier: 1
+            };
+
+            for (const row of (Array.isArray(data) ? data : [])) {
+                const purchasedAt = new Date(row?.purchased_at || 0).getTime();
+                if (!Number.isFinite(purchasedAt) || purchasedAt <= 0) continue;
+
+                const relation = row?.shop_items;
+                const item = Array.isArray(relation) ? relation[0] : relation;
+                const category = String(item?.category || '').toLowerCase();
+                const props = item?.properties || {};
+                const durationRaw = Number(props.duration || 0);
+                if (!Number.isFinite(durationRaw) || durationRaw <= 0) continue;
+
+                if (category === 'hint_pack' && Number(props.hints) === -1) {
+                    const expiresAt = purchasedAt + durationRaw * 24 * 60 * 60 * 1000;
+                    if (expiresAt > now) {
+                        boosts.unlimitedHints = true;
+                        if (!boosts.hintExpiresAt || expiresAt > boosts.hintExpiresAt) {
+                            boosts.hintExpiresAt = expiresAt;
+                        }
+                    }
+                }
+
+                if (category === 'power_up' && Number(props.multiplier) > 1) {
+                    const expiresAt = purchasedAt + durationRaw * 60 * 1000;
+                    if (expiresAt > now) {
+                        boosts.xpMultiplier = Math.max(boosts.xpMultiplier, Number(props.multiplier));
+                        if (!boosts.xpBoostExpiresAt || expiresAt > boosts.xpBoostExpiresAt) {
+                            boosts.xpBoostExpiresAt = expiresAt;
+                        }
+                    }
+                }
+            }
+
+            await mergePlatformEventBoosts(boosts);
+
+            activeBoosts = boosts;
+            return boosts;
+        } catch (error) {
+            console.warn('Could not load active boosts:', error);
+            return activeBoosts;
+        }
+    }
+
+    async function mergePlatformEventBoosts(boosts) {
+        try {
+            const { data, error } = await window.supabaseClient.rpc('get_active_platform_events');
+            if (error) throw error;
+
+            for (const row of (Array.isArray(data) ? data : [])) {
+                const payload = row?.payload || {};
+                const eventKey = String(row?.event_key || '').toLowerCase();
+                const xpMultiplier = Number(payload.xp_multiplier || 0);
+                const coinMultiplier = Number(payload.coin_multiplier || 0);
+                const unlimitedHints = payload.unlimited_hints === true;
+
+                if (xpMultiplier > 1) {
+                    boosts.xpMultiplier = Math.max(boosts.xpMultiplier, xpMultiplier);
+                }
+                if (coinMultiplier > 1) {
+                    boosts.coinMultiplier = Math.max(boosts.coinMultiplier, coinMultiplier);
+                }
+                if (unlimitedHints || eventKey === 'unlimited_hints_weekend') {
+                    boosts.unlimitedHints = true;
+                }
+                if (eventKey === 'double_xp_weekend') {
+                    boosts.xpMultiplier = Math.max(boosts.xpMultiplier, 2);
+                }
+                if (eventKey === 'triple_xp_happy_hour') {
+                    boosts.xpMultiplier = Math.max(boosts.xpMultiplier, 3);
+                }
+                if (eventKey === 'double_coins_weekend') {
+                    boosts.coinMultiplier = Math.max(boosts.coinMultiplier, 2);
+                }
+            }
+        } catch (error) {
+            console.warn('Could not load active platform events:', error);
         }
     }
 
@@ -511,7 +619,10 @@
             return;
         }
         
-        if (currentUser.hint_tokens < 1) {
+        await loadActiveBoosts();
+        const hasUnlimitedHints = activeBoosts.unlimitedHints;
+
+        if (!hasUnlimitedHints && currentUser.hint_tokens < 1) {
             showNotification('No hint tokens available! Purchase more in the shop.', 'error');
             return;
         }
@@ -520,14 +631,16 @@
         
         // Deduct hint token
         try {
-            const { error } = await window.supabaseClient
-                .from('users')
-                .update({ hint_tokens: currentUser.hint_tokens - 1 })
-                .eq('id', currentUser.id);
+            if (!hasUnlimitedHints) {
+                const { error } = await window.supabaseClient
+                    .from('users')
+                    .update({ hint_tokens: currentUser.hint_tokens - 1 })
+                    .eq('id', currentUser.id);
 
-            if (error) throw error;
+                if (error) throw error;
+                currentUser.hint_tokens--;
+            }
 
-            currentUser.hint_tokens--;
             hintsUsed++;
             updateHintTokenDisplay();
 
@@ -566,7 +679,10 @@
             // Animate hint section
             hintSection.style.animation = 'slideDown 0.3s ease';
             
-            showNotification('Hint used! -1 token', 'success');
+            showNotification(
+                hasUnlimitedHints ? 'Hint used! Unlimited hints is active.' : 'Hint used! -1 token',
+                'success'
+            );
 
         } catch (error) {
             console.error('Error using hint:', error);
@@ -701,15 +817,18 @@
         let totalCoins = 0;
 
         if (!isRetake) {
+            await loadActiveBoosts();
             // Calculate rewards only for first attempt
             const baseXP = 20;
             const perfectBonus = percentage === 100 ? 50 : 0;
             const hintPenalty = hintsUsed * 2;
             totalXP = Math.max(baseXP + perfectBonus - hintPenalty, 10);
+            totalXP = Math.floor(totalXP * (activeBoosts.xpMultiplier || 1));
 
             const baseCoins = 10;
             const perfectCoinBonus = percentage === 100 ? 25 : 0;
             totalCoins = baseCoins + perfectCoinBonus;
+            totalCoins = Math.floor(totalCoins * (activeBoosts.coinMultiplier || 1));
         }
 
         // Save quiz to database
@@ -1011,6 +1130,11 @@
     // ======================
     function updateHintTokenDisplay() {
         if (useHintBtn) {
+            if (activeBoosts.unlimitedHints) {
+                useHintBtn.textContent = 'Use Hint (Unlimited active)';
+                useHintBtn.disabled = !currentUser;
+                return;
+            }
             useHintBtn.textContent = `Use Hint (${currentUser?.hint_tokens || 0} available)`;
             useHintBtn.disabled = !currentUser || currentUser.hint_tokens < 1;
         }
