@@ -3,9 +3,8 @@
 * fix "view answers" on quizzes
 * when a user picks a quizz, a carousel shows up with around 7 things talking about how to do certain things in thst topic
 * fix unlimited hints so its only a week
-Create a Google Docs–style analysis page:
-
-Features:
+* Create a Google Docs–style analysis page:
+  Features:
 	•	Display poem text
 	•	User can click or highlight specific lines
 	•	On click:
