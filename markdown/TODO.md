@@ -15,7 +15,7 @@
 	•	Selected lines become highlighted
 	•	User can edit or remove their analysis
 
-Extra features:
+## Extra features:
 	•	colour-coded highlights (language / structure / themes)
 	•	side panel with:
 	•	key quotes
