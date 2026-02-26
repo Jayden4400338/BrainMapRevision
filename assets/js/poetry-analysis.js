@@ -29,6 +29,7 @@ let annotations = [];
 let editingIndex = null;
 let currentLineIndex = null;
 let activeType = "language";
+let currentUserId = null;
 
 const authorSelect = document.getElementById("authorSelect");
 const titleSelect = document.getElementById("titleSelect");
@@ -47,6 +48,8 @@ const scaffoldPoints = document.getElementById("scaffoldPoints");
 const sentenceStarters = document.getElementById("sentenceStarters");
 const annotationList = document.getElementById("annotationList");
 const annotationCount = document.getElementById("annotationCount");
+const saveAllAnalysisBtn = document.getElementById("saveAllAnalysisBtn");
+const saveAllStatus = document.getElementById("saveAllStatus");
 
 function escHtml(str) {
   return String(str || "")
@@ -72,6 +75,149 @@ function loadAnnotations() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) annotations = JSON.parse(raw);
   } catch {}
+}
+
+async function ensureUserId() {
+  if (currentUserId) return currentUserId;
+  if (!window.supabaseClient) return null;
+  try {
+    const { data, error } = await window.supabaseClient.auth.getUser();
+    if (error || !data?.user?.id) return null;
+    currentUserId = data.user.id;
+    return currentUserId;
+  } catch {
+    return null;
+  }
+}
+
+async function fetchPoemAnnotationsFromDb(poemKeyValue) {
+  const userId = await ensureUserId();
+  if (!userId || !window.supabaseClient) return null;
+  try {
+    const { data, error } = await window.supabaseClient
+      .from("poetry_annotations")
+      .select("id, poem_key, line_index, line_text, analysis_type, analysis_text, created_at")
+      .eq("user_id", userId)
+      .eq("poem_key", poemKeyValue)
+      .order("line_index", { ascending: true })
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      console.warn("Could not load poetry annotations from DB:", error.message);
+      return null;
+    }
+
+    return (data || []).map((row) => ({
+      id: row.id,
+      poemKey: row.poem_key,
+      lineIndex: row.line_index,
+      lineText: row.line_text,
+      type: row.analysis_type,
+      text: row.analysis_text,
+      createdAt: row.created_at ? new Date(row.created_at).getTime() : Date.now(),
+    }));
+  } catch (err) {
+    console.warn("Could not load poetry annotations from DB:", err);
+    return null;
+  }
+}
+
+async function saveAnnotationToDb(annotation, existingId = null) {
+  const userId = await ensureUserId();
+  if (!userId || !window.supabaseClient) return null;
+
+  const payload = {
+    user_id: userId,
+    poem_key: annotation.poemKey,
+    line_index: annotation.lineIndex,
+    line_text: annotation.lineText,
+    analysis_type: annotation.type,
+    analysis_text: annotation.text,
+  };
+
+  try {
+    if (existingId) {
+      const { data, error } = await window.supabaseClient
+        .from("poetry_annotations")
+        .update(payload)
+        .eq("id", existingId)
+        .eq("user_id", userId)
+        .select("id, poem_key, line_index, line_text, analysis_type, analysis_text, created_at")
+        .single();
+      if (error) throw error;
+      return data;
+    }
+
+    const { data, error } = await window.supabaseClient
+      .from("poetry_annotations")
+      .insert(payload)
+      .select("id, poem_key, line_index, line_text, analysis_type, analysis_text, created_at")
+      .single();
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.warn("Could not save poetry annotation to DB:", err);
+    return null;
+  }
+}
+
+async function deleteAnnotationFromDb(annotationId) {
+  const userId = await ensureUserId();
+  if (!userId || !window.supabaseClient || !annotationId) return false;
+  try {
+    const { error } = await window.supabaseClient
+      .from("poetry_annotations")
+      .delete()
+      .eq("id", annotationId)
+      .eq("user_id", userId);
+    if (error) throw error;
+    return true;
+  } catch (err) {
+    console.warn("Could not delete poetry annotation from DB:", err);
+    return false;
+  }
+}
+
+function setSaveAllStatus(message, isError = false) {
+  if (!saveAllStatus) return;
+  saveAllStatus.textContent = message || "";
+  saveAllStatus.style.color = isError ? "var(--error)" : "var(--text-secondary)";
+}
+
+async function saveAllCurrentPoemAnnotations() {
+  if (!currentPoem) {
+    setSaveAllStatus("Load a poem first.", true);
+    return;
+  }
+
+  const relevant = annotations.filter((a) => a.poemKey === poemKey());
+  if (!relevant.length) {
+    setSaveAllStatus("No annotations to save for this poem.", true);
+    return;
+  }
+
+  if (saveAllAnalysisBtn) saveAllAnalysisBtn.disabled = true;
+  setSaveAllStatus("Saving analysis...");
+
+  let savedCount = 0;
+  for (const ann of relevant) {
+    const saved = await saveAnnotationToDb(ann, ann.id || null);
+    if (saved) {
+      ann.id = saved.id;
+      ann.createdAt = saved.created_at ? new Date(saved.created_at).getTime() : ann.createdAt;
+      savedCount += 1;
+    }
+  }
+
+  saveAnnotations();
+  renderAnnotationList();
+  if (saveAllAnalysisBtn) saveAllAnalysisBtn.disabled = false;
+
+  if (savedCount === relevant.length) {
+    setSaveAllStatus(`Saved ${savedCount} annotation${savedCount === 1 ? "" : "s"} to DB.`);
+  } else {
+    setSaveAllStatus(`Saved ${savedCount}/${relevant.length}. Check DB connection or RLS.`, true);
+  }
 }
 
 async function fetchAuthors() {
@@ -119,8 +265,14 @@ function showPoemError(message) {
   poemCard.innerHTML = `<div class="load-error"><i class="fa-solid fa-triangle-exclamation"></i><p>${escHtml(message)}</p></div>`;
 }
 
-function setPoem(poem) {
+async function setPoem(poem) {
   currentPoem = poem;
+  const key = poemKey();
+  const dbAnnotations = await fetchPoemAnnotationsFromDb(key);
+  if (Array.isArray(dbAnnotations)) {
+    annotations = annotations.filter((a) => a.poemKey !== key).concat(dbAnnotations);
+    saveAnnotations();
+  }
   renderPoem();
   renderAnnotationList();
 }
@@ -223,9 +375,11 @@ function renderAnnotationList() {
   });
 
   annotationList.querySelectorAll("[data-delete]").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
+    btn.addEventListener("click", async (e) => {
       e.stopPropagation();
       const idx = parseInt(btn.dataset.delete, 10);
+      const target = annotations[idx];
+      if (target?.id) await deleteAnnotationFromDb(target.id);
       annotations.splice(idx, 1);
       saveAnnotations();
       renderPoem();
@@ -272,7 +426,7 @@ loadPoemBtn.addEventListener("click", async () => {
   if (!author || !title) return;
   showPoemLoading();
   try {
-    setPoem(await fetchPoem(author, title));
+    await setPoem(await fetchPoem(author, title));
   } catch (err) {
     showPoemError(err.message);
   }
@@ -281,7 +435,7 @@ loadPoemBtn.addEventListener("click", async () => {
 randomPoemBtn.addEventListener("click", async () => {
   showPoemLoading();
   try {
-    setPoem(await fetchRandomPoem());
+    await setPoem(await fetchRandomPoem());
   } catch (err) {
     showPoemError(err.message);
   }
@@ -319,11 +473,13 @@ modalBackdrop.addEventListener("click", (e) => {
   if (e.target === modalBackdrop) closeModal();
 });
 
-modalSaveBtn.addEventListener("click", () => {
+modalSaveBtn.addEventListener("click", async () => {
   const text = analysisTextarea.value.trim();
   if (!text || !currentPoem) return;
 
+  const existing = editingIndex !== null ? annotations[editingIndex] : null;
   const annotation = {
+    id: existing?.id,
     poemKey: poemKey(),
     lineIndex: currentLineIndex,
     lineText: currentPoem.lines[currentLineIndex],
@@ -331,6 +487,12 @@ modalSaveBtn.addEventListener("click", () => {
     text,
     createdAt: Date.now(),
   };
+
+  const saved = await saveAnnotationToDb(annotation, existing?.id || null);
+  if (saved) {
+    annotation.id = saved.id;
+    annotation.createdAt = saved.created_at ? new Date(saved.created_at).getTime() : annotation.createdAt;
+  }
 
   if (editingIndex !== null) {
     annotations[editingIndex] = annotation;
@@ -343,6 +505,10 @@ modalSaveBtn.addEventListener("click", () => {
   renderPoem();
   renderAnnotationList();
 });
+
+if (saveAllAnalysisBtn) {
+  saveAllAnalysisBtn.addEventListener("click", saveAllCurrentPoemAnnotations);
+}
 
 loadAnnotations();
 initAuthors();
