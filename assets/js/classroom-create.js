@@ -46,13 +46,15 @@
       // Check if user is a teacher
       const { data: profile, error: profileError } = await supabaseClient
         .from('users')
-        .select('role')
+        .select('role, roles')
         .eq('id', currentUser.id)
         .single();
 
       if (profileError) throw profileError;
 
-      if (profile.role !== 'teacher') {
+      const roles = Array.isArray(profile?.roles) ? profile.roles : [profile?.role];
+      const isTeacher = roles.includes('teacher');
+      if (!isTeacher) {
         console.log('User is not a teacher, redirecting...');
         const currentPath = window.location.pathname;
         if (currentPath.includes('/classroom/')) {

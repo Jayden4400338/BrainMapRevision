@@ -13,6 +13,14 @@
   const multiRoleTeacher = document.getElementById("multiRoleTeacher");
   const multiRoleAdmin = document.getElementById("multiRoleAdmin");
   const multiRoleApplyBtn = document.getElementById("multiRoleApplyBtn");
+  const userSelectDropdown = document.getElementById("userSelectDropdown");
+  const userSelectEmail = document.getElementById("userSelectEmail");
+  const userRoleStudent = document.getElementById("userRoleStudent");
+  const userRoleTeacher = document.getElementById("userRoleTeacher");
+  const userRoleAdmin = document.getElementById("userRoleAdmin");
+  const userRoleApplyBtn = document.getElementById("userRoleApplyBtn");
+
+  let allUsers = [];
 
   const shopItemName = document.getElementById("shopItemName");
   const shopItemDescription = document.getElementById("shopItemDescription");
@@ -50,6 +58,16 @@
   const eventCalHour = document.getElementById("eventCalHour");
   const eventCalMinute = document.getElementById("eventCalMinute");
   const eventDateApplyBtn = document.getElementById("eventDateApplyBtn");
+  const poemSourceExisting = document.getElementById("poemSourceExisting");
+  const poemSourceNew = document.getElementById("poemSourceNew");
+  const poemAuthorSelectWrap = document.getElementById("poemAuthorSelectWrap");
+  const poemAuthorInputWrap = document.getElementById("poemAuthorInputWrap");
+  const poemAuthorSelect = document.getElementById("poemAuthorSelect");
+  const poemAuthorInput = document.getElementById("poemAuthorInput");
+  const poemTitleInput = document.getElementById("poemTitleInput");
+  const poemTextInput = document.getElementById("poemTextInput");
+  const poemAddStatus = document.getElementById("poemAddStatus");
+  const poemAddBtn = document.getElementById("poemAddBtn");
 
   let scheduledEvents = [];
   let eventStartAt = null;
@@ -258,6 +276,153 @@
         `;
       })
       .join("");
+  }
+
+  async function loadAllUsers() {
+    try {
+      const { data, error } = await supabase.rpc("admin_get_all_users_full");
+      if (error) {
+        const fallback = await supabase.rpc("admin_get_all_users");
+        if (fallback.error) throw fallback.error;
+        allUsers = (fallback.data || []).map((u) => ({
+          ...u,
+          roles: u.roles || [u.role || "student"],
+        }));
+      } else {
+        allUsers = (data || []).map((u) => ({
+          ...u,
+          roles: Array.isArray(u.roles) ? u.roles : [u.role || "student"],
+        }));
+      }
+      if (!userSelectDropdown) return;
+      userSelectDropdown.innerHTML =
+        '<option value="">- Choose a user -</option>' +
+        allUsers
+          .map(
+            (u) =>
+              `<option value="${escapeHtml(u.email)}">${escapeHtml(u.username || u.email)} (${escapeHtml(u.email)})</option>`
+          )
+          .join("");
+      if (window.initCustomSelects) window.initCustomSelects(document.querySelector(".admin-shell"));
+    } catch (err) {
+      console.warn("Could not load users for dropdown:", err);
+    }
+  }
+
+  function syncUserRoleCheckboxes() {
+    const email = userSelectDropdown?.value || "";
+    const user = allUsers.find((u) => u.email === email);
+    if (!user) {
+      if (userSelectEmail) userSelectEmail.style.display = "none";
+      if (userRoleApplyBtn) userRoleApplyBtn.disabled = true;
+      return;
+    }
+    const roles = user.roles || [];
+    if (userRoleStudent) userRoleStudent.checked = roles.includes("student");
+    if (userRoleTeacher) userRoleTeacher.checked = roles.includes("teacher");
+    if (userRoleAdmin) userRoleAdmin.checked = roles.includes("admin");
+    if (userSelectEmail) {
+      userSelectEmail.textContent = user.email;
+      userSelectEmail.style.display = "block";
+    }
+    if (userRoleApplyBtn) userRoleApplyBtn.disabled = false;
+  }
+
+  async function applyUserRolesFromDropdown() {
+    const email = userSelectDropdown?.value || "";
+    if (!email) throw new Error("Select a user first.");
+
+    const roles = [];
+    if (userRoleStudent?.checked) roles.push("student");
+    if (userRoleTeacher?.checked) roles.push("teacher");
+    if (userRoleAdmin?.checked) roles.push("admin");
+    if (!roles.length) throw new Error("Select at least one role.");
+
+    const { data, error } = await supabase.rpc("admin_set_user_roles_by_email", {
+      target_email: email,
+      new_roles: roles,
+    });
+    if (error) throw error;
+
+    const row = Array.isArray(data) ? data[0] : null;
+    if (row) {
+      const idx = allUsers.findIndex((u) => u.email === email);
+      if (idx >= 0) allUsers[idx] = { ...allUsers[idx], roles };
+      alert(`Updated ${row.email}. Roles: ${(row.roles || []).join(", ")}`);
+    } else {
+      alert("Roles updated.");
+    }
+    syncUserRoleCheckboxes();
+  }
+
+  async function loadCustomPoemAuthors() {
+    if (!poemAuthorSelect) return;
+    try {
+      const { data, error } = await supabase.rpc("get_custom_poem_authors");
+      if (error) throw error;
+      const authors = Array.isArray(data) ? data : [];
+      poemAuthorSelect.innerHTML =
+        '<option value="">- Select poet -</option>' +
+        authors.map((a) => `<option value="${escapeHtml(a?.author || "")}">${escapeHtml(a?.author || "")}</option>`).join("");
+    } catch (err) {
+      poemAuthorSelect.innerHTML = '<option value="">Error loading poets</option>';
+    }
+  }
+
+  function getPoemAuthor() {
+    if (poemSourceNew?.checked) {
+      return (poemAuthorInput?.value || "").trim();
+    }
+    return poemAuthorSelect?.value || "";
+  }
+
+  function setPoemAddStatus(message, isError = false) {
+    if (!poemAddStatus) return;
+    poemAddStatus.textContent = message || "";
+    poemAddStatus.className = "admin-note admin-poem-status" + (isError ? " error" : message ? " success" : "");
+  }
+
+  async function addCustomPoem() {
+    const author = getPoemAuthor();
+    const title = (poemTitleInput?.value || "").trim();
+    const text = (poemTextInput?.value || "").trim();
+    if (!author) {
+      setPoemAddStatus("Enter or select a poet.", true);
+      return;
+    }
+    if (!title) {
+      setPoemAddStatus("Enter a title.", true);
+      return;
+    }
+    if (!text) {
+      setPoemAddStatus("Enter the poem text.", true);
+      return;
+    }
+
+    try {
+      poemAddBtn.disabled = true;
+      setPoemAddStatus("");
+      const { data, error } = await supabase.rpc("admin_add_custom_poem", {
+        p_author: author,
+        p_title: title,
+        p_lines_text: text,
+      });
+      if (error) throw error;
+
+      const row = Array.isArray(data) ? data[0] : data;
+      if (row?.already_existed) {
+        setPoemAddStatus(`"${escapeHtml(title)}" by ${escapeHtml(author)} is already in the library.`, false);
+      } else {
+        setPoemAddStatus(`Added "${escapeHtml(title)}" by ${escapeHtml(author)}.`, false);
+        if (poemTitleInput) poemTitleInput.value = "";
+        if (poemTextInput) poemTextInput.value = "";
+        await loadCustomPoemAuthors();
+      }
+    } catch (err) {
+      setPoemAddStatus(err.message || "Failed to add poem.", true);
+    } finally {
+      poemAddBtn.disabled = false;
+    }
   }
 
   async function loadAvatarCosmeticItems() {
@@ -613,6 +778,20 @@
     }
   });
 
+  userSelectDropdown?.addEventListener("change", syncUserRoleCheckboxes);
+
+  userRoleApplyBtn?.addEventListener("click", async () => {
+    try {
+      userRoleApplyBtn.disabled = true;
+      await applyUserRolesFromDropdown();
+    } catch (err) {
+      console.error(err);
+      alert(err.message || "Failed to update roles.");
+    } finally {
+      userRoleApplyBtn.disabled = false;
+    }
+  });
+
   refreshShopItemsBtn?.addEventListener("click", () => {
     loadShopItems().catch((err) => {
       console.error(err);
@@ -760,6 +939,19 @@
     closeEventDatePicker();
   });
 
+  poemSourceExisting?.addEventListener("change", () => {
+    if (poemAuthorSelectWrap) poemAuthorSelectWrap.style.display = poemSourceExisting?.checked ? "" : "none";
+    if (poemAuthorInputWrap) poemAuthorInputWrap.style.display = poemSourceNew?.checked ? "" : "none";
+  });
+  poemSourceNew?.addEventListener("change", () => {
+    if (poemAuthorSelectWrap) poemAuthorSelectWrap.style.display = poemSourceExisting?.checked ? "" : "none";
+    if (poemAuthorInputWrap) poemAuthorInputWrap.style.display = poemSourceNew?.checked ? "" : "none";
+  });
+
+  poemAddBtn?.addEventListener("click", () => {
+    addCustomPoem();
+  });
+
   settingsAvatarBtn?.addEventListener("click", () => {
     settingsAvatarInput?.click();
   });
@@ -802,6 +994,8 @@
       await loadShopItems();
       await loadAvatarCosmeticItems();
       await loadPlatformEvents();
+      await loadAllUsers();
+      await loadCustomPoemAuthors();
     } catch (err) {
       console.error(err);
       alert(err.message || "Failed to load settings.");

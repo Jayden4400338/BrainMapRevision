@@ -220,26 +220,101 @@ async function saveAllCurrentPoemAnnotations() {
   }
 }
 
+async function fetchCustomPoemAuthors() {
+  if (!window.supabaseClient) return [];
+  try {
+    const { data, error } = await window.supabaseClient.rpc("get_custom_poem_authors");
+    if (error) {
+      console.warn("Custom poem authors fetch failed:", error.message);
+      return [];
+    }
+    const rows = Array.isArray(data) ? data : [];
+    return rows.map((r) => (typeof r === "string" ? r : r?.author)).filter(Boolean);
+  } catch (err) {
+    console.warn("Custom poem authors error:", err);
+    return [];
+  }
+}
+
+async function fetchCustomPoemTitlesByAuthor(author) {
+  if (!window.supabaseClient) return [];
+  try {
+    const { data, error } = await window.supabaseClient.rpc("get_custom_poem_titles_by_author", {
+      p_author: author,
+    });
+    if (error) return [];
+    return (data || []).map((r) => r?.title).filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+
+async function fetchCustomPoem(author, title) {
+  if (!window.supabaseClient) return null;
+  try {
+    const { data, error } = await window.supabaseClient.rpc("get_custom_poem", {
+      p_author: author,
+      p_title: title,
+    });
+    if (error || !data?.length) return null;
+    const row = data[0];
+    return {
+      author: row.author,
+      title: row.title,
+      lines: row.lines || [],
+    };
+  } catch {
+    return null;
+  }
+}
+
 async function fetchAuthors() {
-  const res = await fetch(`${API}/author`);
-  if (!res.ok) throw new Error("Failed to load authors");
-  const json = await res.json();
-  return json.authors || [];
+  const [apiAuthors, customAuthors] = await Promise.all([
+    (async () => {
+      try {
+        const res = await fetch(`${API}/author`);
+        if (!res.ok) return [];
+        const json = await res.json();
+        return json.authors || [];
+      } catch {
+        return [];
+      }
+    })(),
+    fetchCustomPoemAuthors(),
+  ]);
+  const combined = [...new Set([...apiAuthors, ...customAuthors])];
+  return combined.sort((a, b) => String(a).localeCompare(String(b)));
 }
 
 async function fetchTitlesByAuthor(author) {
-  const res = await fetch(`${API}/author/${encodeURIComponent(author)}/title`);
-  if (!res.ok) throw new Error("Failed to load titles");
-  const json = await res.json();
-  return (json || []).map((p) => p.title);
+  const [apiTitles, customTitles] = await Promise.all([
+    (async () => {
+      try {
+        const res = await fetch(`${API}/author/${encodeURIComponent(author)}/title`);
+        if (!res.ok) return [];
+        const json = await res.json();
+        return (json || []).map((p) => p.title);
+      } catch {
+        return [];
+      }
+    })(),
+    fetchCustomPoemTitlesByAuthor(author),
+  ]);
+  const combined = [...new Set([...apiTitles, ...customTitles])];
+  return combined.sort((a, b) => String(a).localeCompare(String(b)));
 }
 
 async function fetchPoem(author, title) {
-  const res = await fetch(`${API}/author,title/${encodeURIComponent(author)};${encodeURIComponent(title)}`);
-  if (!res.ok) throw new Error("Failed to load poem");
-  const json = await res.json();
-  if (!Array.isArray(json) || !json.length) throw new Error("Poem not found");
-  return json[0];
+  try {
+    const res = await fetch(`${API}/author,title/${encodeURIComponent(author)};${encodeURIComponent(title)}`);
+    if (res.ok) {
+      const json = await res.json();
+      if (Array.isArray(json) && json.length) return json[0];
+    }
+  } catch {}
+  const custom = await fetchCustomPoem(author, title);
+  if (custom) return custom;
+  throw new Error("Poem not found");
 }
 
 async function fetchRandomPoem() {
@@ -390,9 +465,11 @@ function renderAnnotationList() {
 
 async function initAuthors() {
   try {
+    await ensureUserId();
     const authors = await fetchAuthors();
     authorSelect.innerHTML = '<option value="">- Choose author -</option>' + authors.map((a) => `<option value="${escHtml(a)}">${escHtml(a)}</option>`).join("");
-  } catch {
+  } catch (err) {
+    console.warn("initAuthors failed:", err);
     authorSelect.innerHTML = '<option value="">Error loading authors</option>';
   }
 }

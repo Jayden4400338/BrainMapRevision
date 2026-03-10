@@ -46,12 +46,12 @@
 
       const { data: profile } = await supabaseClient
         .from('users')
-        .select('role')
+        .select('role, roles')
         .eq('id', currentUser.id)
         .single();
 
-      // Only students can join classrooms; teachers are redirected
-      if (profile?.role === 'teacher') {
+      const roles = Array.isArray(profile?.roles) ? profile.roles : [profile?.role];
+      if (roles.includes('teacher')) {
         window.userRole = 'teacher';
         return true; // still "authenticated", but join form will be hidden and message shown
       }
@@ -414,10 +414,11 @@
     // Teachers cannot join; show message and hide form
     const { data: profile } = await supabaseClient
       .from('users')
-      .select('role')
+      .select('role, roles')
       .eq('id', currentUser.id)
       .single();
-    if (profile?.role === 'teacher') {
+    const roles = Array.isArray(profile?.roles) ? profile.roles : [profile?.role];
+    if (roles.includes('teacher')) {
       showTeacherOnlyState();
       return;
     }

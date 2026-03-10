@@ -67,7 +67,7 @@
       // Get user profile
       const { data: profile, error: profileError } = await supabaseClient
         .from('users')
-        .select('role, username')
+        .select('role, roles, username')
         .eq('id', currentUser.id)
         .single();
 
@@ -112,7 +112,8 @@
       // or student (can view classrooms they're in)
       let classroom = null;
 
-      if (userProfile.role === 'teacher') {
+      const roles = Array.isArray(userProfile?.roles) ? userProfile.roles : [userProfile?.role];
+      if (roles.includes('teacher')) {
         // Teachers can view their own classrooms
         const { data, error } = await supabaseClient
           .from('classrooms')
@@ -224,7 +225,7 @@
       loadClassroomStats();
       loadAssignments();
       
-      if (userProfile.role === 'teacher') {
+      if ((Array.isArray(userProfile?.roles) ? userProfile.roles : [userProfile?.role]).includes('teacher')) {
         loadStudents();
       }
 
@@ -252,7 +253,8 @@
     if (classroomYear) classroomYear.textContent = yearGroup;
 
     // Show teacher section if user is teacher
-    const isTeacher = userProfile.role === 'teacher' && classroom.teacher_id === currentUser.id;
+    const roles = Array.isArray(userProfile?.roles) ? userProfile.roles : [userProfile?.role];
+        const isTeacher = roles.includes('teacher') && classroom.teacher_id === currentUser.id;
     
     if (isTeacher) {
       if (teacherSection) teacherSection.style.display = 'block';

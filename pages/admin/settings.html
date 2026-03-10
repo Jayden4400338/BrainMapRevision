@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,22 +6,79 @@
     <title>Admin Settings - BrainMapRevision</title>
     <link rel="stylesheet" href="../../style.css" />
     <link rel="stylesheet" href="../../assets/css/admin.css" />
+    <link rel="stylesheet" href="../../assets/css/custom-select.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <link rel="shortcut icon" href="../../assets/images/shortcut-icon.png" />
   </head>
   <body>
     <nav class="navbar">
       <div class="nav-container">
-        <div class="nav-logo" onclick="window.location.href='../../index.html'" style="cursor:pointer;">
-          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></svg>
+        <div
+          class="nav-logo"
+          onclick="window.location.href='../../index.html'"
+          style="cursor: pointer"
+        >
+          <svg
+            class="logo-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"
+            />
+            <path
+              d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"
+            />
+          </svg>
           <span class="logo-text">BrainMapRevision</span>
         </div>
-        <button class="mobile-menu-btn" id="mobileMenuBtn"><span></span><span></span><span></span></button>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <span></span><span></span><span></span>
+        </button>
         <div class="nav-menu" id="navMenu">
           <a href="../dashboard.html" class="nav-link">Dashboard</a>
           <a href="../subjects.html" class="nav-link">Subjects</a>
           <a href="../quizzes.html" class="nav-link">Quizzes</a>
           <div class="nav-profile" id="navProfile"></div>
-          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg><svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+          <button
+            class="theme-toggle"
+            id="themeToggle"
+            aria-label="Toggle dark mode"
+          >
+            <svg
+              class="sun-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="5" />
+              <line x1="12" y1="1" x2="12" y2="3" />
+              <line x1="12" y1="21" x2="12" y2="23" />
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+              <line x1="1" y1="12" x2="3" y2="12" />
+              <line x1="21" y1="12" x2="23" y2="12" />
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" /></svg
+            ><svg
+              class="moon-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+          </button>
         </div>
       </div>
     </nav>
@@ -45,49 +102,128 @@
           <a class="is-active" href="./settings.html">Settings</a>
         </nav>
 
-        <section id="adminAccessError" class="admin-access-error" style="display:none;">
+        <section
+          id="adminAccessError"
+          class="admin-access-error"
+          style="display: none"
+        >
           <h2>Access denied</h2>
           <p>This page is for users with role <code>admin</code> only.</p>
         </section>
 
-        <section class="admin-panel-grid admin-settings-grid" id="settingsPanel">
+        <section
+          class="admin-panel-grid admin-settings-grid"
+          id="settingsPanel"
+        >
           <article class="admin-panel-card admin-settings-card">
             <h3>My Avatar & Frame</h3>
             <div class="admin-form-grid">
               <div class="admin-avatar-settings-row">
-                <img id="settingsAvatarPreview" class="admin-avatar-preview" alt="Avatar preview" />
-                <input id="settingsAvatarInput" type="file" accept="image/*" style="display:none;" />
-                <button id="settingsAvatarBtn" class="btn btn-secondary" type="button">Upload New Photo</button>
+                <img
+                  id="settingsAvatarPreview"
+                  class="admin-avatar-preview"
+                  alt="Avatar preview"
+                />
+                <input
+                  id="settingsAvatarInput"
+                  type="file"
+                  accept="image/*"
+                  style="display: none"
+                />
+                <button
+                  id="settingsAvatarBtn"
+                  class="btn btn-secondary"
+                  type="button"
+                >
+                  Upload New Photo
+                </button>
               </div>
-              <p class="admin-note" id="settingsAvatarFrameNote">Frame/filter comes from your equipped cosmetic in Shop.</p>
+              <p class="admin-note" id="settingsAvatarFrameNote">
+                Frame/filter comes from your equipped cosmetic in Shop.
+              </p>
             </div>
           </article>
 
           <article class="admin-panel-card admin-settings-card">
             <h3>Set User Role by Email</h3>
             <div class="admin-form-grid">
-              <input id="settingsEmail" type="email" placeholder="user@email.com" />
+              <input
+                id="settingsEmail"
+                type="email"
+                placeholder="user@email.com"
+              />
               <select id="settingsRole">
                 <option value="admin">admin</option>
                 <option value="teacher">teacher</option>
                 <option value="student">student</option>
               </select>
-              <button id="settingsApplyBtn" class="btn btn-primary">Apply Role</button>
-              <p class="admin-note">This uses `admin_set_user_role_by_email` and updates the role directly.</p>
+              <button id="settingsApplyBtn" class="btn btn-primary">
+                Apply Role
+              </button>
+              <p class="admin-note">
+                This uses `admin_set_user_role_by_email` and updates the role
+                directly.
+              </p>
             </div>
           </article>
 
           <article class="admin-panel-card admin-settings-card">
             <h3>Set Multiple Roles by Email</h3>
             <div class="admin-form-grid">
-              <input id="multiRoleEmail" type="email" placeholder="user@email.com" />
+              <input
+                id="multiRoleEmail"
+                type="email"
+                placeholder="user@email.com"
+              />
               <div class="admin-role-check-grid">
-                <label class="admin-role-check"><input type="checkbox" id="multiRoleStudent" checked /> student</label>
-                <label class="admin-role-check"><input type="checkbox" id="multiRoleTeacher" /> teacher</label>
-                <label class="admin-role-check"><input type="checkbox" id="multiRoleAdmin" /> admin</label>
+                <label class="admin-role-check"
+                  ><input type="checkbox" id="multiRoleStudent" checked />
+                  student</label
+                >
+                <label class="admin-role-check"
+                  ><input type="checkbox" id="multiRoleTeacher" />
+                  teacher</label
+                >
+                <label class="admin-role-check"
+                  ><input type="checkbox" id="multiRoleAdmin" /> admin</label
+                >
               </div>
-              <button id="multiRoleApplyBtn" class="btn btn-primary">Apply Role Set</button>
-              <p class="admin-note">Lets one user hold multiple roles (e.g. teacher + admin).</p>
+              <button id="multiRoleApplyBtn" class="btn btn-primary">
+                Apply Role Set
+              </button>
+              <p class="admin-note">
+                Lets one user hold multiple roles (e.g. teacher + admin).
+              </p>
+            </div>
+          </article>
+
+          <article class="admin-panel-card admin-settings-card">
+            <h3><i class="fa-solid fa-user-gear"></i> Set Roles by User</h3>
+            <div class="admin-form-grid">
+              <div class="admin-form-row">
+                <label for="userSelectDropdown">Select user</label>
+                <select id="userSelectDropdown">
+                  <option value="">- Choose a user -</option>
+                </select>
+              </div>
+              <p id="userSelectEmail" class="admin-note" style="display:none;"></p>
+              <div class="admin-role-check-grid" id="userRoleCheckGrid">
+                <label class="admin-role-check"
+                  ><input type="checkbox" id="userRoleStudent" /> student</label
+                >
+                <label class="admin-role-check"
+                  ><input type="checkbox" id="userRoleTeacher" /> teacher</label
+                >
+                <label class="admin-role-check"
+                  ><input type="checkbox" id="userRoleAdmin" /> admin</label
+                >
+              </div>
+              <button id="userRoleApplyBtn" class="btn btn-primary" disabled>
+                Apply Roles
+              </button>
+              <p class="admin-note">
+                Pick a user from the dropdown, tick or untick roles, then apply.
+              </p>
             </div>
           </article>
 
@@ -95,18 +231,115 @@
             <h3>Add Shop Item</h3>
             <div class="admin-form-grid">
               <input id="shopItemName" placeholder="Item name" />
-              <textarea id="shopItemDescription" placeholder="Description"></textarea>
+              <textarea
+                id="shopItemDescription"
+                placeholder="Description"
+              ></textarea>
               <select id="shopItemCategory">
                 <option value="theme">theme</option>
                 <option value="hint_pack">hint_pack</option>
                 <option value="power_up">power_up</option>
                 <option value="cosmetic">cosmetic</option>
               </select>
-              <input id="shopItemPrice" type="number" min="1" placeholder="Price (coins)" />
-              <input id="shopItemMinLevel" type="number" min="1" value="1" placeholder="Min level" />
-              <textarea id="shopItemProperties" placeholder='Properties JSON e.g. {"colors":{"primary":"#0EA5E9","secondary":"#06B6D4"}}'></textarea>
-              <label><input id="shopItemActive" type="checkbox" checked /> Active item</label>
-              <button id="shopItemAddBtn" class="btn btn-primary">Add Shop Item</button>
+              <input
+                id="shopItemPrice"
+                type="number"
+                min="1"
+                placeholder="Price (coins)"
+              />
+              <input
+                id="shopItemMinLevel"
+                type="number"
+                min="1"
+                value="1"
+                placeholder="Min level"
+              />
+              <textarea
+                id="shopItemProperties"
+                placeholder='Properties JSON e.g. {"colors":{"primary":"#0EA5E9","secondary":"#06B6D4"}}'
+              ></textarea>
+              <label
+                ><input id="shopItemActive" type="checkbox" checked /> Active
+                item</label
+              >
+              <button id="shopItemAddBtn" class="btn btn-primary">
+                Add Shop Item
+              </button>
+            </div>
+          </article>
+
+          <article
+            class="admin-panel-card admin-settings-card admin-poems-card"
+          >
+            <h3>
+              <i class="fa-solid fa-feather-pointed"></i> Add Poem to Analyse
+            </h3>
+            <div class="admin-form-grid">
+              <div class="admin-poem-source-row">
+                <label class="admin-poem-source-label">
+                  <input
+                    type="radio"
+                    name="poemSource"
+                    value="existing"
+                    id="poemSourceExisting"
+                    checked
+                  />
+                  Use existing poet
+                </label>
+                <label class="admin-poem-source-label">
+                  <input
+                    type="radio"
+                    name="poemSource"
+                    value="new"
+                    id="poemSourceNew"
+                  />
+                  Add new poet
+                </label>
+              </div>
+              <div id="poemAuthorSelectWrap" class="admin-form-row">
+                <label for="poemAuthorSelect">Poet</label>
+                <select id="poemAuthorSelect">
+                  <option value="">- Select poet -</option>
+                </select>
+              </div>
+              <div
+                id="poemAuthorInputWrap"
+                class="admin-form-row"
+                style="display: none"
+              >
+                <label for="poemAuthorInput">Poet name</label>
+                <input
+                  id="poemAuthorInput"
+                  type="text"
+                  placeholder="e.g. William Shakespeare"
+                />
+              </div>
+              <div class="admin-form-row">
+                <label for="poemTitleInput">Title</label>
+                <input
+                  id="poemTitleInput"
+                  type="text"
+                  placeholder="e.g. Sonnet 18"
+                />
+              </div>
+              <div class="admin-form-row">
+                <label for="poemTextInput"
+                  >Poem text (one line per verse)</label
+                >
+                <textarea
+                  id="poemTextInput"
+                  placeholder="Shall I compare thee to a summer's day?&#10;Thou art more lovely and more temperate:&#10;..."
+                  rows="8"
+                ></textarea>
+              </div>
+              <p id="poemAddStatus" class="admin-note admin-poem-status"></p>
+              <button id="poemAddBtn" class="btn btn-primary">
+                <i class="fa-solid fa-plus"></i> Add Poem
+              </button>
+              <p class="admin-note">
+                If poet exists, select them and enter title + text. Duplicate
+                poems (same poet + title) are rejected.
+              </p>
             </div>
           </article>
 
@@ -115,47 +348,110 @@
             <div class="admin-form-grid">
               <select id="avatarShopItemSelect"></select>
               <input id="avatarShopImageInput" type="file" accept="image/*" />
-              <button id="avatarShopImageUploadBtn" class="btn btn-primary" type="button">Upload Image</button>
-              <p class="admin-note">Upload avatar cosmetic images (e.g. brain/book/star). This sets <code>shop_items.image_url</code>.</p>
+              <button
+                id="avatarShopImageUploadBtn"
+                class="btn btn-primary"
+                type="button"
+              >
+                Upload Image
+              </button>
+              <p class="admin-note">
+                Upload avatar cosmetic images (e.g. brain/book/star). This sets
+                <code>shop_items.image_url</code>.
+              </p>
             </div>
           </article>
 
-          <article class="admin-panel-card admin-settings-card admin-events-card">
+          <article
+            class="admin-panel-card admin-settings-card admin-events-card"
+          >
             <h3>Platform Events</h3>
             <div class="admin-form-grid">
-              <input id="eventNameInput" placeholder="Event name (e.g. Double XP Weekend)" />
+              <input
+                id="eventNameInput"
+                placeholder="Event name (e.g. Double XP Weekend)"
+              />
               <select id="eventTypeSelect">
                 <option value="double_xp_weekend">double_xp_weekend</option>
-                <option value="triple_xp_happy_hour">triple_xp_happy_hour</option>
-                <option value="unlimited_hints_weekend">unlimited_hints_weekend</option>
-                <option value="double_coins_weekend">double_coins_weekend</option>
+                <option value="triple_xp_happy_hour">
+                  triple_xp_happy_hour
+                </option>
+                <option value="unlimited_hints_weekend">
+                  unlimited_hints_weekend
+                </option>
+                <option value="double_coins_weekend">
+                  double_coins_weekend
+                </option>
                 <option value="custom_boost">custom_boost</option>
               </select>
               <div class="admin-event-datetime-row">
-                <button id="eventStartBtn" class="btn btn-secondary" type="button">Pick Start</button>
-                <span id="eventStartText" class="admin-event-date-label">Not set</span>
+                <button
+                  id="eventStartBtn"
+                  class="btn btn-secondary"
+                  type="button"
+                >
+                  Pick Start
+                </button>
+                <span id="eventStartText" class="admin-event-date-label"
+                  >Not set</span
+                >
               </div>
               <div class="admin-event-datetime-row">
-                <button id="eventEndBtn" class="btn btn-secondary" type="button">Pick End</button>
-                <span id="eventEndText" class="admin-event-date-label">Not set</span>
+                <button
+                  id="eventEndBtn"
+                  class="btn btn-secondary"
+                  type="button"
+                >
+                  Pick End
+                </button>
+                <span id="eventEndText" class="admin-event-date-label"
+                  >Not set</span
+                >
               </div>
-              <textarea id="eventDescriptionInput" placeholder="Optional event description"></textarea>
-              <label><input id="eventActiveInput" type="checkbox" checked /> Event enabled</label>
-              <button id="eventCreateBtn" class="btn btn-primary" type="button">Create Event</button>
-              <p class="admin-note">Calendar/time picker is fully custom and does not use browser date input UI.</p>
+              <textarea
+                id="eventDescriptionInput"
+                placeholder="Optional event description"
+              ></textarea>
+              <label
+                ><input id="eventActiveInput" type="checkbox" checked /> Event
+                enabled</label
+              >
+              <button id="eventCreateBtn" class="btn btn-primary" type="button">
+                Create Event
+              </button>
+              <p class="admin-note">
+                Calendar/time picker is fully custom and does not use browser
+                date input UI.
+              </p>
             </div>
             <div id="adminEventsList" class="admin-events-list"></div>
           </article>
         </section>
 
-        <section class="admin-panel-card admin-settings-table-card" id="shopItemsPanel">
+        <section
+          class="admin-panel-card admin-settings-table-card"
+          id="shopItemsPanel"
+        >
           <div class="admin-head-actions admin-settings-table-head">
             <h3>Recent Shop Items</h3>
-            <button id="refreshShopItemsBtn" class="btn btn-secondary">Refresh</button>
+            <button id="refreshShopItemsBtn" class="btn btn-secondary">
+              Refresh
+            </button>
           </div>
           <div class="admin-table-wrap">
             <table class="admin-users-table">
-              <thead><tr><th>ID</th><th>Name</th><th>Category</th><th>Price</th><th>Min Level</th><th>Active</th><th>Created</th><th>Actions</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Min Level</th>
+                  <th>Active</th>
+                  <th>Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
               <tbody id="adminShopItemsTableBody"></tbody>
             </table>
           </div>
@@ -168,7 +464,9 @@
         <div class="footer-content">
           <div class="footer-section">
             <h3 class="footer-title">BrainMapRevision</h3>
-            <p class="footer-text">Admin controls for managing platform users, content, and settings.</p>
+            <p class="footer-text">
+              Admin controls for managing platform users, content, and settings.
+            </p>
           </div>
           <div class="footer-section">
             <h4 class="footer-heading">Admin</h4>
@@ -185,9 +483,15 @@
           </div>
           <div class="footer-section">
             <h4 class="footer-heading">Legal</h4>
-            <a href="../../legal/license.html" class="footer-link">MIT License</a>
-            <a href="../../legal/privacy.html" class="footer-link">Privacy Policy</a>
-            <a href="../../legal/terms.html" class="footer-link">Terms of Service</a>
+            <a href="../../legal/license.html" class="footer-link"
+              >MIT License</a
+            >
+            <a href="../../legal/privacy.html" class="footer-link"
+              >Privacy Policy</a
+            >
+            <a href="../../legal/terms.html" class="footer-link"
+              >Terms of Service</a
+            >
           </div>
         </div>
         <div class="footer-bottom">
@@ -196,31 +500,46 @@
       </div>
     </footer>
 
-    <div id="eventDateModal" class="admin-event-modal" style="display:none;">
+    <div id="eventDateModal" class="admin-event-modal" style="display: none">
       <div class="admin-event-modal-card">
         <div class="admin-event-modal-head">
           <h3 id="eventDateModalTitle">Pick Date</h3>
-          <button id="eventDateModalClose" class="btn btn-secondary" type="button">Close</button>
+          <button
+            id="eventDateModalClose"
+            class="btn btn-secondary"
+            type="button"
+          >
+            Close
+          </button>
         </div>
         <div class="admin-event-cal-nav">
-          <button id="eventCalPrev" class="btn btn-secondary" type="button">Prev</button>
+          <button id="eventCalPrev" class="btn btn-secondary" type="button">
+            Prev
+          </button>
           <div id="eventCalMonthLabel" class="admin-event-cal-month">Month</div>
-          <button id="eventCalNext" class="btn btn-secondary" type="button">Next</button>
+          <button id="eventCalNext" class="btn btn-secondary" type="button">
+            Next
+          </button>
         </div>
         <div class="admin-event-weekdays">
-          <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+          <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span
+          ><span>Fri</span><span>Sat</span><span>Sun</span>
         </div>
         <div id="eventCalGrid" class="admin-event-cal-grid"></div>
         <div class="admin-event-time-row">
-          <label>Hour
+          <label
+            >Hour
             <select id="eventCalHour"></select>
           </label>
-          <label>Minute
+          <label
+            >Minute
             <select id="eventCalMinute"></select>
           </label>
         </div>
         <div class="admin-event-modal-actions">
-          <button id="eventDateApplyBtn" class="btn btn-primary" type="button">Apply Date & Time</button>
+          <button id="eventDateApplyBtn" class="btn btn-primary" type="button">
+            Apply Date & Time
+          </button>
         </div>
       </div>
     </div>
@@ -229,12 +548,20 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
       (function () {
-        const SUPABASE_URL = window.__ENV__?.SUPABASE_URL || "https://qqbyxydxxcuklakvjlfr.supabase.co";
-        const SUPABASE_ANON_KEY = window.__ENV__?.SUPABASE_ANON_KEY || "Your-anon-key-here";
-        if (!window.supabaseClient) window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const SUPABASE_URL =
+          window.__ENV__?.SUPABASE_URL ||
+          "https://qqbyxydxxcuklakvjlfr.supabase.co";
+        const SUPABASE_ANON_KEY =
+          window.__ENV__?.SUPABASE_ANON_KEY || "Your-anon-key-here";
+        if (!window.supabaseClient)
+          window.supabaseClient = window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+          );
       })();
     </script>
     <script src="../../script.js"></script>
+    <script src="../../assets/js/custom-select.js"></script>
     <script src="../../assets/js/admin-settings.js"></script>
   </body>
 </html>

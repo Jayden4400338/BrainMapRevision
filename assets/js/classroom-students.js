@@ -50,9 +50,10 @@
       return false;
     }
     currentUser = session.user;
-    const { data: profile } = await supabaseClient.from('users').select('role').eq('id', currentUser.id).single();
+    const { data: profile } = await supabaseClient.from('users').select('role, roles').eq('id', currentUser.id).single();
     userProfile = profile || { role: 'student' };
-    if (userProfile.role !== 'teacher') {
+    const roles = Array.isArray(userProfile?.roles) ? userProfile.roles : [userProfile?.role];
+  if (!roles.includes('teacher')) {
       showError('Only teachers can view classroom students.');
       return false;
     }

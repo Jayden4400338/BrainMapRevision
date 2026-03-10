@@ -66,13 +66,18 @@
       return false;
     }
     currentUser = session.user;
-    const { data: profile } = await supabaseClient.from('users').select('role').eq('id', currentUser.id).single();
-    userProfile = profile || { role: 'student' };
+    const { data: profile } = await supabaseClient.from('users').select('role, roles').eq('id', currentUser.id).single();
+    userProfile = profile || { role: 'student', roles: ['student'] };
     return true;
   }
 
+  function hasTeacherRole(p) {
+    const roles = Array.isArray(p?.roles) ? p.roles : [p?.role];
+    return roles.includes('teacher');
+  }
+
   async function loadClassroomMeta() {
-    if (userProfile.role === 'teacher') {
+    if (hasTeacherRole(userProfile)) {
       const { data, error } = await supabaseClient
         .from('classrooms')
         .select('name')
@@ -181,7 +186,7 @@
       byAid[res.assignment_id].push(res);
     });
 
-    const isTeacher = userProfile.role === 'teacher';
+    const isTeacher = hasTeacherRole(userProfile);
 
     assignmentsList.innerHTML = assignments.map(a => {
       const due = a.due_date ? new Date(a.due_date).toLocaleDateString() : 'No due date';
@@ -439,7 +444,7 @@
     }
 
     await loadSubjects();
-    if (userProfile.role === 'teacher') await loadRevisionGuides();
+    if (hasTeacherRole(userProfile)) await loadRevisionGuides();
 
     if (loadingState) loadingState.style.display = 'none';
     if (errorState) errorState.style.display = 'none';
@@ -448,7 +453,7 @@
     if (classroomSubtitle) classroomSubtitle.textContent = classroomName;
     if (backToViewLink) backToViewLink.href = `view.html?id=${classroomId}`;
     if (createAssignmentBtn) {
-      createAssignmentBtn.style.display = userProfile.role === 'teacher' ? 'inline-flex' : 'none';
+      createAssignmentBtn.style.display = hasTeacherRole(userProfile) ? 'inline-flex' : 'none';
       createAssignmentBtn.addEventListener('click', openCreateModal);
     }
     if (createAssignmentForm) createAssignmentForm.addEventListener('submit', handleCreateAssignment);

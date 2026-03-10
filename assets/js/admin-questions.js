@@ -18,6 +18,8 @@
   const optionsInput = document.getElementById("qOptions");
   const explanationInput = document.getElementById("qExplanation");
   const addButton = document.getElementById("addQuestionBtn");
+  const statQuestionsInBank = document.getElementById("statQuestionsInBank");
+  const statTotalAnswered = document.getElementById("statTotalAnswered");
   let questions = [];
   let currentPage = 1;
   let pageSize = Number(pageSizeSelect?.value || 25);
@@ -93,7 +95,7 @@
         <td>${escapeHtml(row.topic)}</td>
         <td>${escapeHtml(row.question)}</td>
         <td>${escapeHtml(row.difficulty)}</td>
-        <td><button class="admin-danger-btn" data-action="delete">Delete</button></td>
+        <td><button class="btn btn-small admin-danger-btn" data-action="delete"><i class="fa-solid fa-trash"></i> Delete</button></td>
       </tr>
     `
       )
@@ -102,6 +104,19 @@
     if (pageInfo) pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
     if (prevPageBtn) prevPageBtn.disabled = currentPage <= 1;
     if (nextPageBtn) nextPageBtn.disabled = currentPage >= totalPages;
+  }
+
+  async function loadQuestionStats() {
+    try {
+      const { data, error } = await supabase.rpc("admin_get_question_stats");
+      if (error) throw error;
+      const row = Array.isArray(data) && data.length ? data[0] : null;
+      if (statQuestionsInBank) statQuestionsInBank.textContent = row?.questions_in_bank ?? "-";
+      if (statTotalAnswered) statTotalAnswered.textContent = row?.total_answered ?? "-";
+    } catch (err) {
+      if (statQuestionsInBank) statQuestionsInBank.textContent = "-";
+      if (statTotalAnswered) statTotalAnswered.textContent = "-";
+    }
   }
 
   async function loadQuestions() {
@@ -113,9 +128,10 @@
     questions = Array.isArray(data) ? data : [];
     if (!questions.length) {
       tableBody.innerHTML = '<tr><td colspan="6" class="admin-empty">No questions yet.</td></tr>';
-      return;
+    } else {
+      renderQuestions(searchInput?.value || "");
     }
-    renderQuestions(searchInput?.value || "");
+    await loadQuestionStats();
   }
 
   async function addQuestion() {

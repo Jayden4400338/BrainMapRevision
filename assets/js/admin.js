@@ -151,6 +151,7 @@
       : users;
 
     tableBody.innerHTML = filtered.map(rowHtml).join("");
+    if (window.initCustomSelects) window.initCustomSelects(document.querySelector(".admin-shell"));
   }
 
   async function loadUsers() {

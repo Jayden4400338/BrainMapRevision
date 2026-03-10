@@ -294,9 +294,11 @@
     animateDashboardStats();
     
     
+    const roles = normalizeRoles(userProfile);
     if (primaryRole === 'admin') {
       console.log('User is an admin, loading admin dashboard');
       showAdminDashboard();
+      if (roles.includes('teacher')) showTeacherDashboard();
     } else if (primaryRole === 'teacher') {
       console.log('User is a teacher, loading teacher dashboard');
       showTeacherDashboard();
