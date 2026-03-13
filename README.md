@@ -60,7 +60,7 @@ See our [Past Paper Contribution Guide](CONTRIBUTING.md#past-paper-questions) fo
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/yourusername/BrainMapRevision.git
+   git clone https://github.com/jayden4400338/BrainMapRevision.git
    ```
 
 2. Install dependencies:
